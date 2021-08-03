@@ -111,9 +111,19 @@ object FrmMDIChild: TFrmMDIChild
     Font.Style = []
     ParentFont = False
     TabOrder = 2
+    BoundLabel.Font.Charset = RUSSIAN_CHARSET
+    BoundLabel.Font.Color = 16772838
+    BoundLabel.Font.Height = -13
+    BoundLabel.Font.Name = 'Courier New'
+    BoundLabel.Font.Style = []
   end
   object sSkinProvider: TsSkinProvider
     ShowAppIcon = False
+    AddedTitle.Font.Charset = DEFAULT_CHARSET
+    AddedTitle.Font.Color = clNone
+    AddedTitle.Font.Height = -11
+    AddedTitle.Font.Name = 'Tahoma'
+    AddedTitle.Font.Style = []
     SkinData.SkinSection = 'FORM'
     TitleButtons = <>
     Left = 68

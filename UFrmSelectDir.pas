@@ -1,4 +1,4 @@
-unit UFrmSelectDir;
+п»їunit UFrmSelectDir;
 
 interface
 
@@ -45,8 +45,8 @@ begin
       if LVDir.Items[i].Checked then inc(CheckedCount);
     if CheckedCount > 1 then
     begin
-      MessageBox(Handle, PChar('Мастер директория не может быть более чем одна директория. '+
-                             'Снимите лишнии галочки.'), PChar(MB_CAPTION), MB_ICONWARNING);
+      MessageBox(Handle, PChar('С›Р°СЃС‚РµСЂ РґРёСЂРµРєС‚РѕСЂРёВ¤ РЅРµ РјРѕР¶РµС‚ Р±С‹С‚СЊ Р±РѕР»РµРµ С‡РµРј РѕРґРЅР° РґРёСЂРµРєС‚РѕСЂРёВ¤. '+
+                             'вЂ”РЅРёРјРёС‚Рµ Р»РёС€РЅРёРё РіР°Р»РѕС‡РєРё.'), PChar(MB_CAPTION), MB_ICONWARNING);
       exit;
     end;
   end;

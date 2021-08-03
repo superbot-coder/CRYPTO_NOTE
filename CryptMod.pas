@@ -1,4 +1,4 @@
-unit CryptMod;
+﻿unit CryptMod;
 
 interface
 

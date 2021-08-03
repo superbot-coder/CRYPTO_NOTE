@@ -1,12 +1,13 @@
-unit UFrmConfig;
+п»їunit UFrmConfig;
 
 interface
 
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.ExtCtrls, System.Win.Registry,
-  Vcl.FileCtrl, ShellAPI, JvExControls, JvXPCore, JvXPButtons, JvExStdCtrls,
-  JvListComb, Vcl.Menus, Vcl.PlatformDefaultStyleActnCtrls, Vcl.ActnPopup,
+  Vcl.FileCtrl, ShellAPI,
+  // JvExControls, JvXPCore, JvXPButtons, JvExStdCtrls, JvListComb,
+  Vcl.Menus, Vcl.PlatformDefaultStyleActnCtrls, Vcl.ActnPopup,
   Vcl.ComCtrls, sComboBoxes, sButton, sLabel, Vcl.Mask, sMaskEdit,
   sCustomComboEdit, sToolEdit, sListView;
 
@@ -57,14 +58,14 @@ var
   ChosenDirectory: String;
 begin
   Options := [sdShowShares, sdNewUI];
-  if Not SelectDirectory('Укажите директорию','',ChosenDirectory, Options, Nil) then Exit;
+  if Not SelectDirectory('РЈРєР°Р¶РёС‚Рµ РґРёСЂРµРєС‚РѕСЂРёСЋ','',ChosenDirectory, Options, Nil) then Exit;
   if ChosenDirectory = '' then Exit;
 
   for i:=0 to LVDir.Items.Count -1 do
   begin
     if LVDir.Items[i].Caption = ChosenDirectory then
     begin
-      MessageBox(Handle, PChar('Такая директория уже существует в списке.'),
+      MessageBox(Handle, PChar('РўР°РєР°СЏ РґРёСЂРµРєС‚РѕСЂРёСЏ СѓР¶Рµ СЃСѓС‰РµСЃС‚РІСѓРµС‚ РІ СЃРїРёСЃРєРµ.'),
                  PChar(MB_CAPTION), MB_ICONINFORMATION);
       Exit;
     end;
@@ -93,7 +94,7 @@ procedure TFrmConfig.BtnApply(Sender: TObject);
 begin
   SaveDirToRegistry;
   MessageBox(Handle,
-              PChar('Праметры были успешно сохранены.'),
+              PChar('РџСЂР°РјРµС‚СЂС‹ Р±С‹Р»Рё СѓСЃРїРµС€РЅРѕ СЃРѕС…СЂР°РЅРµРЅС‹.'),
              PChar(MB_CAPTION), MB_ICONINFORMATION);
   Close;
 end;
@@ -101,8 +102,8 @@ end;
 procedure TFrmConfig.PA_DeletDirClick(Sender: TObject);
 begin
   if MessageBox(Handle,
-                PChar('Вы действительно хотите удалить выделенные директории?'+
-                      #13#10+'Для удаления нажмите ДА, для отмены Нет.'),
+                PChar('Р’С‹ РґРµР№СЃС‚РІРёС‚РµР»СЊРЅРѕ С…РѕС‚РёС‚Рµ СѓРґР°Р»РёС‚СЊ РІС‹РґРµР»РµРЅРЅС‹Рµ РґРёСЂРµРєС‚РѕСЂРёРё?'+
+                      #13#10+'Р”Р»СЏ СѓРґР°Р»РµРЅРёСЏ РЅР°Р¶РјРёС‚Рµ Р”Рђ, РґР»СЏ РѕС‚РјРµРЅС‹ РќРµС‚.'),
                 PChar(MB_CAPTION),
                 MB_YESNO or MB_ICONWARNING) = ID_NO Then Exit;
   LVDir.DeleteSelected;

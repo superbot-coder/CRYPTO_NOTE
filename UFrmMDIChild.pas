@@ -1,13 +1,13 @@
-unit UFrmMDIChild;
+п»їunit UFrmMDIChild;
 
 interface
 
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.ExtCtrls,
-  JvExControls, JvXPCore, JvXPButtons, CryptMod, JvExStdCtrls,
-  Vcl.ComCtrls, Error, MsgLog, JvButton, JvNavigationPane, JvLabel, JvGradient,
-  sStatusBar, sButton, sPanel, sMemo, sSkinProvider;
+  //JvExControls, JvXPCore, JvXPButtons, JvExStdCtrls,JvButton, JvNavigationPane, JvLabel, JvGradient,
+  CryptMod,
+  Vcl.ComCtrls, Error, MsgLog, sStatusBar, sButton, sPanel, sMemo, sSkinProvider;
 
 type TMDIStatusFile = (sfNewFile, sfCryptFile, sfUnCryptFile, sfUnDecryptedFile);
 
@@ -72,7 +72,7 @@ var
   NewTabName: String;
 begin
 
-  // Проверка и генерация Имени Файла
+  // РџСЂРѕРІРµСЂРєР° Рё РіРµРЅРµСЂР°С†РёСЏ РРјРµРЅРё Р¤Р°Р№Р»Р°
   case MDIStatusFile of
     sfNewFile:
       begin
@@ -107,7 +107,7 @@ begin
          //end;
          if MASTER_PASSWORD = '' then
          begin
-           MessageBox(Handle, PChar('МАСТЕР ПАРОЛЬ не был введен.'),
+           MessageBox(Handle, PChar('РњРђРЎРўР•Р  РџРђР РћР›Р¬ РЅРµ Р±С‹Р» РІРІРµРґРµРЅ.'),
                       PChar(MB_CAPTION), MB_ICONWARNING);
            Exit;
          end;
@@ -116,14 +116,14 @@ begin
        end;
 
     1: begin
-         // Диалог
+         // Р”РёР°Р»РѕРі
        end;
   end;
 
-  // Шифруем и сохраняем
+  // РЁРёС„СЂСѓРµРј Рё СЃРѕС…СЂР°РЅСЏРµРј
   EnCryptTxtToSave(EncriptFileName, PAnsiChar(AnsiString(mm.Text)), ALGO, PASSWORD);
 
-  // обновляю статусы и свойства формы
+  // РѕР±РЅРѕРІР»СЏСЋ СЃС‚Р°С‚СѓСЃС‹ Рё СЃРІРѕР№СЃС‚РІР° С„РѕСЂРјС‹
   if MDIStatusFile = sfNewFile then
   begin
     NewTabName :=  FrmMain.IncrementTabsName(ExtractFileName(EncriptFileName));
@@ -144,13 +144,13 @@ begin
     end;
   end;
 
-  // обновления списка дерева файлов
+  // РѕР±РЅРѕРІР»РµРЅРёСЏ СЃРїРёСЃРєР° РґРµСЂРµРІР° С„Р°Р№Р»РѕРІ
   SetStatusBarInfo;
   if FileExists(EncriptFileName) then
     FrmMain.AddNodeToTreeView(EncriptFileName, IMG_INDEX_CTXT);
   //FrmMain.Act_UpDateFileListBrowserExecute(nil);
 
-  MessageBox(Handle, PChar('Файл успешно зашифрован и сохранен.'),
+  MessageBox(Handle, PChar('Р¤Р°Р№Р» СѓСЃРїРµС€РЅРѕ Р·Р°С€РёС„СЂРѕРІР°РЅ Рё СЃРѕС…СЂР°РЅРµРЅ.'),
              PChar(MB_CAPTION), MB_ICONINFORMATION);
 end;
 
@@ -164,7 +164,7 @@ begin
     st   := TStringList.Create;
     d_size := Length(PAnsiChar(PAtxt));
 
-    // шифруемый текст менее 20 символов, то добавляются еще 20 символов мусора
+    // С€РёС„СЂСѓРµРјС‹Р№ С‚РµРєСЃС‚ РјРµРЅРµРµ 20 СЃРёРјРІРѕР»РѕРІ, С‚Рѕ РґРѕР±Р°РІР»СЏСЋС‚СЃСЏ РµС‰Рµ 20 СЃРёРјРІРѕР»РѕРІ РјСѓСЃРѕСЂР°
     if d_size < 20 then
       //Atxt := 'dsz:' + IntToStr(d_size) + ';' + mm.Text + #13 + GetTrashStr(20)
       Atxt := 'dsz:' + IntToStr(d_size) + ';' + PAnsiChar(PAtxt) + #13 + GetTrashStr(20)
@@ -174,9 +174,9 @@ begin
 
     ASign := ASign+ 'sign:0;' + GetMD5Hash(Atxt); // add to Signature hash_md5_txt
     case ALGO of
-      RC4_SHA1:   Actxt := EncryptRC4_SHA1(APwd, Atxt);  // шифруеется
-      RC4_SHA256: Actxt := EncryptRC4_SHA256(APwd, Atxt);  // шифруеется
-      RC4_SHA512: Actxt := EncryptRC4_SHA512(APwd, Atxt);  // шифруеется
+      RC4_SHA1:   Actxt := EncryptRC4_SHA1(APwd, Atxt);  // С€РёС„СЂСѓРµРµС‚СЃСЏ
+      RC4_SHA256: Actxt := EncryptRC4_SHA256(APwd, Atxt);  // С€РёС„СЂСѓРµРµС‚СЃСЏ
+      RC4_SHA512: Actxt := EncryptRC4_SHA512(APwd, Atxt);  // С€РёС„СЂСѓРµРµС‚СЃСЏ
     end;
 
     ASign := ASign + ';' + GetMD5Hash(Actxt);    // add to Signature hash_md5_ctxt
@@ -193,14 +193,14 @@ procedure TFrmMDIChild.FormClose(Sender: TObject; var Action: TCloseAction);
 var i: integer;
 begin
   if ChangeTxt then
-    case MessageBox(Handle, PChar('Сохранить изменения в тексте?'),
+    case MessageBox(Handle, PChar('РЎРѕС…СЂР°РЅРёС‚СЊ РёР·РјРµРЅРµРЅРёСЏ РІ С‚РµРєСЃС‚Рµ?'),
                   PChar(MB_CAPTION), MB_YESNOCANCEL or MB_ICONQUESTION) of
 
      ID_YES     : SaveFile(false);
      ID_CANCEL  : begin Action := caNone; Exit; end;
     end;
 
-  // Удатение TabSet элемента
+  // РЈРґР°С‚РµРЅРёРµ TabSet СЌР»РµРјРµРЅС‚Р°
   if FrmMain.TabSet.Tabs.Count <> 0 then
   begin
     for I:=0 to FrmMain.TabSet.Tabs.Count do
@@ -239,7 +239,7 @@ begin
 
     0: begin
          //Decrypt the MASTER_PASSWORD
-         // Проверка мастер пароля
+         // РџСЂРѕРІРµСЂРєР° РјР°СЃС‚РµСЂ РїР°СЂРѕР»СЏ
          if MASTER_PASSWORD = '' then
          begin
            FrmMain.Act_GetMasterPasswordExecute(Nil);
@@ -265,9 +265,9 @@ begin
       if Sign.hash_encrypt <> GetMD5Hash(st.Strings[1]) then
       begin
        if MessageBox(Handle,
-                     PChar('Хэш из сигнатуры несовпадает с полученным хешем зашифрованного файла,' + #13+
-                           'возможно файл поврежден и его не удастся правильно дешифровать.'+ #13+
-                           'Вы желаете продолжить?'),
+                     PChar('РҐСЌС€ РёР· СЃРёРіРЅР°С‚СѓСЂС‹ РЅРµСЃРѕРІРїР°РґР°РµС‚ СЃ РїРѕР»СѓС‡РµРЅРЅС‹Рј С…РµС€РµРј Р·Р°С€РёС„СЂРѕРІР°РЅРЅРѕРіРѕ С„Р°Р№Р»Р°,' + #13+
+                           'РІРѕР·РјРѕР¶РЅРѕ С„Р°Р№Р» РїРѕРІСЂРµР¶РґРµРЅ Рё РµРіРѕ РЅРµ СѓРґР°СЃС‚СЃСЏ РїСЂР°РІРёР»СЊРЅРѕ РґРµС€РёС„СЂРѕРІР°С‚СЊ.'+ #13+
+                           'Р’С‹ Р¶РµР»Р°РµС‚Рµ РїСЂРѕРґРѕР»Р¶РёС‚СЊ?'),
                      PChar(MB_CAPTION),
                      MB_ICONWARNING or MB_YESNO) = IDNO
        then Exit;
@@ -282,9 +282,9 @@ begin
       if Sign.hash_uncrypt <> GetMD5Hash(Atxt) then
       begin
         MessageBox(Handle,
-                   PChar('Текст не убалось дешифровать,' + #13 +
-                         'хэш сигнатуры не совпал с дешифрованным текстом.' + #13 +
-                         'Возможно был выбран не верный алгоритм или введен не верный пароль.'),
+                   PChar('РўРµРєСЃС‚ РЅРµ СѓР±Р°Р»РѕСЃСЊ РґРµС€РёС„СЂРѕРІР°С‚СЊ,' + #13 +
+                         'С…СЌС€ СЃРёРіРЅР°С‚СѓСЂС‹ РЅРµ СЃРѕРІРїР°Р» СЃ РґРµС€РёС„СЂРѕРІР°РЅРЅС‹Рј С‚РµРєСЃС‚РѕРј.' + #13 +
+                         'Р’РѕР·РјРѕР¶РЅРѕ Р±С‹Р» РІС‹Р±СЂР°РЅ РЅРµ РІРµСЂРЅС‹Р№ Р°Р»РіРѕСЂРёС‚Рј РёР»Рё РІРІРµРґРµРЅ РЅРµ РІРµСЂРЅС‹Р№ РїР°СЂРѕР»СЊ.'),
                    PChar(MB_CAPTION), MB_ICONWARNING);
         mm.ReadOnly := True;
       end
@@ -304,10 +304,10 @@ begin
       else
     begin
       if MessageBox(Handle,
-         PChar('Сигнатура файла не найдена или повреждена.'+#13+
-               'Возможно этот файл не является зашифровонным. '+
-               'Возможно дальнейшая расшифровка текста не удастся.'+#13+
-               'Вы хотит продолжить?'),
+         PChar('РЎРёРіРЅР°С‚СѓСЂР° С„Р°Р№Р»Р° РЅРµ РЅР°Р№РґРµРЅР° РёР»Рё РїРѕРІСЂРµР¶РґРµРЅР°.'+#13+
+               'Р’РѕР·РјРѕР¶РЅРѕ СЌС‚РѕС‚ С„Р°Р№Р» РЅРµ СЏРІР»СЏРµС‚СЃСЏ Р·Р°С€РёС„СЂРѕРІРѕРЅРЅС‹Рј. '+
+               'Р’РѕР·РјРѕР¶РЅРѕ РґР°Р»СЊРЅРµР№С€Р°СЏ СЂР°СЃС€РёС„СЂРѕРІРєР° С‚РµРєСЃС‚Р° РЅРµ СѓРґР°СЃС‚СЃСЏ.'+#13+
+               'Р’С‹ С…РѕС‚РёС‚ РїСЂРѕРґРѕР»Р¶РёС‚СЊ?'),
          PChar(MB_CAPTION), MB_ICONWARNING or MB_YESNO) = IDNO
       then Exit;
 
@@ -374,7 +374,7 @@ begin
 
   if FileExists(OpenedFileName) then
     if MessageBox(Handle,
-                PChar(OpenedFileName+' Фай, уже существует.' + #13 + 'Заменить?'),
+                PChar(OpenedFileName+' Р¤Р°Р№, СѓР¶Рµ СЃСѓС‰РµСЃС‚РІСѓРµС‚.' + #13 + 'Р—Р°РјРµРЅРёС‚СЊ?'),
                 PChar(MB_CAPTION),
                 MB_YESNO or MB_ICONWARNING) = ID_NO then
     begin
@@ -396,7 +396,7 @@ begin
         MDIStatusFile := sfUnCryptFile;
       end;
 
-    // Сохранение Криптованного файла
+    // РЎРѕС…СЂР°РЅРµРЅРёРµ РљСЂРёРїС‚РѕРІР°РЅРЅРѕРіРѕ С„Р°Р№Р»Р°
     sfCryptFile:
       begin
         EnCryptTxtToSave(OpenedFileName, PAnsiChar(AnsiString(mm.Text)), ALGO , PASSWORD);
@@ -413,7 +413,7 @@ begin
       end;
     end;
   if Notification then
-    MessageBox(Handle,PChar('Файл '+OpenedFileName+' был сохранен.'),
+    MessageBox(Handle,PChar('Р¤Р°Р№Р» '+OpenedFileName+' Р±С‹Р» СЃРѕС…СЂР°РЅРµРЅ.'),
                PChar(MB_CAPTION), MB_ICONINFORMATION);
 end;
 
@@ -449,7 +449,7 @@ begin
 
     0: begin
          //Decrypt the MASTER_PASSWORD
-         // Проверка мастер пароля
+         // РџСЂРѕРІРµСЂРєР° РјР°СЃС‚РµСЂ РїР°СЂРѕР»СЏ
          if MASTER_PASSWORD = '' then
          begin
            FrmMain.Act_GetMasterPasswordExecute(Nil);
@@ -475,9 +475,9 @@ begin
       if Sign.hash_encrypt <> GetMD5Hash(st.Strings[1]) then
       begin
        if MessageBox(Handle,
-                     PChar('Хэш из сигнатуры несовпадает с полученным хешем зашифрованного файла,' + #13+
-                           'возможно файл поврежден и его не удастся правильно дешифровать.'+ #13+
-                           'Вы желаете продолжить?'),
+                     PChar('РҐСЌС€ РёР· СЃРёРіРЅР°С‚СѓСЂС‹ РЅРµСЃРѕРІРїР°РґР°РµС‚ СЃ РїРѕР»СѓС‡РµРЅРЅС‹Рј С…РµС€РµРј Р·Р°С€РёС„СЂРѕРІР°РЅРЅРѕРіРѕ С„Р°Р№Р»Р°,' + #13+
+                           'РІРѕР·РјРѕР¶РЅРѕ С„Р°Р№Р» РїРѕРІСЂРµР¶РґРµРЅ Рё РµРіРѕ РЅРµ СѓРґР°СЃС‚СЃСЏ РїСЂР°РІРёР»СЊРЅРѕ РґРµС€РёС„СЂРѕРІР°С‚СЊ.'+ #13+
+                           'Р’С‹ Р¶РµР»Р°РµС‚Рµ РїСЂРѕРґРѕР»Р¶РёС‚СЊ?'),
                      PChar(MB_CAPTION),
                      MB_ICONWARNING or MB_YESNO) = IDNO
        then Exit;
@@ -492,9 +492,9 @@ begin
       if Sign.hash_uncrypt <> GetMD5Hash(Atxt) then
       begin
         MessageBox(Handle,
-                   PChar('Текст не убалось дешифровать,' + #13 +
-                         'хэш сигнатуры не совпал с дешифрованным текстом.' + #13 +
-                         'Возможно был выбран не верный алгоритм или введен не верный пароль.'),
+                   PChar('РўРµРєСЃС‚ РЅРµ СѓР±Р°Р»РѕСЃСЊ РґРµС€РёС„СЂРѕРІР°С‚СЊ,' + #13 +
+                         'С…СЌС€ СЃРёРіРЅР°С‚СѓСЂС‹ РЅРµ СЃРѕРІРїР°Р» СЃ РґРµС€РёС„СЂРѕРІР°РЅРЅС‹Рј С‚РµРєСЃС‚РѕРј.' + #13 +
+                         'Р’РѕР·РјРѕР¶РЅРѕ Р±С‹Р» РІС‹Р±СЂР°РЅ РЅРµ РІРµСЂРЅС‹Р№ Р°Р»РіРѕСЂРёС‚Рј РёР»Рё РІРІРµРґРµРЅ РЅРµ РІРµСЂРЅС‹Р№ РїР°СЂРѕР»СЊ.'),
                    PChar(MB_CAPTION), MB_ICONWARNING);
         mm.ReadOnly := True;
       end
@@ -514,10 +514,10 @@ begin
       else
     begin
       if MessageBox(Handle,
-         PChar('Сигнатура файла не найдена или повреждена.'+#13+
-               'Возможно этот файл не является зашифровонным. '+
-               'Возможно дальнейшая расшифровка текста не удастся.'+#13+
-               'Вы хотит продолжить?'),
+         PChar('РЎРёРіРЅР°С‚СѓСЂР° С„Р°Р№Р»Р° РЅРµ РЅР°Р№РґРµРЅР° РёР»Рё РїРѕРІСЂРµР¶РґРµРЅР°.'+#13+
+               'Р’РѕР·РјРѕР¶РЅРѕ СЌС‚РѕС‚ С„Р°Р№Р» РЅРµ СЏРІР»СЏРµС‚СЃСЏ Р·Р°С€РёС„СЂРѕРІРѕРЅРЅС‹Рј. '+
+               'Р’РѕР·РјРѕР¶РЅРѕ РґР°Р»СЊРЅРµР№С€Р°СЏ СЂР°СЃС€РёС„СЂРѕРІРєР° С‚РµРєСЃС‚Р° РЅРµ СѓРґР°СЃС‚СЃСЏ.'+#13+
+               'Р’С‹ С…РѕС‚РёС‚ РїСЂРѕРґРѕР»Р¶РёС‚СЊ?'),
          PChar(MB_CAPTION), MB_ICONWARNING or MB_YESNO) = IDNO
       then Exit;
 
@@ -583,14 +583,14 @@ begin
         if FileExists(FileName) then
         begin
           if MessageBox(Handle,
-                        PChar('Файл с таким именем '+FileName+
-                        ' уже существует, вы хотите его заменить?'),
+                        PChar('Р¤Р°Р№Р» СЃ С‚Р°РєРёРј РёРјРµРЅРµРј '+FileName+
+                        ' СѓР¶Рµ СЃСѓС‰РµСЃС‚РІСѓРµС‚, РІС‹ С…РѕС‚РёС‚Рµ РµРіРѕ Р·Р°РјРµРЅРёС‚СЊ?'),
                         PChar(MB_CAPTION),MB_YESNO or MB_ICONWARNING) = IDNO
           then Exit;
         end;
 
         mm.Lines.SaveToFile(FileName);
-        MessageBox(Handle,PChar('Файл успешно сохранен.'),
+        MessageBox(Handle,PChar('Р¤Р°Р№Р» СѓСЃРїРµС€РЅРѕ СЃРѕС…СЂР°РЅРµРЅ.'),
                    PChar(MB_CAPTION), MB_ICONINFORMATION);
       end;
   end;
@@ -614,8 +614,8 @@ begin
 
   if OpenedFileName = '' then
   begin
-    StatusBar.Panels[0].Text := 'Создан: 00.00.0000 00:00:00';
-    StatusBar.Panels[1].Text := 'Изменен: 00.00.0000 00:00:00';
+    StatusBar.Panels[0].Text := 'РЎРѕР·РґР°РЅ: 00.00.0000 00:00:00';
+    StatusBar.Panels[1].Text := 'РР·РјРµРЅРµРЅ: 00.00.0000 00:00:00';
     Exit;
   end;
 
@@ -625,13 +625,13 @@ begin
     FileTimeToSystemTime(LocalTime, sys_time);
     SetLength(str_dt, GetDateFormat(LOCALE_SYSTEM_DEFAULT,0,@sys_time,PChar('dd MMMM yyyy'),Nil,0));
     GetDateFormat(LOCALE_SYSTEM_DEFAULT,0,@sys_time,PChar('dd MMMM yyyy'),PChar(str_dt),Length(str_dt));
-    StatusBar.Panels[0].Text := 'Создан: ' + Trim(str_dt) + ' ' + TimeToStr(SystemTimeToDateTime(sys_time));
+    StatusBar.Panels[0].Text := 'РЎРѕР·РґР°РЅ: ' + Trim(str_dt) + ' ' + TimeToStr(SystemTimeToDateTime(sys_time));
 
     FileTimeToLocalFileTime(SR.FindData.ftLastWriteTime, LocalTime);
     FileTimeToSystemTime(LocalTime, sys_time);
     SetLength(str_dt, GetDateFormat(LOCALE_SYSTEM_DEFAULT,0,@sys_time,PChar('dd MMMM yyyy'),Nil,0));
     GetDateFormat(LOCALE_SYSTEM_DEFAULT,0,@sys_time,PChar('dd MMMM yyyy'),PChar(str_dt),Length(str_dt));
-    StatusBar.Panels[1].Text := 'Изменен: ' + Trim(str_dt) + ' ' + TimeToStr(SystemTimeToDateTime(sys_time));
+    StatusBar.Panels[1].Text := 'РР·РјРµРЅРµРЅ: ' + Trim(str_dt) + ' ' + TimeToStr(SystemTimeToDateTime(sys_time));
   end;
 
 end;

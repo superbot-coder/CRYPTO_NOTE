@@ -10,7 +10,7 @@ uses
   UFrmDlgFileName in 'UFrmDlgFileName.pas' {FrmDlgFileName},
   UFrmSelectEncrypt in 'UFrmSelectEncrypt.pas' {FrmSelectEncrypt},
   UFrmOldDecrypt in 'UFrmOldDecrypt.pas' {FrmOldDeCrypt},
-  UFrmColorParam in 'UFrmColorParam.pas' {FrmColorParam},
+  // UFrmColorParam in 'UFrmColorParam.pas' {FrmColorParam},
   UFrmDebugs in 'UFrmDebugs.pas' {FrmDebugs},
   UFrmSync in 'UFrmSync.pas' {FrmSync},
   UFrmSelectDir in 'UFrmSelectDir.pas' {FrmSelectDir},
@@ -27,7 +27,7 @@ begin
   Application.CreateForm(TFrmMasterPwd, FrmMasterPwd);
   Application.CreateForm(TFrmDlgFileName, FrmDlgFileName);
   Application.CreateForm(TFrmSelectEncrypt, FrmSelectEncrypt);
-  Application.CreateForm(TFrmColorParam, FrmColorParam);
+  // Application.CreateForm(TFrmColorParam, FrmColorParam);
   Application.CreateForm(TFrmDebugs, FrmDebugs);
   //Application.CreateForm(TFrmSync, FrmSync);
   Application.CreateForm(TFrmSelectDir, FrmSelectDir);

@@ -1,4 +1,4 @@
-unit UFrmExt;
+п»їunit UFrmExt;
 
 interface
 
@@ -49,7 +49,7 @@ begin
   for I := 0 to LVExt.Items.Count -1 do
     if LVExt.Items[I].Caption = LowerCase(sEdExt.Text) then
     begin
-      MessageBox(Handle, PChar('Такая маска уже существует.'), PChar(MB_CAPTION), MB_ICONWARNING);
+      MessageBox(Handle, PChar('РўР°РєР°СЏ РјР°СЃРєР° СѓР¶Рµ СЃСѓС‰РµСЃС‚РІСѓРµС‚.'), PChar(MB_CAPTION), MB_ICONWARNING);
       Exit;
     end;
 

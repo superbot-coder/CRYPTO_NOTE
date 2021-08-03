@@ -1,22 +1,22 @@
-unit UFrmSelectEncrypt;
+п»їunit UFrmSelectEncrypt;
 
 interface
 
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
-  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, JvExControls, JvXPCore, JvXPButtons,
-  Vcl.StdCtrls, Vcl.ExtCtrls, JvGradient, Vcl.ComCtrls, CryptMod;
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs,
+  Vcl.StdCtrls, Vcl.ExtCtrls,  Vcl.ComCtrls, CryptMod, sButton;
 
 type
   TFrmSelectEncrypt = class(TForm)
-    JvXPBtton: TJvXPButton;
     RadioGroup: TRadioGroup;
     ChBoxDeleteSource: TCheckBox;
     CmBoxExAlgo: TComboBoxEx;
     lblAlgo: TLabel;
-    procedure JvXPBttonClick(Sender: TObject);
+    sButton1: TsButton;
     procedure FrmShowModal(DLG: TCryptDlgMode);
     procedure FormCreate(Sender: TObject);
+    procedure sButton1Click(Sender: TObject);
   private
     { Private declarations }
   public
@@ -57,19 +57,19 @@ begin
 
    DLG_ECRYPT:
    begin
-     caption := 'Параметры шифрования';
-     RadioGroup.Items[0] := 'Шифровать МАСТЕР паролем';
-     RadioGroup.Items[1] := 'Шифровать другим паролем';
-     //ChBoxDeleteSource.Caption := 'Удалить файл(ы) источник(и)';
+     caption := 'РџР°СЂР°РјРµС‚СЂС‹ С€РёС„СЂРѕРІР°РЅРёСЏ';
+     RadioGroup.Items[0] := 'РЁРёС„СЂРѕРІР°С‚СЊ РњРђРЎРўР•Р  РїР°СЂРѕР»РµРј';
+     RadioGroup.Items[1] := 'РЁРёС„СЂРѕРІР°С‚СЊ РґСЂСѓРіРёРј РїР°СЂРѕР»РµРј';
+     //ChBoxDeleteSource.Caption := 'РЈРґР°Р»РёС‚СЊ С„Р°Р№Р»(С‹) РёСЃС‚РѕС‡РЅРёРє(Рё)';
      //ChBoxDeleteSource.Visible := true;
    end;
 
    DLG_DECRYPT:
    begin
-     caption := 'Параметры дешифрования';
-     RadioGroup.Items[0] := 'Дешифровать МАСТЕР паролем';
-     RadioGroup.Items[1] := 'Дешифровать другим паролем';
-     //ChBoxDeleteSource.Caption := 'Удалить шифрованный(е) файл(ы)';
+     caption := 'РџР°СЂР°РјРµС‚СЂС‹ РґРµС€РёС„СЂРѕРІР°РЅРёСЏ';
+     RadioGroup.Items[0] := 'Р”РµС€РёС„СЂРѕРІР°С‚СЊ РњРђРЎРўР•Р  РїР°СЂРѕР»РµРј';
+     RadioGroup.Items[1] := 'Р”РµС€РёС„СЂРѕРІР°С‚СЊ РґСЂСѓРіРёРј РїР°СЂРѕР»РµРј';
+     //ChBoxDeleteSource.Caption := 'РЈРґР°Р»РёС‚СЊ С€РёС„СЂРѕРІР°РЅРЅС‹Р№(Рµ) С„Р°Р№Р»(С‹)';
      //ChBoxDeleteSource.Visible := false;
    end;
 
@@ -78,7 +78,7 @@ begin
   ShowModal;
 end;
 
-procedure TFrmSelectEncrypt.JvXPBttonClick(Sender: TObject);
+procedure TFrmSelectEncrypt.sButton1Click(Sender: TObject);
 begin
   ALGO  := GetAlgoType(FrmSelectEncrypt.CmBoxExAlgo.Items[FrmSelectEncrypt.CmBoxExAlgo.ItemIndex]);
   Apply := true;

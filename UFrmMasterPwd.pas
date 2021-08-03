@@ -1,4 +1,4 @@
-unit UFrmMasterPwd;
+п»їunit UFrmMasterPwd;
 
 interface
 
@@ -14,7 +14,7 @@ type
     edPwd1: TLabeledEdit;
     edPwd2: TLabeledEdit;
     ChBoxStrView: TCheckBox;
-    ChBoxSaveНаrdLink: TCheckBox;
+    ChBoxSaveРќР°rdLink: TCheckBox;
     procedure BtnSaveClick(Sender: TObject);
     procedure ChBoxStrViewClick(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
@@ -43,7 +43,7 @@ procedure TFrmMasterPwd.BtnSaveClick(Sender: TObject);
 begin
   if edPwd1.Text = '' then
   begin
-    ShowMessage('Введите пароль.');
+    ShowMessage('Р’РІРµРґРёС‚Рµ РїР°СЂРѕР»СЊ.');
     exit;
   end;
 
@@ -52,7 +52,7 @@ begin
      begin
        if edPwd1.Text <> edPwd2.Text then
        begin
-         ShowMessage('Веденные пароли не совпадают');
+         ShowMessage('Р’РµРґРµРЅРЅС‹Рµ РїР°СЂРѕР»Рё РЅРµ СЃРѕРІРїР°РґР°СЋС‚');
          Exit;
        end;
        MASTER_PASSWORD := edPwd1.Text;
@@ -106,17 +106,17 @@ begin
     DLG_MASTERPWD:
      begin
        Height  := 230;
-       Caption := 'Мастер пароль';
-       ChBoxSaveНаrdLink.Visible := true;
-       ChBoxSaveНаrdLink.Checked := False;
+       Caption := 'РњР°СЃС‚РµСЂ РїР°СЂРѕР»СЊ';
+       ChBoxSaveРќР°rdLink.Visible := true;
+       ChBoxSaveРќР°rdLink.Checked := False;
        edPwd2.Show;
      end;
 
     DLG_OLDPWD:
      begin
        Height  := 160;
-       Caption := 'Пароль';
-       ChBoxSaveНаrdLink.Visible := False;
+       Caption := 'РџР°СЂРѕР»СЊ';
+       ChBoxSaveРќР°rdLink.Visible := False;
        edPwd1.Text := '';
        edPwd2.Hide;
      end;
@@ -150,7 +150,7 @@ begin
         MASTER_PASSWORD      := copy(MASTER_PASSWORD, 1, Length(MASTER_PASSWORD) - 16);
         edPwd1.Text := '********';
         edPwd2.Text := '********';
-        ChBoxSaveНаrdLink.Checked := True;
+        ChBoxSaveРќР°rdLink.Checked := True;
       end
         else
       begin;
@@ -173,7 +173,7 @@ var
   PwdHash: AnsiString;
        i : Integer;
 begin
-  if ChBoxSaveНаrdLink.Checked then
+  if ChBoxSaveРќР°rdLink.Checked then
   begin
     try
       Reg := TRegistry.Create;
@@ -188,8 +188,8 @@ begin
         Reg.WriteString('PasswordHash', PwdHash);
 
         Reg.CloseKey;
-        MessageBox(Handle,PChar('МАСТЕР ПАРОЛЬ сохранен и привязан к компьютеру, '+
-         ' МАСТЕР ПАРОЛЬ будет действовать пока его не замените.'),
+        MessageBox(Handle,PChar('РњРђРЎРўР•Р  РџРђР РћР›Р¬ СЃРѕС…СЂР°РЅРµРЅ Рё РїСЂРёРІСЏР·Р°РЅ Рє РєРѕРјРїСЊСЋС‚РµСЂСѓ, '+
+         ' РњРђРЎРўР•Р  РџРђР РћР›Р¬ Р±СѓРґРµС‚ РґРµР№СЃС‚РІРѕРІР°С‚СЊ РїРѕРєР° РµРіРѕ РЅРµ Р·Р°РјРµРЅРёС‚Рµ.'),
          PChar(MB_CAPTION), MB_ICONINFORMATION);
       end;
     finally
@@ -207,7 +207,7 @@ begin
         Reg.WriteString('PasswordHash', '');
         Reg.CloseKey;
         MessageBox(Handle,
-                   PChar('МАСТЕР ПАРОЛЬ введен и будет действовать пока не закроете программу'),
+                   PChar('РњРђРЎРўР•Р  РџРђР РћР›Р¬ РІРІРµРґРµРЅ Рё Р±СѓРґРµС‚ РґРµР№СЃС‚РІРѕРІР°С‚СЊ РїРѕРєР° РЅРµ Р·Р°РєСЂРѕРµС‚Рµ РїСЂРѕРіСЂР°РјРјСѓ'),
                    PChar(MB_CAPTION), MB_ICONINFORMATION);
       end;
     finally

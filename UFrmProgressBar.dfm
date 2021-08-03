@@ -14,15 +14,6 @@ object FrmProgressBar: TFrmProgressBar
   Position = poMainFormCenter
   PixelsPerInch = 96
   TextHeight = 16
-  object JvGradProgressBar: TJvGradientProgressBar
-    Left = 20
-    Top = 12
-    Width = 273
-    Height = 29
-    BarColorFrom = clGreen
-    BarColorTo = clLime
-    Color = clWhite
-  end
   object LblCaption: TLabel
     Left = 88
     Top = 18
@@ -44,6 +35,11 @@ object FrmProgressBar: TFrmProgressBar
     Top = 8
   end
   object sSkinProvider: TsSkinProvider
+    AddedTitle.Font.Charset = DEFAULT_CHARSET
+    AddedTitle.Font.Color = clNone
+    AddedTitle.Font.Height = -11
+    AddedTitle.Font.Name = 'Tahoma'
+    AddedTitle.Font.Style = []
     SkinData.SkinSection = 'FORM'
     TitleButtons = <>
     Left = 56

@@ -1,12 +1,11 @@
-unit UFrmOldDecrypt;
+п»їunit UFrmOldDecrypt;
 
 interface
 
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
-  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls, JvExExtCtrls,
-  JvExControls, Vcl.StdCtrls, JvButton, CryptMod, JvXPCore,
-  JvXPButtons, JvGradient;
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls, Vcl.StdCtrls, CryptMod;
+  //JvExExtCtrls, JvExControls,  JvButton, JvXPCore, JvXPButtons, JvGradient;
 
 type
   TFrmOldDeCrypt = class(TForm)
@@ -16,10 +15,10 @@ type
     PnlSource: TPanel;
     PnlDest: TPanel;
     Pnl: TPanel;
-    JvXPBtnImport: TJvXPButton;
-    JvXPBtnSave: TJvXPButton;
-    JvXPBtnDecrypt: TJvXPButton;
-    JvGradient1: TJvGradient;
+    //JvXPBtnImport: TJvXPButton;
+    //JvXPBtnSave: TJvXPButton;
+    //JvXPBtnDecrypt: TJvXPButton;
+    //JvGradient1: TJvGradient;
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure JvXPBtnImportClick(Sender: TObject);
     procedure JvXPBtnDecryptClick(Sender: TObject);
@@ -46,6 +45,7 @@ begin
   Action := caFree;
 end;
 
+
 procedure TFrmOldDeCrypt.JvXPBtnDecryptClick(Sender: TObject);
 var
   Actxt: AnsiString;
@@ -59,7 +59,7 @@ begin
 
     0: begin
          //Decrypt the MASTER_PASSWORD
-         // Проверка мастер пароля
+         // РџСЂРѕРІРµСЂРєР° РјР°СЃС‚РµСЂ РїР°СЂРѕР»СЏ
          if MASTER_PASSWORD = '' then
          begin
            FrmMain.Act_GetMasterPasswordExecute(Nil);
@@ -87,7 +87,7 @@ end;
 
 procedure TFrmOldDeCrypt.JvXPBtnImportClick(Sender: TObject);
 begin
-  FrmMain.OpenDialog.Filter := 'Все файлы (*.*)|*.*';
+  FrmMain.OpenDialog.Filter := 'Р’СЃРµ С„Р°Р№Р»С‹ (*.*)|*.*';
   if Not FrmMain.OpenDialog.Execute then Exit;
   mmSource.Lines.LoadFromFile(FrmMain.OpenDialog.FileName);
 end;

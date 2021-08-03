@@ -1,4 +1,4 @@
-unit UFrmSync;
+п»їunit UFrmSync;
 
 interface
 
@@ -98,7 +98,7 @@ var
   Icon: Ticon;
   Ext: String;
 begin
-  // Добавление ассоциированной иконки файла в ListView
+  // Р”РѕР±Р°РІР»РµРЅРёРµ Р°СЃСЃРѕС†РёРёСЂРѕРІР°РЅРЅРѕР№ РёРєРѕРЅРєРё С„Р°Р№Р»Р° РІ ListView
   Icon := TIcon.Create;
   Icon.SetSize(16,16);
   try
@@ -151,7 +151,7 @@ begin
   for i := 0 to LVAddDir.Items.Count -1 do
     if LowerCase(AddDir) = LowerCase(LVAddDir.Items[i].Caption) then
     begin
-      MessageBox(Handle, PChar('Данная директория уже существует в данном списке.'),
+      MessageBox(Handle, PChar('Р”Р°РЅРЅР°СЏ РґРёСЂРµРєС‚РѕСЂРёСЏ СѓР¶Рµ СЃСѓС‰РµСЃС‚РІСѓРµС‚ РІ РґР°РЅРЅРѕРј СЃРїРёСЃРєРµ.'),
                  PChar(MB_CAPTION), MB_ICONWARNING);
       Exit;
     end;
@@ -159,7 +159,7 @@ begin
   for i := 0 to LVCheckDir.Items.Count -1 do
     if LowerCase(AddDir) = LowerCase(LVCheckDir.Items[i].Caption) then
     begin
-      MessageBox(Handle, PChar('Данная директория уже существует в противоположенном списке.'),
+      MessageBox(Handle, PChar('Р”Р°РЅРЅР°СЏ РґРёСЂРµРєС‚РѕСЂРёСЏ СѓР¶Рµ СЃСѓС‰РµСЃС‚РІСѓРµС‚ РІ РїСЂРѕС‚РёРІРѕРїРѕР»РѕР¶РµРЅРЅРѕРј СЃРїРёСЃРєРµ.'),
                  PChar(MB_CAPTION), MB_ICONWARNING);
       Exit;
     end;
@@ -210,7 +210,7 @@ begin
 
   if (LVDirMaster.Items.Count = 0) or (LVDirBackUp.Items.Count = 0) then
   begin
-    MessageBox(Handle, PChar('Не добавлена директория.'),
+    MessageBox(Handle, PChar('РќРµ РґРѕР±Р°РІР»РµРЅР° РґРёСЂРµРєС‚РѕСЂРёСЏ.'),
                PChar(MB_CAPTION), MB_ICONWARNING);
     Exit;
   end;
@@ -253,7 +253,7 @@ begin
 
 
   LockControl(ptSync);
-  // для прогресс бар
+  // РґР»СЏ РїСЂРѕРіСЂРµСЃСЃ Р±Р°СЂ
   for i := 0 to LVRep.Items.Count -1 do
     if LVRep.Items[i].Checked then inc(max);
   cnt := 0;
@@ -282,38 +282,38 @@ begin
         FileDest := LVRep.Items[i].SubItems[5];
     end;
 
-    //проверка существования директории
+    //РїСЂРѕРІРµСЂРєР° СЃСѓС‰РµСЃС‚РІРѕРІР°РЅРёСЏ РґРёСЂРµРєС‚РѕСЂРёРё
     FileDir := ExtractFileDir(FileDest);
     if Not DirectoryExists(FileDir) then
       if Not ForceDirectories(FileDir) then
       begin
-        LVRep.Items[i].SubItems[4] := 'Ошибка: ' + SystemErrorMessage(GetLastError);
+        LVRep.Items[i].SubItems[4] := 'РћС€РёР±РєР°: ' + SystemErrorMessage(GetLastError);
         Continue;
       end;
 
-    // Копирование файла
+    // РљРѕРїРёСЂРѕРІР°РЅРёРµ С„Р°Р№Р»Р°
     CopyFile(PChar(FileSource), PChar(FileDest), false);
 
-    //проверка что файл был дейтвительно скопирован и заменен
+    //РїСЂРѕРІРµСЂРєР° С‡С‚Рѕ С„Р°Р№Р» Р±С‹Р» РґРµР№С‚РІРёС‚РµР»СЊРЅРѕ СЃРєРѕРїРёСЂРѕРІР°РЅ Рё Р·Р°РјРµРЅРµРЅ
     if CheckFileCopy(FileSource, FileDest) then
     begin
       if LVRep.Items[i].SubItems[1] = '-->>' then
       begin
         if LVRep.Items[i].SubItems[3] <> '' then
-          LVRep.Items[i].SubItems[4] := 'Обновлен'
-        else LVRep.Items[i].SubItems[4] := 'Скопирован';
+          LVRep.Items[i].SubItems[4] := 'РћР±РЅРѕРІР»РµРЅ'
+        else LVRep.Items[i].SubItems[4] := 'РЎРєРѕРїРёСЂРѕРІР°РЅ';
       end
         else
       begin
         if LVRep.Items[i].Caption <> '' then
-          LVRep.Items[i].SubItems[4] := 'Обновлен'
-        else LVRep.Items[i].SubItems[4] := 'Скопирован';
+          LVRep.Items[i].SubItems[4] := 'РћР±РЅРѕРІР»РµРЅ'
+        else LVRep.Items[i].SubItems[4] := 'РЎРєРѕРїРёСЂРѕРІР°РЅ';
       end;
     end
     else
     begin
-      //копирование не удалось
-      LVRep.Items[i].SubItems[4] := 'Не удачно';
+      //РєРѕРїРёСЂРѕРІР°РЅРёРµ РЅРµ СѓРґР°Р»РѕСЃСЊ
+      LVRep.Items[i].SubItems[4] := 'РќРµ СѓРґР°С‡РЅРѕ';
     end;
 
     inc(cnt);
@@ -377,14 +377,14 @@ begin
   case ProcType of
     ptScan :
       begin
-        BtnScan.Caption := 'ОСТАНОВИТЬ';
+        BtnScan.Caption := 'РћРЎРўРђРќРћР’РРўР¬';
         BtnSync.Enabled := false;
         ProgressBar.Style := pbstMarquee;
       end;
     ptSync :
       begin
         BtnScan.Enabled := false;
-        BtnSync.Caption := 'ОСТАНОВИТЬ';
+        BtnSync.Caption := 'РћРЎРўРђРќРћР’РРўР¬';
       end;
   end;
 end;
@@ -401,9 +401,9 @@ begin
   DefaultDraw := true;
   with Sender.Canvas do
   begin
-    if Item.SubItems[4] = 'Не удачно' then Brush.Color := $00D9D9FF;
-    if Item.SubItems[4] = 'Обновлен' then Brush.Color := $00FFD5D5;
-    if Item.SubItems[4] = 'Скопирован' then Brush.Color := $00E7FFCE;
+    if Item.SubItems[4] = 'РќРµ СѓРґР°С‡РЅРѕ' then Brush.Color := $00D9D9FF;
+    if Item.SubItems[4] = 'РћР±РЅРѕРІР»РµРЅ' then Brush.Color := $00FFD5D5;
+    if Item.SubItems[4] = 'РЎРєРѕРїРёСЂРѕРІР°РЅ' then Brush.Color := $00E7FFCE;
    //FillRect(Item.DisplayRect(drBounds));
  end;
 
@@ -415,7 +415,7 @@ var
 begin
   ///  sdNewFolder, sdShowEdit, sdShowShares,, sdShowFiles, sdValidateDir
   Options := [sdNewFolder, sdShowEdit, sdShowShares, sdNewUI];
-  SelectDirectory('Укажите директорию','',Result, Options, Nil);
+  SelectDirectory('РЈРєР°Р¶РёС‚Рµ РґРёСЂРµРєС‚РѕСЂРёСЋ','',Result, Options, Nil);
 end;
 
 procedure TFrmSync.PA_LVRepCheckDownClick(Sender: TObject);
@@ -438,7 +438,7 @@ end;
 
 procedure TFrmSync.PA_VLClearClick(Sender: TObject);
 begin
-  if MessageBox(Handle, PChar('Вы действительно желаете очистить список?'), PChar(MB_CAPTION),
+  if MessageBox(Handle, PChar('Р’С‹ РґРµР№СЃС‚РІРёС‚РµР»СЊРЅРѕ Р¶РµР»Р°РµС‚Рµ РѕС‡РёСЃС‚РёС‚СЊ СЃРїРёСЃРѕРє?'), PChar(MB_CAPTION),
                 MB_ICONWARNING or MB_YESNO) = IDNO then Exit;
   LastActivLV.Clear;
 end;
@@ -448,7 +448,7 @@ begin
   if LastActivLV = LVDirMaster then
     if LVDirMaster.Items.Count > 0 then
     begin
-      MessageBox(Handle, PChar('Мастер директория не может быть более чем одна директория.'),
+      MessageBox(Handle, PChar('РњР°СЃС‚РµСЂ РґРёСЂРµРєС‚РѕСЂРёСЏ РЅРµ РјРѕР¶РµС‚ Р±С‹С‚СЊ Р±РѕР»РµРµ С‡РµРј РѕРґРЅР° РґРёСЂРµРєС‚РѕСЂРёСЏ.'),
                  PChar(MB_CAPTION), MB_ICONINFORMATION);
       exit;
     end;
@@ -470,7 +470,8 @@ begin
   begin
     if LVDirMaster.Items.Count > 0 then
     begin
-      MessageBox(Handle, PChar('Мастер директория не может быть более чем одна директория.'),
+      MessageBox(Handle, 
+	             PChar('РњР°СЃС‚РµСЂ РґРёСЂРµРєС‚РѕСЂРёСЏ РЅРµ РјРѕР¶РµС‚ Р±С‹С‚СЊ Р±РѕР»РµРµ С‡РµРј РѕРґРЅР° РґРёСЂРµРєС‚РѕСЂРёСЏ.'),
                  PChar(MB_CAPTION), MB_ICONINFORMATION);
       exit;
     end;
@@ -487,8 +488,10 @@ begin
     if FrmSelectDir.LVDir.Items[i].Checked then
     begin
       mm.Lines.Add(FrmSelectDir.LVDir.Items[i].Caption);
-      if LastActivLV = LVDirMaster then AddItem(LVDirMaster, LVDirBackUp, FrmSelectDir.LVDir.Items[i].Caption);
-      if LastActivLV = LVDirBackUp then AddItem(LVDirBackUp, LVDirMaster, FrmSelectDir.LVDir.Items[i].Caption);
+      if LastActivLV = LVDirMaster then 
+	    AddItem(LVDirMaster, LVDirBackUp, FrmSelectDir.LVDir.Items[i].Caption);
+      if LastActivLV = LVDirBackUp then 
+	    AddItem(LVDirBackUp, LVDirMaster, FrmSelectDir.LVDir.Items[i].Caption);
     end;
   end;
 
@@ -499,7 +502,9 @@ end;
 procedure TFrmSync.PM_DeleteItemClick(Sender: TObject);
 begin
  if LastActivLV.SelCount = 0 then exit;
-  if MessageBox(Handle, PChar('Вы действительно желаете удалить выделенную директорию из списока?'), PChar(MB_CAPTION),
+  if MessageBox(Handle, 
+                PChar('Р’С‹ РґРµР№СЃС‚РІРёС‚РµР»СЊРЅРѕ Р¶РµР»Р°РµС‚Рµ СѓРґР°Р»РёС‚СЊ РІС‹РґРµР»РµРЅРЅСѓСЋ РґРёСЂРµРєС‚РѕСЂРёСЋ РёР· СЃРїРёСЃРѕРєР°?'), 
+				PChar(MB_CAPTION),
                 MB_ICONWARNING or MB_YESNO) = IDNO then Exit;
  LastActivLV.Selected.Delete;
 end;
@@ -524,7 +529,7 @@ end;
 
 procedure TFrmSync.PM_VLClearClick(Sender: TObject);
 begin
-  if MessageBox(Handle, PChar('Вы действительно желаете очистить список?'), PChar(MB_CAPTION),
+  if MessageBox(Handle, PChar('Р’С‹ РґРµР№СЃС‚РІРёС‚РµР»СЊРЅРѕ Р¶РµР»Р°РµС‚Рµ РѕС‡РёСЃС‚РёС‚СЊ СЃРїРёСЃРѕРє?'), PChar(MB_CAPTION),
                 MB_ICONWARNING or MB_YESNO) = IDNO then Exit;
   LastActivLV.Clear;
 end;
@@ -574,24 +579,24 @@ begin
 
               FindFile := Copy(StartDir + SR.Name, Length(FirstDir) + 1, length(StartDir + SR.Name) - Length(FirstDir));
 
-              // Получаем дату последнего изменения
+              // РџРѕР»СѓС‡Р°РµРј РґР°С‚Сѓ РїРѕСЃР»РµРґРЅРµРіРѕ РёР·РјРµРЅРµРЅРёСЏ
               dt_start := GetDateTimeFromFile(SR);
 
-              ////  поиск Файла в резервной директории
+              ////  РїРѕРёСЃРє Р¤Р°Р№Р»Р° РІ СЂРµР·РµСЂРІРЅРѕР№ РґРёСЂРµРєС‚РѕСЂРёРё
               if FindFirst(OldDir + FindFile, faAnyFile, SR_Old) = 0 then
               begin
 
-                // Получаем дату файла последнего изменения в синхронизируемой папке
+                // РџРѕР»СѓС‡Р°РµРј РґР°С‚Сѓ С„Р°Р№Р»Р° РїРѕСЃР»РµРґРЅРµРіРѕ РёР·РјРµРЅРµРЅРёСЏ РІ СЃРёРЅС…СЂРѕРЅРёР·РёСЂСѓРµРјРѕР№ РїР°РїРєРµ
                 dt_sync  := GetDateTimeFromFile(SR_Old);
 
-                // Если даты последнего изменения равны то переход на следующий цикл
+                // Р•СЃР»Рё РґР°С‚С‹ РїРѕСЃР»РµРґРЅРµРіРѕ РёР·РјРµРЅРµРЅРёСЏ СЂР°РІРЅС‹ С‚Рѕ РїРµСЂРµС…РѕРґ РЅР° СЃР»РµРґСѓСЋС‰РёР№ С†РёРєР»
                 if (dt_start = dt_sync) or (dt_start < dt_sync) then Continue;
 
 
-                // Получение иконки
+                // РџРѕР»СѓС‡РµРЅРёРµ РёРєРѕРЅРєРё
                 IcnIndex := AddAssociatedIcon(StartDir + SR.Name);
 
-                // Создаем новый итем в списке
+                // РЎРѕР·РґР°РµРј РЅРѕРІС‹Р№ РёС‚РµРј РІ СЃРїРёСЃРєРµ
                 NewItem := AddItemReport;
                 NewItem.Caption     := StartDir + SR.Name;
                 NewItem.ImageIndex  := IcnIndex;
@@ -603,7 +608,7 @@ begin
                 //
                 if dt_start > dt_sync then
                 begin
-                  //NewItem.SubItems[4] := 'Заменен';
+                  //NewItem.SubItems[4] := 'Р—Р°РјРµРЅРµРЅ';
                   NewItem.SubItems[1] := '-->>';
                 end;
 
@@ -611,9 +616,9 @@ begin
               end
                 else
               begin
-                // Если файл не найден в синхронизируемой директории
+                // Р•СЃР»Рё С„Р°Р№Р» РЅРµ РЅР°Р№РґРµРЅ РІ СЃРёРЅС…СЂРѕРЅРёР·РёСЂСѓРµРјРѕР№ РґРёСЂРµРєС‚РѕСЂРёРё
 
-                // Получение иконки
+                // РџРѕР»СѓС‡РµРЅРёРµ РёРєРѕРЅРєРё
                 IcnIndex := AddAssociatedIcon(StartDir + SR.Name);
 
                 NewItem             := AddItemReport;
@@ -622,7 +627,7 @@ begin
                 NewItem.SubItems[0] := FormatDateTime('dd.mm.yyyy hh:mm:ss.zz', dt_start);
                 NewItem.SubItems[1] := '-->>';
                 NewItem.SubItems[5] := OldDir + FindFile;
-                //NewItem.SubItems[4] := 'Скопирован';
+                //NewItem.SubItems[4] := 'РЎРєРѕРїРёСЂРѕРІР°РЅ';
               end;
 
               FindClose(SR_Old);
@@ -684,10 +689,10 @@ begin
 
               FindFile := Copy(StartDir + SR.Name, Length(FirstDir) + 1, length(StartDir + SR.Name) - Length(FirstDir));
 
-              // Получаем дату последнего изменения
+              // РџРѕР»СѓС‡Р°РµРј РґР°С‚Сѓ РїРѕСЃР»РµРґРЅРµРіРѕ РёР·РјРµРЅРµРЅРёСЏ
               dt_start := GetDateTimeFromFile(SR);
 
-              // поиск Файла в другой директории
+              // РїРѕРёСЃРє Р¤Р°Р№Р»Р° РІ РґСЂСѓРіРѕР№ РґРёСЂРµРєС‚РѕСЂРёРё
               if FindFirst(OldDir + FindFile, faAnyFile, SR_Old) = 0 then
               begin
 
@@ -695,10 +700,10 @@ begin
 
                 if (dt_start = dt_sync) or (dt_start < dt_sync) then continue;
 
-                // Получение иконки
+                // РџРѕР»СѓС‡РµРЅРёРµ РёРєРѕРЅРєРё
                 IcnIndex := AddAssociatedIcon(StartDir + SR.Name);
 
-                // Если файл не найден в синхронизируемой директории
+                // Р•СЃР»Рё С„Р°Р№Р» РЅРµ РЅР°Р№РґРµРЅ РІ СЃРёРЅС…СЂРѕРЅРёР·РёСЂСѓРµРјРѕР№ РґРёСЂРµРєС‚РѕСЂРёРё
                 NewItem             := AddItemReport;
                 NewItem.Caption     := OldDir + FindFile; //StartDir + SR.Name;
                 NewItem.ImageIndex  := IcnIndex;
@@ -710,12 +715,12 @@ begin
               end
                 else
               begin
-                // Если файл не найден в другой директории
+                // Р•СЃР»Рё С„Р°Р№Р» РЅРµ РЅР°Р№РґРµРЅ РІ РґСЂСѓРіРѕР№ РґРёСЂРµРєС‚РѕСЂРёРё
 
-                // Получение иконки
+                // РџРѕР»СѓС‡РµРЅРёРµ РёРєРѕРЅРєРё
                 IcnIndex := AddAssociatedIcon(StartDir + SR.Name);
 
-                // Если файл не найден в синхронизируемой директории
+                // Р•СЃР»Рё С„Р°Р№Р» РЅРµ РЅР°Р№РґРµРЅ РІ СЃРёРЅС…СЂРѕРЅРёР·РёСЂСѓРµРјРѕР№ РґРёСЂРµРєС‚РѕСЂРёРё
                 NewItem             := AddItemReport;
                 NewItem.Caption     := '';//OldDir + FindFile; //StartDir + SR.Name;
                 NewItem.ImageIndex  := -1;
@@ -754,14 +759,14 @@ begin
   case ProcType of
     ptScan :
       begin
-        BtnScan.Caption := 'СКАНИРОВАТЬ';
+        BtnScan.Caption := 'РЎРљРђРќРР РћР’РђРўР¬';
         BtnSync.Enabled := true;
         ProgressBar.Style := pbstNormal;
       end;
     ptSync :
       begin
         BtnScan.Enabled := true;
-        BtnSync.caption := 'СИНХРОНИЗИРОВАТЬ';
+        BtnSync.caption := 'РЎРРќРҐР РћРќРР—РР РћР’РђРўР¬';
       end;
   end;
 end;

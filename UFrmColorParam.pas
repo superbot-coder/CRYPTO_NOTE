@@ -1,21 +1,16 @@
-unit UFrmColorParam;
+﻿unit UFrmColorParam;
 
 interface
 
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
-  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.ExtCtrls,
-  JvExControls, JvLabel, JvXPCore, JvXPButtons, JvGradient;
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.ExtCtrls;
+  //JvExControls, JvLabel, JvXPCore, JvXPButtons, JvGradient;
 
 type
   TFrmColorParam = class(TForm)
-    JvXPBtnFontDlg: TJvXPButton;
-    JvLabel1: TJvLabel;
     ColorBox: TColorBox;
-    JvXPBtnColor: TJvXPButton;
     mmDemo: TMemo;
-    JvXPBtnOneApply: TJvXPButton;
-    JvGradient1: TJvGradient;
     ColorDialog: TColorDialog;
     procedure ShowModal(MM: TMemo); overload;
     procedure JvXPBtnColorClick(Sender: TObject);

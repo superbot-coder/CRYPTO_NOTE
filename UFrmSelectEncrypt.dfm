@@ -23,15 +23,6 @@ object FrmSelectEncrypt: TFrmSelectEncrypt
     Height = 16
     Caption = #1040#1083#1075#1086#1088#1080#1090#1084':'
   end
-  object JvXPBtton: TJvXPButton
-    Left = 184
-    Top = 136
-    Width = 121
-    Height = 35
-    Caption = #1055#1056#1048#1052#1045#1053#1048#1058#1068
-    TabOrder = 0
-    OnClick = JvXPBttonClick
-  end
   object RadioGroup: TRadioGroup
     Left = 8
     Top = 8
@@ -42,7 +33,7 @@ object FrmSelectEncrypt: TFrmSelectEncrypt
     Items.Strings = (
       #1064#1080#1092#1088#1086#1074#1072#1090#1100' '#1052#1040#1057#1058#1045#1056' '#1087#1072#1088#1086#1083#1077#1084
       #1064#1080#1092#1088#1086#1074#1072#1090#1100' '#1076#1088#1091#1075#1080#1084' '#1087#1072#1088#1086#1083#1077#1084)
-    TabOrder = 1
+    TabOrder = 0
   end
   object ChBoxDeleteSource: TCheckBox
     Left = 271
@@ -71,7 +62,15 @@ object FrmSelectEncrypt: TFrmSelectEncrypt
         ImageIndex = 4
         SelectedImageIndex = 4
       end>
+    TabOrder = 1
+  end
+  object sButton1: TsButton
+    Left = 160
+    Top = 136
+    Width = 169
+    Height = 35
+    Caption = 'sButton1'
     TabOrder = 3
-    Images = FrmMain.ImageList
+    OnClick = sButton1Click
   end
 end

@@ -1,4 +1,4 @@
-unit UFindFiles;
+﻿unit UFindFiles;
 
 interface
 

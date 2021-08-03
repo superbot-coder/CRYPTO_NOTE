@@ -1,17 +1,17 @@
-unit UFrmProgressBar;
+﻿unit UFrmProgressBar;
 
 interface
 
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
-  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls, Vcl.StdCtrls,
-  JvProgressBar, JvExControls, JvGradient, sPanel, sSkinProvider;
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls, Vcl.StdCtrls, sPanel, sSkinProvider;
+  //JvProgressBar, JvExControls, JvGradient;
 
 type
   TFrmProgressBar = class(TForm)
     TimerProgress: TTimer;
     sSkinProvider: TsSkinProvider;
-    JvGradProgressBar: TJvGradientProgressBar;
+    //JvGradProgressBar: TJvGradientProgressBar;
     LblCaption: TLabel;
     procedure TimerProgressTimer(Sender: TObject);
     procedure Start;
@@ -43,6 +43,7 @@ end;
 
 procedure TFrmProgressBar.TimerProgressTimer(Sender: TObject);
 begin
+  {
    if JvGradProgressBar.Position = 100 then
   begin
     JvGradProgressBar.Position := 0;
@@ -60,6 +61,7 @@ begin
     end;
   end;
   JvGradProgressBar.Position := JvGradProgressBar.Position + 2;
+  }
 end;
 
 end.

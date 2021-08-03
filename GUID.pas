@@ -1,4 +1,4 @@
-Unit GUID;
+﻿Unit GUID;
 
 interface
 

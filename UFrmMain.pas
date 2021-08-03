@@ -1,4 +1,4 @@
-unit UFrmMain;
+п»їunit UFrmMain;
 
 interface
 
@@ -9,10 +9,12 @@ uses
   Vcl.PlatformDefaultStyleActnCtrls, Vcl.ExtCtrls, GUID, Vcl.ComCtrls,
   System.ImageList, Vcl.ImgList, System.masks, Vcl.Buttons, Vcl.Menus,
   Vcl.ActnPopup, System.Win.Registry, System.StrUtils,
-  ShellAPI, Vcl.Tabs, Math, Error, JvProgressBar, sSkinManager, sSplitter,
+  ShellAPI, Vcl.Tabs, Math, Error,
+  sSkinManager, sSplitter,
   sComboBoxes, sTreeView, sPanel, sComboBox, sLabel, acShellCtrls, sButton,
   Vcl.Mask, sMaskEdit, sCustomComboEdit, sComboEdit, aceCheckComboBox,
-  sStatusBar, acCoolBar, sSkinProvider;
+  sStatusBar, acCoolBar, sSkinProvider, sPageControl, acHeaderControl,
+  sTabControl, acTitleBar, sScrollBox, sFrameBar, sToolBar, aceListView;
 
 type THashType = (MD5_TXT, MD5_CTXT);
 
@@ -256,7 +258,7 @@ procedure TFrmMain.sBtnSearchClick(Sender: TObject);
 begin
   if (sCmBoxSearch.Text = '') or (TV.Items.Count = 0) then Exit;
   TVSearh;
-  sStatusBar.Panels[0].Text := 'Поиск: ' + GetFullFileName;
+  sStatusBar.Panels[0].Text := 'РџРѕРёСЃРє: ' + GetFullFileName;
 end;
 
 procedure TFrmMain.SendLog(txt: string; Err: Integer);
@@ -305,12 +307,12 @@ var i : SmallInt;
     NewChild: TFrmMDIChild;
 begin
   NewChild := TFrmMDIChild.Create(Application);
-  NewChild.Caption             := 'Новая запись';
+  NewChild.Caption             := 'РќРѕРІР°СЏ Р·Р°РїРёСЃСЊ';
   NewChild.MDIStatusFile       := sfNewFile;
   NewChild.ChangeTxt           := False;
   NewChild.sBtnDecrypt.Enabled := false;
   ImgListLogo.GetIcon(0, NewChild.ImageLogo.Picture.Icon);
-  i := TabSet.Tabs.Add(IncrementTabsName(ExtractFileName('Новая запись')));
+  i := TabSet.Tabs.Add(IncrementTabsName(ExtractFileName('РќРѕРІР°СЏ Р·Р°РїРёСЃСЊ')));
   NewChild.TabSetID := TabSet.Tabs[i];
   TabSet.TabIndex   := i;
 end;
@@ -335,7 +337,7 @@ begin
          //end;
          if MASTER_PASSWORD = '' then
          begin
-           MessageBox(Handle, PChar('МАСТЕР ПАРОЛЬ не был введен.'),
+           MessageBox(Handle, PChar('РњРђРЎРўР•Р  РџРђР РћР›Р¬ РЅРµ Р±С‹Р» РІРІРµРґРµРЅ.'),
                       PChar(MB_CAPTION), MB_ICONWARNING);
            Exit;
          end;
@@ -344,7 +346,7 @@ begin
        end;
 
     1: begin
-         // Диалог
+         // Р”РёР°Р»РѕРі
        end;
   end;
 
@@ -362,13 +364,13 @@ begin
 
       FrmMDIChild.EnCryptTxtToSave(EncriptFileName, PAnsiChar(AnsiString(ST.Text)) , FrmSelectEncrypt.ALGO, PASSWORD);
 
-      // Дабавление в дерево записи
+      // Р”Р°Р±Р°РІР»РµРЅРёРµ РІ РґРµСЂРµРІРѕ Р·Р°РїРёСЃРё
       if FileExists(EncriptFileName) then
       begin
         AddNodeToTreeView(EncriptFileName, 1);
       end;
 
-      // Удаление файлов источников
+      // РЈРґР°Р»РµРЅРёРµ С„Р°Р№Р»РѕРІ РёСЃС‚РѕС‡РЅРёРєРѕРІ
       if FrmSelectEncrypt.ChBoxDeleteSource.Checked then
       begin
         if DeleteFile(FilesList.Strings[i]) then DeletNodeFromTreeVies(FilesList.Strings[i]);
@@ -402,7 +404,7 @@ begin
          //end;
          if MASTER_PASSWORD = '' then
          begin
-           MessageBox(Handle, PChar('МАСТЕР ПАРОЛЬ не был введен.'),
+           MessageBox(Handle, PChar('РњРђРЎРўР•Р  РџРђР РћР›Р¬ РЅРµ Р±С‹Р» РІРІРµРґРµРЅ.'),
                       PChar(MB_CAPTION), MB_ICONWARNING);
            Exit;
          end;
@@ -411,14 +413,14 @@ begin
        end;
 
     1: begin
-         // Диалог
+         // Р”РёР°Р»РѕРі
        end;
   end;
 
   FilesList := TStringList.Create;
   ST        := TStringList.Create;
   try
-    // Получаю список всех шифрованных файлов в выделенной директории
+    // РџРѕР»СѓС‡Р°СЋ СЃРїРёСЃРѕРє РІСЃРµС… С€РёС„СЂРѕРІР°РЅРЅС‹С… С„Р°Р№Р»РѕРІ РІ РІС‹РґРµР»РµРЅРЅРѕР№ РґРёСЂРµРєС‚РѕСЂРёРё
     FindFilesMsk(GetFullFileName, '*.ctxt', FilesList, True);
     FrmDebugs.Show;
     FrmDebugs.mm.Lines.Add(FilesList.Text);
@@ -520,10 +522,8 @@ var
   Sign: TSignature;
 begin
 
-  if TV.SelectionCount = 0 then
-  begin
-    exit;
-  end;
+  if TV.Selected = Nil then exit;
+
 
   FullName := GetFullFileName;
   if GetFileAttributes(PChar(FullName)) = FILE_ATTRIBUTE_DIRECTORY then
@@ -532,7 +532,7 @@ begin
     Exit;
   end;
 
-  // Если окно уже открыто то оно распахнется на максимум
+  // Р•СЃР»Рё РѕРєРЅРѕ СѓР¶Рµ РѕС‚РєСЂС‹С‚Рѕ С‚Рѕ РѕРЅРѕ СЂР°СЃРїР°С…РЅРµС‚СЃСЏ РЅР° РјР°РєСЃРёРјСѓРј
   for i := 0 to FrmMain.MDIChildCount -1 do
   begin
     if FrmMain.MDIChildren[i].Caption = FullName then
@@ -543,7 +543,7 @@ begin
     end;
   end;
 
-  // Создание экземпляра окна
+  // РЎРѕР·РґР°РЅРёРµ СЌРєР·РµРјРїР»СЏСЂР° РѕРєРЅР°
   FrmMDIChild := TFrmMDIChild.Create(Application);
   FrmMDIChild.Caption             := FullName;
   FrmMDIChild.OpenedFileName      := FullName;
@@ -555,14 +555,14 @@ begin
   begin
     try
       ImageIndex := 1;
-      // Проверка мастер пароля
+      // РџСЂРѕРІРµСЂРєР° РјР°СЃС‚РµСЂ РїР°СЂРѕР»СЏ
       if MASTER_PASSWORD = '' then
       begin
          Act_GetMasterPasswordExecute(Nil);
       end;
 
-      // Записываем в созданную форму PASSWORD,
-      // что бы использовался при сохранееии открытого файла
+      // Р—Р°РїРёСЃС‹РІР°РµРј РІ СЃРѕР·РґР°РЅРЅСѓСЋ С„РѕСЂРјСѓ PASSWORD,
+      // С‡С‚Рѕ Р±С‹ РёСЃРїРѕР»СЊР·РѕРІР°Р»СЃСЏ РїСЂРё СЃРѕС…СЂР°РЅРµРµРёРё РѕС‚РєСЂС‹С‚РѕРіРѕ С„Р°Р№Р»Р°
       FrmMDIChild.SetPassword; //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
       st := TStringList.Create;
@@ -570,7 +570,7 @@ begin
       if st.Count = 0 then
       begin
         MessageBox(Handle,
-                   PChar('Файл является пустым и дальнейшая его расшифровка не возможна.'),
+                   PChar('Р¤Р°Р№Р» СЏРІР»СЏРµС‚СЃСЏ РїСѓСЃС‚С‹Рј Рё РґР°Р»СЊРЅРµР№С€Р°СЏ РµРіРѕ СЂР°СЃС€РёС„СЂРѕРІРєР° РЅРµ РІРѕР·РјРѕР¶РЅР°.'),
                    PChar(MB_CAPTION), MB_ICONERROR);
         FrmMDIChild.Close;
         Exit;
@@ -581,11 +581,11 @@ begin
       if Not Sign.Checked then
       begin
         if MessageBox(Handle,
-                   PChar('В этом файле не были найдены хэши файла, '+
-                         'которые являются контрольными суммами файла.'+#13+
-                         'Возможно этот файл не является зашифровонным и '+
-                         'его дальнейшая расшифровка не удастся.'+#13+
-                         'Вы хотит продолжить?'),
+                   PChar('Р’ СЌС‚РѕРј С„Р°Р№Р»Рµ РЅРµ Р±С‹Р»Рё РЅР°Р№РґРµРЅС‹ С…СЌС€Рё С„Р°Р№Р»Р°, '+
+                         'РєРѕС‚РѕСЂС‹Рµ СЏРІР»СЏСЋС‚СЃСЏ РєРѕРЅС‚СЂРѕР»СЊРЅС‹РјРё СЃСѓРјРјР°РјРё С„Р°Р№Р»Р°.'+#13+
+                         'Р’РѕР·РјРѕР¶РЅРѕ СЌС‚РѕС‚ С„Р°Р№Р» РЅРµ СЏРІР»СЏРµС‚СЃСЏ Р·Р°С€РёС„СЂРѕРІРѕРЅРЅС‹Рј Рё '+
+                         'РµРіРѕ РґР°Р»СЊРЅРµР№С€Р°СЏ СЂР°СЃС€РёС„СЂРѕРІРєР° РЅРµ СѓРґР°СЃС‚СЃСЏ.'+#13+
+                         'Р’С‹ С…РѕС‚РёС‚ РїСЂРѕРґРѕР»Р¶РёС‚СЊ?'),
                    PChar(MB_CAPTION), MB_YESNO or MB_ICONWARNING) = IDNO then
          begin
            FrmMDIChild.Close; //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -596,14 +596,14 @@ begin
       if st.Count > 1 then Actxt := st.Strings[1]
       else Actxt := st.Strings[0];
 
-      // Сверка содержимого зашифрованного файла с Хэшем
+      // РЎРІРµСЂРєР° СЃРѕРґРµСЂР¶РёРјРѕРіРѕ Р·Р°С€РёС„СЂРѕРІР°РЅРЅРѕРіРѕ С„Р°Р№Р»Р° СЃ РҐСЌС€РµРј
       if Sign.hash_encrypt <> GetMD5Hash(Actxt) then
       begin
        if Sign.hash_encrypt <> '' then
          MessageBox(Handle,
-                   PChar('Так как хэш файла не совпадает с хешем содержимого файла, '+#13#10+
-                   'это означает, что файл поврежден или не весь, '+
-                   'файл может быть расшифрован не верно.'),
+                   PChar('РўР°Рє РєР°Рє С…СЌС€ С„Р°Р№Р»Р° РЅРµ СЃРѕРІРїР°РґР°РµС‚ СЃ С…РµС€РµРј СЃРѕРґРµСЂР¶РёРјРѕРіРѕ С„Р°Р№Р»Р°, '+#13#10+
+                   'СЌС‚Рѕ РѕР·РЅР°С‡Р°РµС‚, С‡С‚Рѕ С„Р°Р№Р» РїРѕРІСЂРµР¶РґРµРЅ РёР»Рё РЅРµ РІРµСЃСЊ, '+
+                   'С„Р°Р№Р» РјРѕР¶РµС‚ Р±С‹С‚СЊ СЂР°СЃС€РёС„СЂРѕРІР°РЅ РЅРµ РІРµСЂРЅРѕ.'),
                    PChar(MB_CAPTION), MB_ICONWARNING);
       end;
 
@@ -613,10 +613,10 @@ begin
         RC4_SHA512: Atxt := DecryptRC4_SHA512(MASTER_PASSWORD, Actxt);
       end;
 
-      // Сверка расшифрованного файла с Хэшем
+      // РЎРІРµСЂРєР° СЂР°СЃС€РёС„СЂРѕРІР°РЅРЅРѕРіРѕ С„Р°Р№Р»Р° СЃ РҐСЌС€РµРј
       if GetMD5Hash(Atxt) = Sign.hash_uncrypt then
       begin
-        // файл расшифрован
+        // С„Р°Р№Р» СЂР°СЃС€РёС„СЂРѕРІР°РЅ
         if 'dsz:' = copy(Atxt, 1 ,4) then
         begin
           i := ConvertStringToInteger(copy(Atxt, 5 , AnsiPos(';', Atxt) - 5));
@@ -629,13 +629,13 @@ begin
       end
         else
       begin
-        // Файл не удалось расшифровать
+        // Р¤Р°Р№Р» РЅРµ СѓРґР°Р»РѕСЃСЊ СЂР°СЃС€РёС„СЂРѕРІР°С‚СЊ
         if Sign.hash_uncrypt <> '' then
           MessageBox(Handle,
-                   PChar('Так как хэш файла не совпадает с хэшем расшифрованного файла '+#13+
-                   'это означяет, что файл не был правильно расшифрован. '+
-                   'Возможно у вас введен не верный пароль. '+#13+
-                   'Попробуйте повторить попытку с другим паролем.'),
+                   PChar('РўР°Рє РєР°Рє С…СЌС€ С„Р°Р№Р»Р° РЅРµ СЃРѕРІРїР°РґР°РµС‚ СЃ С…СЌС€РµРј СЂР°СЃС€РёС„СЂРѕРІР°РЅРЅРѕРіРѕ С„Р°Р№Р»Р° '+#13+
+                   'СЌС‚Рѕ РѕР·РЅР°С‡СЏРµС‚, С‡С‚Рѕ С„Р°Р№Р» РЅРµ Р±С‹Р» РїСЂР°РІРёР»СЊРЅРѕ СЂР°СЃС€РёС„СЂРѕРІР°РЅ. '+
+                   'Р’РѕР·РјРѕР¶РЅРѕ Сѓ РІР°СЃ РІРІРµРґРµРЅ РЅРµ РІРµСЂРЅС‹Р№ РїР°СЂРѕР»СЊ. '+#13+
+                   'РџРѕРїСЂРѕР±СѓР№С‚Рµ РїРѕРІС‚РѕСЂРёС‚СЊ РїРѕРїС‹С‚РєСѓ СЃ РґСЂСѓРіРёРј РїР°СЂРѕР»РµРј.'),
                    PCHar(MB_CAPTION), MB_ICONWARNING);
         FrmMDIChild.mm.Text       := Atxt;
         FrmMDIChild.mm.ReadOnly   := true;
@@ -658,7 +658,7 @@ begin
     FrmMDIChild.MDIStatusFile           := sfUnCryptFile;
   end;
 
-  // Генерация TabNameID
+  // Р“РµРЅРµСЂР°С†РёСЏ TabNameID
   ImgListLogo.GetIcon(ImageIndex, FrmMDIChild.ImageLogo.Picture.Icon);
 
   i := TabSet.Tabs.Add(IncrementTabsName(ExtractFileName(FullName)));
@@ -677,7 +677,7 @@ begin
   if (sCmBoxExRootDirs.ItemsEx.Count = 0) or (sCmBoxExRootDirs.ItemIndex = -1) then Exit;
 
   sBtnUpDate.Enabled := false;
-  FrmProgressBar.Start;
+  // FrmProgressBar.Start;
   //while ImageListTree.Count > 4 do ImageListTree.Delete(ImageListTree.Count -1);
   //TV.Items.Clear;
   if sCmBoxExRootDirs.ItemIndex = 0 then
@@ -692,13 +692,13 @@ begin
       TN.ImageIndex    := 1;
       TN.SelectedIndex := 1;
       FindFilesMskTV(TN.Text, '*.txt|*.ctxt', TN, true);
-     // Добавление в массив
+     // Р”РѕР±Р°РІР»РµРЅРёРµ РІ РјР°СЃСЃРёРІ
      SetLength(TNRootArray, Length(TNRootArray) + 1);
      TNRootArray[Length(TNRootArray) - 1] := TN;
     end;
     TV.Items.EndUpdate;
 
-    // Сортировка дерева
+    // РЎРѕСЂС‚РёСЂРѕРІРєР° РґРµСЂРµРІР°
     StartNodeSort := true;
     TV.Items.BeginUpdate;
     for i := 0 to Length(TNRootArray) - 1 do TVNodeSort(TNRootArray[i].Text, TNRootArray[i]);
@@ -714,11 +714,11 @@ begin
     TN.ImageIndex    := 1;
     TN.SelectedIndex := 1;
     FindFilesMskTV(TN.Text, '*.txt|*.ctxt', TN, true);
-    // Добавление в массив
+    // Р”РѕР±Р°РІР»РµРЅРёРµ РІ РјР°СЃСЃРёРІ
     SetLength(TNRootArray, Length(TNRootArray) + 1);
     TNRootArray[Length(TNRootArray)- 1] := TN;
 
-    // Сортировка дерева
+    // РЎРѕСЂС‚РёСЂРѕРІРєР° РґРµСЂРµРІР°
     StartNodeSort := true;
     TV.Items.BeginUpdate;
     TVNodeSort(TNRootArray[Length(TNRootArray) - 1].Text, TNRootArray[Length(TNRootArray) - 1]);
@@ -806,7 +806,7 @@ begin
   FrmProgressBar.Start;
 
   TV.Items.BeginUpdate;
-  // Очистка хранилища иконок
+  // РћС‡РёСЃС‚РєР° С…СЂР°РЅРёР»РёС‰Р° РёРєРѕРЅРѕРє
   while ImageListTree.Count > 4 do ImageListTree.Delete(ImageListTree.Count -1);
   for i := 0 to  Length(TNRootArray) - 1 do
   begin
@@ -817,7 +817,7 @@ begin
   end;
   TV.Items.EndUpdate;
 
-  // Сортировка дерева
+  // РЎРѕСЂС‚РёСЂРѕРІРєР° РґРµСЂРµРІР°
   StartNodeSort := true;
   TV.Items.BeginUpdate;
   for i := 0 to Length(TNRootArray) - 1 do TVNodeSort(TNRootArray[i].Text, TNRootArray[i]);
@@ -833,7 +833,7 @@ var
   wd: WORD;
   Icon: Ticon;
 begin
-  // Добавление ассоциированной иконки файла в ListView
+  // Р”РѕР±Р°РІР»РµРЅРёРµ Р°СЃСЃРѕС†РёРёСЂРѕРІР°РЅРЅРѕР№ РёРєРѕРЅРєРё С„Р°Р№Р»Р° РІ ListView
   Icon := TIcon.Create;
   Icon.SetSize(SizeImage,SizeImage);
 
@@ -873,12 +873,12 @@ end;
 procedure TFrmMain.AddNodeToTreeView(FullNameNode: String; ImageIndex: integer);
 var TN, NewNode: TTreeNode;
 begin
-  //************ Процедура добавления Нода в дерево *****************
+  //************ РџСЂРѕС†РµРґСѓСЂР° РґРѕР±Р°РІР»РµРЅРёСЏ РќРѕРґР° РІ РґРµСЂРµРІРѕ *****************
 
-  // Проверка, если такой нод есть, то выход
+  // РџСЂРѕРІРµСЂРєР°, РµСЃР»Рё С‚Р°РєРѕР№ РЅРѕРґ РµСЃС‚СЊ, С‚Рѕ РІС‹С…РѕРґ
   TN := FindTreeViewNode(FullNameNode, '', TV.Items[0]);
   if TN <> Nil Then Exit;
-  // Если такой нод не найден, то добаляем
+  // Р•СЃР»Рё С‚Р°РєРѕР№ РЅРѕРґ РЅРµ РЅР°Р№РґРµРЅ, С‚Рѕ РґРѕР±Р°Р»СЏРµРј
   TN := FindTreeViewNode(ExtractFileDir(FullNameNode), '', TV.Items[0]);
   if TN = Nil Then Exit;
   NewNode := TV.Items.AddChild(TN, ExtractFileName(FullNameNode));
@@ -942,14 +942,14 @@ begin
 
   Result := StrToInt(StrValue);
 end;
-
+{------------------------------------------------------------------------------}
 procedure TFrmMain.DeletNodeFromTreeVies(FullNameNode: String);
 var TN: TTreeNode;
 begin
   TN := FindTreeViewNode(FullNameNode, '', TV.Items[0]);
   TV.Items.Delete(TN);
 end;
-
+{------------------------------------------------------------------------------}
 function TFrmMain.ExtractHash(Hash: THashType; st: TStrings): AnsiString;
 var i: integer;
     TS: TStrings;
@@ -975,7 +975,7 @@ begin
     TS.Free;
   end;
 
- // Старая версия
+ // РЎС‚Р°СЂР°СЏ РІРµСЂСЃРёСЏ
  { for i := 0 to st.Count -1 do
   begin
     if AnsiContainsStr(st.Strings[i], HashName) = True then
@@ -1034,7 +1034,7 @@ begin
   end;
 
 end;
-
+{------------------------------------------------------------------------------}
 procedure TFrmMain.FindFilesMskTV(StartFolder, Mask: string; TNParent: TTreeNode; ScanSubFolders: Boolean);
 var
   SR: TSearchRec;
@@ -1082,7 +1082,7 @@ begin
     FindClose(SR);
   end;
 end;
-
+{------------------------------------------------------------------------------}
 function TFrmMain.FindTreeViewNode(FindPath, BeginPath: String; TN: TTreeNode): TTreeNode;
 var i: integer;
    ChildNode: TTreeNode;
@@ -1119,7 +1119,7 @@ begin
   CurrDir := ExtractFileDir(Application.ExeName);
   LoadSearchBookMark;
 
-  // Загрузка скинов
+  // Р—Р°РіСЂСѓР·РєР° СЃРєРёРЅРѕРІ
   {
   if DirectoryExists(SkinDir) then
   begin
@@ -1208,8 +1208,8 @@ var
   N: TTreeNode;
   CountMove: integer;
 begin
-  // Процедура для сортировки директорий в дереве
-  // Директории будут отсортировываться с верху файлов
+  // РџСЂРѕС†РµРґСѓСЂР° РґР»СЏ СЃРѕСЂС‚РёСЂРѕРІРєРё РґРёСЂРµРєС‚РѕСЂРёР№ РІ РґРµСЂРµРІРµ
+  // Р”РёСЂРµРєС‚РѕСЂРёРё Р±СѓРґСѓС‚ РѕС‚СЃРѕСЂС‚РёСЂРѕРІС‹РІР°С‚СЊСЃСЏ СЃ РІРµСЂС…Сѓ С„Р°Р№Р»РѕРІ
   CountMove := 0;
   RootTxt  := IncludeTrailingPathDelimiter(RootTxt);
   if DEBUG_MODE then FrmDebugs.mm.Lines.Add('RootTxt + N.Text ' + RootTxt + N.Text);
@@ -1227,8 +1227,8 @@ begin
     end
       else
     begin
-     // Здесь действия для сортировки файлов
-     // зарезирвировано т.к. пока не требуется
+     // Р—РґРµСЃСЊ РґРµР№СЃС‚РІРёСЏ РґР»СЏ СЃРѕСЂС‚РёСЂРѕРІРєРё С„Р°Р№Р»РѕРІ
+     // Р·Р°СЂРµР·РёСЂРІРёСЂРѕРІР°РЅРѕ С‚.Рє. РїРѕРєР° РЅРµ С‚СЂРµР±СѓРµС‚СЃСЏ
     end;
     N := N.getNextSibling;
   end;
@@ -1264,7 +1264,7 @@ begin
 end;
 
 procedure TFrmMain.TVSearh;
-// Процедура поиска в TReeView
+// РџСЂРѕС†РµРґСѓСЂР° РїРѕРёСЃРєР° РІ TReeView
 Var i: Integer;
   aSubStr, aStr: AnsiString;
 begin
@@ -1307,7 +1307,7 @@ var i: integer;
 begin
   sCmBoxExRootDirs.Items.Clear;
   if FrmConfig.LVDir.Items.Count = 0 then Exit;
-  sCmBoxExRootDirs.ItemsEx.AddItem('Открыть все директории',1 , 1, 1, 1, 0);
+  sCmBoxExRootDirs.ItemsEx.AddItem('РћС‚РєСЂС‹С‚СЊ РІСЃРµ РґРёСЂРµРєС‚РѕСЂРёРё',1 , 1, 1, 1, 0);
   for i := 0 to FrmConfig.LVDir.Items.Count -1 do
   begin
     sCmBoxExRootDirs.ItemsEx.AddItem(FrmConfig.LVDir.Items[I].Caption , 1, 1, 1, 1, 0);

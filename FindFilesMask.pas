@@ -1,4 +1,4 @@
-unit FindFilesMask;
+﻿unit FindFilesMask;
 
 interface
 

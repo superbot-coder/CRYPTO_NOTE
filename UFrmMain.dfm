@@ -94,15 +94,14 @@ object FrmMain: TFrmMain
       Top = 8
       Width = 189
       Height = 25
+      BoundLabel.Font.Charset = DEFAULT_CHARSET
+      BoundLabel.Font.Color = clWindowText
+      BoundLabel.Font.Height = -13
+      BoundLabel.Font.Name = 'Tahoma'
+      BoundLabel.Font.Style = []
       ItemsEx = <>
       Anchors = [akLeft, akTop, akRight]
-      Font.Charset = DEFAULT_CHARSET
-      Font.Color = clWindowText
-      Font.Height = -13
-      Font.Name = 'Tahoma'
-      Font.Style = []
       ItemIndex = -1
-      ParentFont = False
       TabOrder = 3
       Text = 'sCmBoxExRootDirs'
       Images = ImageListTree
@@ -113,15 +112,12 @@ object FrmMain: TFrmMain
       Width = 214
       Height = 24
       Anchors = [akLeft, akTop, akRight]
-      Alignment = taLeftJustify
-      VerticalAlignment = taAlignTop
-      Font.Charset = DEFAULT_CHARSET
-      Font.Color = clWindowText
-      Font.Height = -13
-      Font.Name = 'Tahoma'
-      Font.Style = []
+      BoundLabel.Font.Charset = DEFAULT_CHARSET
+      BoundLabel.Font.Color = clWindowText
+      BoundLabel.Font.Height = -13
+      BoundLabel.Font.Name = 'Tahoma'
+      BoundLabel.Font.Style = []
       ItemIndex = -1
-      ParentFont = False
       TabOrder = 4
     end
     object TV: TsTreeViewEx
@@ -130,19 +126,18 @@ object FrmMain: TFrmMain
       Width = 288
       Height = 591
       Anchors = [akLeft, akTop, akRight, akBottom]
-      Font.Charset = DEFAULT_CHARSET
-      Font.Color = clWindowText
-      Font.Height = -13
-      Font.Name = 'Tahoma'
-      Font.Style = []
       Images = ImageListTree
       Indent = 19
-      ParentFont = False
       PopupMenu = PopActBarTV
       ReadOnly = True
       ShowRoot = False
       TabOrder = 5
       OnDblClick = Act_OpenFileExecute
+      BoundLabel.Font.Charset = DEFAULT_CHARSET
+      BoundLabel.Font.Color = clWindowText
+      BoundLabel.Font.Height = -13
+      BoundLabel.Font.Name = 'Tahoma'
+      BoundLabel.Font.Style = []
     end
   end
   object sPnlTabs: TsPanel
@@ -160,13 +155,12 @@ object FrmMain: TFrmMain
       Top = 6
       Width = 145
       Height = 25
+      BoundLabel.Font.Charset = DEFAULT_CHARSET
+      BoundLabel.Font.Color = clWindowText
+      BoundLabel.Font.Height = -13
+      BoundLabel.Font.Name = 'Tahoma'
+      BoundLabel.Font.Style = []
       Anchors = [akTop, akRight]
-      Font.Charset = DEFAULT_CHARSET
-      Font.Color = clWindowText
-      Font.Height = -13
-      Font.Name = 'Tahoma'
-      Font.Style = []
-      ParentFont = False
       TabOrder = 0
     end
     object TabSet: TTabSet
@@ -253,7 +247,7 @@ object FrmMain: TFrmMain
           end>
       end>
     Left = 456
-    Top = 112
+    Top = 128
     StyleName = 'Platform Default'
     object Act_ShowFrmMasterPwd: TAction
       Category = #1053#1072#1089#1090#1088#1086#1081#1082#1080
@@ -375,7 +369,7 @@ object FrmMain: TFrmMain
     Left = 708
     Top = 112
     Bitmap = {
-      494C010102000800BC0030003000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
+      494C010102000800040030003000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000C00000003000000001002000000000000090
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
@@ -1607,7 +1601,7 @@ object FrmMain: TFrmMain
     Left = 632
     Top = 116
     Bitmap = {
-      494C010104000800480010001000FFFFFFFF2110FFFFFFFFFFFFFFFF424D3600
+      494C010104000800040010001000FFFFFFFF2110FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000002000000001002000000000000020
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
@@ -1879,13 +1873,11 @@ object FrmMain: TFrmMain
       000000000000}
   end
   object sSkinManager: TsSkinManager
+    ButtonsOptions.OldGlyphsMode = True
     Active = False
     InternalSkins = <
       item
         Name = 'Material Dark (internal)'
-        Shadow1Color = clBlack
-        Shadow1Offset = 0
-        Shadow1Transparency = 0
         Data = {
           41537A66050000000B0000004F5054494F4E532E4441543742000078DAED5ADD
           6FE3B8117F0F90FFE1F27A40AFFC1029090B03916CAD2DAC2D19B29CECDEA11B
@@ -3669,6 +3661,7 @@ object FrmMain: TFrmMain
           AEEBB2076C1C4CD0D47FA1B4A9885B402584E0EB5BA87A395154E311FE13874E
           F1C204FEF69782CEF297000300D18BCF405A4583F60000000049454E44AE4260
           82}
+        OriginName = ''
       end>
     MenuSupport.ExtraLineWidth = 24
     MenuSupport.Font.Charset = DEFAULT_CHARSET
@@ -3677,6 +3670,7 @@ object FrmMain: TFrmMain
     MenuSupport.Font.Name = 'Tahoma'
     MenuSupport.Font.Style = []
     Options.StdImgTransparency = True
+    SkinDirectory = 'c:\Skins'
     SkinName = 'Material Dark (internal)'
     SkinInfo = 'N/A'
     ThirdParty.ThirdEdits = ' '
@@ -3713,7 +3707,7 @@ object FrmMain: TFrmMain
     Left = 548
     Top = 116
     Bitmap = {
-      494C010101000800200018001800FFFFFFFF2110FFFFFFFFFFFFFFFF424D3600
+      494C010101000800040018001800FFFFFFFF2110FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000600000001800000001002000000000000024
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000404
@@ -4079,6 +4073,11 @@ object FrmMain: TFrmMain
     end
   end
   object sSkinProvider: TsSkinProvider
+    AddedTitle.Font.Charset = DEFAULT_CHARSET
+    AddedTitle.Font.Color = clNone
+    AddedTitle.Font.Height = -11
+    AddedTitle.Font.Name = 'Tahoma'
+    AddedTitle.Font.Style = []
     SkinData.SkinSection = 'FORM'
     TitleButtons = <>
     Left = 876
