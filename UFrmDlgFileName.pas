@@ -3,7 +3,8 @@
 interface
 
 uses
-  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants,
+  System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.ExtCtrls, sButton,
   sLabel, sEdit;
 
@@ -25,18 +26,19 @@ var
 
 implementation
 
-
 {$R *.dfm}
 
 procedure TFrmDlgFileName.btnOkClick(Sender: TObject);
 begin
-  if sEdFilename.Text = '' then Exit;
+  if sEdFilename.Text = '' then
+    Exit;
 end;
 
 procedure TFrmDlgFileName.FormKeyDown(Sender: TObject; var Key: Word;
   Shift: TShiftState);
 begin
-  if Key =  27 then Close;
+  if Key = 27 then
+    Close;
 end;
 
 end.

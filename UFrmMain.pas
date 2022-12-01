@@ -14,7 +14,8 @@ uses
   sComboBoxes, sTreeView, sPanel, sComboBox, sLabel, acShellCtrls, sButton,
   Vcl.Mask, sMaskEdit, sCustomComboEdit, sComboEdit, aceCheckComboBox,
   sStatusBar, acCoolBar, sSkinProvider, sPageControl, acHeaderControl,
-  sTabControl, acTitleBar, sScrollBox, sFrameBar, sToolBar, aceListView;
+  sTabControl, acTitleBar, sScrollBox, sFrameBar, sToolBar, aceListView,
+  Vcl.Themes;
 
 type THashType = (MD5_TXT, MD5_CTXT);
 
@@ -59,11 +60,10 @@ type
     Act_ShowDebugWindow: TAction;
     sSplitterBrowser: TsSplitter;
     sSkinManager: TsSkinManager;
-    sSkinSelector: TsSkinSelector;
     sPnlTabs: TsPanel;
-    sCmBoxSearch: TsComboBox;
+    sCmBoxSearch_old: TsComboBox;
     sLblSearch: TsLabel;
-    sCmBoxExRootDirs: TsComboBoxEx;
+    sCmBoxExRootDirs_old: TsComboBoxEx;
     sBtnSearch: TsButton;
     sBtnOpenTreeDir: TsButton;
     sBtnUpDate: TsButton;
@@ -91,8 +91,20 @@ type
     N_ShowDebugWindow: TMenuItem;
     N_Spliter: TMenuItem;
     N_tets: TMenuItem;
-    TV: TsTreeViewEx;
+    TV_old: TsTreeViewEx;
     Act_SpliterSvich: TAction;
+    ActionMainMenuBar1: TActionMainMenuBar;
+    Button1: TButton;
+    Splitter: TSplitter;
+    PanelBrowser: TPanel;
+    CmBoxExRootDirs: TComboBoxEx;
+    BtnOpenTreeDir: TButton;
+    CmBoxSearch: TComboBox;
+    TV: TTreeView;
+    BtnUpDate: TButton;
+    BtnSearch: TButton;
+    LblSearch: TLabel;
+    cbxVclStyles: TComboBox;
     procedure Act_SettingsExecute(Sender: TObject);
     procedure Act_ShowFrmMasterPwdExecute(Sender: TObject);
     procedure FindFilesMskTV(StartFolder,  Mask: string; TNParent: TTreeNode; ScanSubFolders: Boolean);
@@ -142,6 +154,9 @@ type
     procedure sSplitterBrowserMouseDown(Sender: TObject; Button: TMouseButton;
       Shift: TShiftState; X, Y: Integer);
     procedure Act_SpliterSvichExecute(Sender: TObject);
+    procedure cbxVclStylesSelect(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
+    procedure BtnSearchClick(Sender: TObject);
   private
     { Private declarations }
     LastIndexSearch: integer;
@@ -203,7 +218,7 @@ begin
     Reg.RootKey := HKEY_CURRENT_USER;
     if Reg.OpenKey('\Software\CryptoNote', false) then
     begin
-      sCmBoxSearch.Items.Text := Reg.ReadString('SearchBookmark');
+      CmBoxSearch.Items.Text := Reg.ReadString('SearchBookmark');
       Reg.CloseKey;
     end;
   finally
@@ -256,7 +271,7 @@ end;
 
 procedure TFrmMain.sBtnSearchClick(Sender: TObject);
 begin
-  if (sCmBoxSearch.Text = '') or (TV.Items.Count = 0) then Exit;
+  if (CmBoxSearch.Text = '') or (TV.Items.Count = 0) then Exit;
   TVSearh;
   sStatusBar.Panels[0].Text := 'Поиск: ' + GetFullFileName;
 end;
@@ -310,7 +325,7 @@ begin
   NewChild.Caption             := 'Новая запись';
   NewChild.MDIStatusFile       := sfNewFile;
   NewChild.ChangeTxt           := False;
-  NewChild.sBtnDecrypt.Enabled := false;
+  NewChild.BtnDecrypt.Enabled  := false;
   ImgListLogo.GetIcon(0, NewChild.ImageLogo.Picture.Icon);
   i := TabSet.Tabs.Add(IncrementTabsName(ExtractFileName('Новая запись')));
   NewChild.TabSetID := TabSet.Tabs[i];
@@ -623,9 +638,9 @@ begin
           Atxt := Copy(Atxt, AnsiPos(';', Atxt) + 1, i);
         end;
 
-        FrmMDIChild.mm.Text       := Atxt;
-        FrmMDIChild.MDIStatusFile := sfCryptFile;
-        FrmMDIChild.sBtnDecrypt.Enabled := false;
+        FrmMDIChild.SynEdit.Text       := Atxt;
+        FrmMDIChild.MDIStatusFile      := sfCryptFile;
+        FrmMDIChild.BtnDecrypt.Enabled := false;
       end
         else
       begin
@@ -637,9 +652,9 @@ begin
                    'Возможно у вас введен не верный пароль. '+#13+
                    'Попробуйте повторить попытку с другим паролем.'),
                    PCHar(MB_CAPTION), MB_ICONWARNING);
-        FrmMDIChild.mm.Text       := Atxt;
-        FrmMDIChild.mm.ReadOnly   := true;
-        FrmMDIChild.sBtnEncrypt.Enabled := false;
+        FrmMDIChild.SynEdit.Text       := Atxt;
+        FrmMDIChild.SynEdit.ReadOnly   := true;
+        FrmMDIChild.BtnEncrypt.Enabled := false;
         FrmMDIChild.MDIStatusFile := sfUnDecryptedFile;
 
       end;
@@ -652,10 +667,10 @@ begin
     else
   begin
     ImageIndex := 0;
-    FrmMDIChild.mm.Lines.LoadFromFile(FullName);
-    FrmMDIChild.sBtnDecrypt.Enabled     := false;
-    FrmMDIChild.sBtnSaveUnCrypt.Enabled := false;
-    FrmMDIChild.MDIStatusFile           := sfUnCryptFile;
+    FrmMDIChild.SynEdit.Lines.LoadFromFile(FullName);
+    FrmMDIChild.BtnDecrypt.Enabled     := false;
+    FrmMDIChild.BtnSaveDecrypt.Enabled := false;
+    FrmMDIChild.MDIStatusFile          := sfUnCryptFile;
   end;
 
   // Генерация TabNameID
@@ -674,21 +689,21 @@ var
   TN: TTreeNode;
    i, j: integer;
 begin
-  if (sCmBoxExRootDirs.ItemsEx.Count = 0) or (sCmBoxExRootDirs.ItemIndex = -1) then Exit;
+  if (CmBoxExRootDirs.ItemsEx.Count = 0) or (CmBoxExRootDirs.ItemIndex = -1) then Exit;
 
   sBtnUpDate.Enabled := false;
   // FrmProgressBar.Start;
   //while ImageListTree.Count > 4 do ImageListTree.Delete(ImageListTree.Count -1);
   //TV.Items.Clear;
-  if sCmBoxExRootDirs.ItemIndex = 0 then
+  if CmBoxExRootDirs.ItemIndex = 0 then
   begin
     TV.Items.BeginUpdate;
-    for i := 1 to sCmBoxExRootDirs.ItemsEx.Count -1 do
+    for i := 1 to CmBoxExRootDirs.ItemsEx.Count -1 do
     begin
       for j := 0 to Length(TNRootArray) - 1 do
-        if TNRootArray[j].Text = sCmBoxExRootDirs.ItemsEx[i].Caption then continue;
+        if TNRootArray[j].Text = CmBoxExRootDirs.ItemsEx[i].Caption then continue;
 
-      TN := TV.Items.Add(Nil, sCmBoxExRootDirs.ItemsEx[i].Caption);
+      TN := TV.Items.Add(Nil, CmBoxExRootDirs.ItemsEx[i].Caption);
       TN.ImageIndex    := 1;
       TN.SelectedIndex := 1;
       FindFilesMskTV(TN.Text, '*.txt|*.ctxt', TN, true);
@@ -709,8 +724,8 @@ begin
     else
   begin
     for j := 0 to Length(TNRootArray) - 1 do
-      if TNRootArray[j].Text = sCmBoxExRootDirs.ItemsEx[sCmBoxExRootDirs.ItemIndex].Caption then Exit;
-    TN := TV.Items.Add(Nil, sCmBoxExRootDirs.ItemsEx[sCmBoxExRootDirs.ItemIndex].Caption);
+      if TNRootArray[j].Text = CmBoxExRootDirs.ItemsEx[CmBoxExRootDirs.ItemIndex].Caption then Exit;
+    TN := TV.Items.Add(Nil, CmBoxExRootDirs.ItemsEx[CmBoxExRootDirs.ItemIndex].Caption);
     TN.ImageIndex    := 1;
     TN.SelectedIndex := 1;
     FindFilesMskTV(TN.Text, '*.txt|*.ctxt', TN, true);
@@ -801,7 +816,7 @@ var
    i: integer;
    ImageIndex: Integer;
 begin
-  if (sCmBoxExRootDirs.ItemsEx.Count = 0) or (sCmBoxExRootDirs.ItemIndex = -1) then Exit;
+  if (CmBoxExRootDirs.ItemsEx.Count = 0) or (CmBoxExRootDirs.ItemIndex = -1) then Exit;
   sBtnUpDate.Enabled := false;
   FrmProgressBar.Start;
 
@@ -890,17 +905,17 @@ procedure TFrmMain.AddSearchBookMark;
 var i: SmallInt;
     Reg: TRegistry;
 begin
-  if sCmBoxSearch.Items.IndexOf(sCmBoxSearch.Text) = -1 then
+  if CmBoxSearch.Items.IndexOf(CmBoxSearch.Text) = -1 then
   begin
-    if sCmBoxSearch.Items.Count = MAX_SEARCH_BOOKMARK then
-      sCmBoxSearch.Items.Delete(MAX_SEARCH_BOOKMARK - 1);
-    sCmBoxSearch.Items.Insert(0, sCmBoxSearch.Text);
+    if CmBoxSearch.Items.Count = MAX_SEARCH_BOOKMARK then
+      CmBoxSearch.Items.Delete(MAX_SEARCH_BOOKMARK - 1);
+    CmBoxSearch.Items.Insert(0, CmBoxSearch.Text);
     Reg := TRegistry.Create;
     try
       Reg.RootKey := HKEY_CURRENT_USER;
       if Reg.OpenKey('\Software\CryptoNote', false) then
       begin
-        Reg.WriteString('SearchBookmark', sCmBoxSearch.Items.Text);
+        Reg.WriteString('SearchBookmark', CmBoxSearch.Items.Text);
         Reg.CloseKey;
       end;
     finally
@@ -912,6 +927,24 @@ end;
 procedure TFrmMain.BtnOpenTreeDirClick(Sender: TObject);
 begin
   //
+end;
+
+procedure TFrmMain.BtnSearchClick(Sender: TObject);
+begin
+ if (CmBoxSearch.Text = '') or (TV.Items.Count = 0) then Exit;
+  TVSearh;
+  sStatusBar.Panels[0].Text := 'Поиск: ' + GetFullFileName;
+end;
+
+procedure TFrmMain.Button1Click(Sender: TObject);
+begin
+  ShowMessage(IntToStr(FrmMain.Color));
+end;
+
+procedure TFrmMain.cbxVclStylesSelect(Sender: TObject);
+begin
+  TStyleManager.SetStyle(cbxVclStyles.Text);
+  // sSplitter.
 end;
 
 function TFrmMain.CheckStrToDateTime(StrDT: String): Boolean;
@@ -926,7 +959,7 @@ begin
 end;
 
 function TFrmMain.ConvertStringToInteger(StrValue: String): Integer;
-var 
+var
   i: ShortInt;
   num: set of Char;
 begin
@@ -1113,11 +1146,16 @@ begin
 end;
 
 procedure TFrmMain.FormCreate(Sender: TObject);
+var
+  StyleName: string;
 begin
 
   WinDir  := GetEnvironmentVariable('WinDir');
   CurrDir := ExtractFileDir(Application.ExeName);
   LoadSearchBookMark;
+
+  for StyleName in TStyleManager.StyleNames do cbxVclStyles.Items.Add(StyleName);
+  TStyleManager.SetStyle('Sapphire Kamri');
 
   // Загрузка скинов
   {
@@ -1133,6 +1171,9 @@ begin
     sSkinManager.SkinName := '';
   end;
   }
+
+  sSkinManager.SkinName := '';
+  sSkinManager.Active   := false;
 
 end;
 
@@ -1275,7 +1316,7 @@ begin
     if LastIndexSearch = TV.Items.Count then LastIndexSearch := 0;
   end;
 
-  aSubStr := sCmBoxSearch.Text;
+  aSubStr := CmBoxSearch.Text;
 
   for i := LastIndexSearch to TV.Items.Count - 1 do
   begin
@@ -1305,14 +1346,14 @@ end;
 procedure TFrmMain.UpdateCbBoxDirList;
 var i: integer;
 begin
-  sCmBoxExRootDirs.Items.Clear;
+  CmBoxExRootDirs.Items.Clear;
   if FrmConfig.LVDir.Items.Count = 0 then Exit;
-  sCmBoxExRootDirs.ItemsEx.AddItem('Открыть все директории',1 , 1, 1, 1, 0);
+  CmBoxExRootDirs.ItemsEx.AddItem('Открыть все директории',1 , 1, 1, 1, 0);
   for i := 0 to FrmConfig.LVDir.Items.Count -1 do
   begin
-    sCmBoxExRootDirs.ItemsEx.AddItem(FrmConfig.LVDir.Items[I].Caption , 1, 1, 1, 1, 0);
+    CmBoxExRootDirs.ItemsEx.AddItem(FrmConfig.LVDir.Items[I].Caption , 1, 1, 1, 1, 0);
   end;
-  sCmBoxExRootDirs.ItemIndex := 0;
+  CmBoxExRootDirs.ItemIndex := 0;
 end;
 
 end.

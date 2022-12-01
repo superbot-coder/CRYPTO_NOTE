@@ -102,10 +102,13 @@ object FrmExt: TFrmExt
     Checked = True
     State = cbChecked
     TabOrder = 5
-    ImgChecked = 0
-    ImgUnchecked = 0
   end
   object sSkinProvider: TsSkinProvider
+    AddedTitle.Font.Charset = DEFAULT_CHARSET
+    AddedTitle.Font.Color = clNone
+    AddedTitle.Font.Height = -11
+    AddedTitle.Font.Name = 'Tahoma'
+    AddedTitle.Font.Style = []
     SkinData.SkinSection = 'FORM'
     TitleButtons = <>
     Left = 324

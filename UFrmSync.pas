@@ -3,13 +3,16 @@
 interface
 
 uses
-  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants,
+  System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ComCtrls, Vcl.StdCtrls,
-  Vcl.PlatformDefaultStyleActnCtrls, Vcl.Menus, Vcl.ActnPopup, Vcl.ExtCtrls, Vcl.FileCtrl,
+  Vcl.PlatformDefaultStyleActnCtrls, Vcl.Menus, Vcl.ActnPopup, Vcl.ExtCtrls,
+  Vcl.FileCtrl,
   System.masks, Error, System.ImageList, Vcl.ImgList, Winapi.ShellAPI, sButton,
   sPanel, sStatusBar, sSkinProvider, sListView, sCheckBox, sLabel, sEdit;
 
-Type TProcessType = (ptScan, ptSync);
+Type
+  TProcessType = (ptScan, ptSync);
 
 type
   TFrmSync = class(TForm)
@@ -47,12 +50,14 @@ type
     procedure LVMouseDown(Sender: TObject; Button: TMouseButton;
       Shift: TShiftState; X, Y: Integer);
     procedure BtnScanClick(Sender: TObject);
-    procedure SynchronizeDirect(StartDir, FirstDir, OldDir, Mask: string; ScanSubFolders: Boolean);
-    procedure SynchronizeRevers(StartDir, FirstDir, OldDir, Mask: string; ScanSubFolders: Boolean);
+    procedure SynchronizeDirect(StartDir, FirstDir, OldDir, Mask: string;
+      ScanSubFolders: Boolean);
+    procedure SynchronizeRevers(StartDir, FirstDir, OldDir, Mask: string;
+      ScanSubFolders: Boolean);
     function GetDateTimeFromFile(SR: TSearchRec): TDateTime;
     procedure BtnMaskEditClick(Sender: TObject);
     function AddAssociatedIcon(FileName: String): Integer;
-    function AddIconFromImageList(ImgList: TImageList; index: integer): Integer;
+    function AddIconFromImageList(ImgList: TImageList; index: Integer): Integer;
     procedure PA_LVRepSetCheckClick(Sender: TObject);
     procedure BtnSyncClick(Sender: TObject);
     procedure PA_LVRepCheckDownClick(Sender: TObject);
@@ -81,7 +86,7 @@ var
   OpenDirSrt: String;
   LastActivLV: TsListView;
   si: SmallInt;
-  I: integer;
+  I: Integer;
   StartProcess: Boolean;
 
 implementation
@@ -89,7 +94,6 @@ implementation
 USES UFrmMain, UFrmSelectDir, UFrmExt;
 
 {$R *.dfm}
-
 { TFrmSync }
 
 function TFrmSync.AddAssociatedIcon(FileName: String): Integer;
@@ -99,14 +103,14 @@ var
   Ext: String;
 begin
   // Добавление ассоциированной иконки файла в ListView
-  Icon := TIcon.Create;
-  Icon.SetSize(16,16);
+  Icon := Ticon.Create;
+  Icon.SetSize(16, 16);
   try
     Ext := AnsiLowerCase(ExtractFileExt(FileName));
     if Ext = '.ctxt' then
     begin
-      ImageList.GetIcon(1, icon);
-      Result := ImageList.AddIcon(icon);
+      ImageList.GetIcon(1, Icon);
+      Result := ImageList.AddIcon(Icon);
       Exit;
     end;
 
@@ -119,12 +123,12 @@ begin
 
     wd := 0;
     Icon.Handle := ExtractAssociatedIcon(HInstance, PChar(FileName), wd);
-    if icon.HandleAllocated then
-      Result := ImageList.AddIcon(icon)
+    if Icon.HandleAllocated then
+      Result := ImageList.AddIcon(Icon)
     else
     begin
-      ImageList.GetIcon(0, icon);
-      Result := ImageList.AddIcon(icon);
+      ImageList.GetIcon(0, Icon);
+      Result := ImageList.AddIcon(Icon);
     end;
 
   finally
@@ -132,10 +136,12 @@ begin
   end;
 end;
 
-function TFrmSync.AddIconFromImageList(ImgList: TImageList;  index: integer): Integer;
-var icon: TIcon;
+function TFrmSync.AddIconFromImageList(ImgList: TImageList;
+  index: Integer): Integer;
+var
+  Icon: Ticon;
 begin
-  Icon := TIcon.Create;
+  Icon := Ticon.Create;
   try
     ImgList.GetIcon(index, Icon);
     Result := ImageList.AddIcon(Icon);
@@ -145,42 +151,48 @@ begin
 end;
 
 procedure TFrmSync.AddItem(LVAddDir, LVCheckDir: TsListView; AddDir: String);
-Var NewItem: TListItem;
-          i: SmallInt;
+Var
+  NewItem: TListItem;
+  I: SmallInt;
 begin
-  for i := 0 to LVAddDir.Items.Count -1 do
-    if LowerCase(AddDir) = LowerCase(LVAddDir.Items[i].Caption) then
+  for I := 0 to LVAddDir.Items.Count - 1 do
+    if LowerCase(AddDir) = LowerCase(LVAddDir.Items[I].Caption) then
     begin
-      MessageBox(Handle, PChar('Данная директория уже существует в данном списке.'),
-                 PChar(MB_CAPTION), MB_ICONWARNING);
+      MessageBox(Handle,
+        PChar('Данная директория уже существует в данном списке.'),
+        PChar(MB_CAPTION), MB_ICONWARNING);
       Exit;
     end;
 
-  for i := 0 to LVCheckDir.Items.Count -1 do
-    if LowerCase(AddDir) = LowerCase(LVCheckDir.Items[i].Caption) then
+  for I := 0 to LVCheckDir.Items.Count - 1 do
+    if LowerCase(AddDir) = LowerCase(LVCheckDir.Items[I].Caption) then
     begin
-      MessageBox(Handle, PChar('Данная директория уже существует в противоположенном списке.'),
-                 PChar(MB_CAPTION), MB_ICONWARNING);
+      MessageBox(Handle,
+        PChar('Данная директория уже существует в противоположенном списке.'),
+        PChar(MB_CAPTION), MB_ICONWARNING);
       Exit;
     end;
 
-  NewItem            := LVAddDir.Items.Add;
-  NewItem.Checked    := true;
-  NewItem.Caption    := AddDir;
+  NewItem := LVAddDir.Items.Add;
+  NewItem.Checked := true;
+  NewItem.Caption := AddDir;
   NewItem.ImageIndex := 0;
 
 end;
 
 Function TFrmSync.AddItemReport: TListItem;
-var i: ShortInt;
+var
+  I: ShortInt;
 begin
- Result := LVRep.Items.Add;
- Result.Checked := true;
- for i:=1 to 6 do Result.SubItems.Add('');
+  Result := LVRep.Items.Add;
+  Result.Checked := true;
+  for I := 1 to 6 do
+    Result.SubItems.Add('');
 end;
 
 procedure TFrmSync.BtnMaskEditClick(Sender: TObject);
-var s: string;
+var
+  s: string;
 begin
   FrmExt.ShowModal;
 
@@ -190,7 +202,7 @@ begin
     Exit;
   end;
 
-  for si := 0 to FrmExt.LVExt.Items.Count -1 do
+  for si := 0 to FrmExt.LVExt.Items.Count - 1 do
   begin
     if FrmExt.LVExt.Items[si].Checked then
       s := s + FrmExt.LVExt.Items[si].Caption + '|';
@@ -199,19 +211,20 @@ begin
 end;
 
 procedure TFrmSync.BtnScanClick(Sender: TObject);
-var i: SmallInt;
+var
+  I: SmallInt;
 begin
 
   if StartProcess = true then
   begin
     StartProcess := false;
-    exit;
+    Exit;
   end;
 
   if (LVDirMaster.Items.Count = 0) or (LVDirBackUp.Items.Count = 0) then
   begin
-    MessageBox(Handle, PChar('Не добавлена директория.'),
-               PChar(MB_CAPTION), MB_ICONWARNING);
+    MessageBox(Handle, PChar('Не добавлена директория.'), PChar(MB_CAPTION),
+      MB_ICONWARNING);
     Exit;
   end;
   StartProcess := true;
@@ -220,100 +233,111 @@ begin
   LVRep.Clear;
   ImagListClear;
   LVRep.Items.BeginUpdate;
-  for i := 0 to LVDirBackUp.Items.Count-1 do
+  for I := 0 to LVDirBackUp.Items.Count - 1 do
   begin
-    if LVDirBackUp.Items[i].Checked then
+    if LVDirBackUp.Items[I].Checked then
     begin
       if ChBoxSyncDirect.Checked then
-        SynchronizeDirect(LVDirMaster.Items[0].Caption, LVDirMaster.Items[0].Caption, LVDirBackUp.Items[i].Caption, edExt.Text, true);
+        SynchronizeDirect(LVDirMaster.Items[0].Caption,
+          LVDirMaster.Items[0].Caption, LVDirBackUp.Items[I].Caption,
+          edExt.Text, true);
       if ChBoxSyncRevers.Checked then
-        SynchronizeRevers(LVDirBackUp.Items[i].Caption, LVDirBackUp.Items[i].Caption, LVDirMaster.Items[0].Caption, edExt.Text, true);
+        SynchronizeRevers(LVDirBackUp.Items[I].Caption,
+          LVDirBackUp.Items[I].Caption, LVDirMaster.Items[0].Caption,
+          edExt.Text, true);
     end;
   end;
-  StartProcess := False;
+  StartProcess := false;
   LVRep.Items.EndUpdate;
   UnlockControl(ptScan);
 end;
 
 procedure TFrmSync.BtnSyncClick(Sender: TObject);
-var i: integer;
-    max: integer;
-    FileSource: string;
-    FileDest: String;
-    FileDir : String;
-    cnt: integer;
+var
+  I: Integer;
+  max: Integer;
+  FileSource: string;
+  FileDest: String;
+  FileDir: String;
+  cnt: Integer;
 begin
-  if LVRep.Items.Count = 0 then exit;
+  if LVRep.Items.Count = 0 then
+    Exit;
 
-  if StartProcess = True then
+  if StartProcess = true then
   begin
     StartProcess := false;
     Exit;
   end;
 
-
   LockControl(ptSync);
   // для прогресс бар
-  for i := 0 to LVRep.Items.Count -1 do
-    if LVRep.Items[i].Checked then inc(max);
+  for I := 0 to LVRep.Items.Count - 1 do
+    if LVRep.Items[I].Checked then
+      inc(max);
   cnt := 0;
 
   StartProcess := true;
-  for i := 0 to LVRep.Items.Count -1 do
+  for I := 0 to LVRep.Items.Count - 1 do
   begin
     Application.ProcessMessages;
-    if StartProcess = false then Break;
-    if Not LVRep.Items[i].Checked then Continue;
+    if StartProcess = false then
+      Break;
+    if Not LVRep.Items[I].Checked then
+      Continue;
 
-    if LVRep.Items[i].SubItems[1] = '-->>' then
+    if LVRep.Items[I].SubItems[1] = '-->>' then
     begin
-      FileSource := LVRep.Items[i].Caption;
-      if LVRep.Items[i].SubItems[3] <> '' then
-        FileDest := LVRep.Items[i].SubItems[3]
+      FileSource := LVRep.Items[I].Caption;
+      if LVRep.Items[I].SubItems[3] <> '' then
+        FileDest := LVRep.Items[I].SubItems[3]
       else
-        FileDest := LVRep.Items[i].SubItems[5];
+        FileDest := LVRep.Items[I].SubItems[5];
     end
     else
     begin
-      FileSource := LVRep.Items[i].SubItems[3];
-      if LVRep.Items[i].Caption <> '' then
-        FileDest := LVRep.Items[i].Caption
+      FileSource := LVRep.Items[I].SubItems[3];
+      if LVRep.Items[I].Caption <> '' then
+        FileDest := LVRep.Items[I].Caption
       else
-        FileDest := LVRep.Items[i].SubItems[5];
+        FileDest := LVRep.Items[I].SubItems[5];
     end;
 
-    //проверка существования директории
+    // проверка существования директории
     FileDir := ExtractFileDir(FileDest);
     if Not DirectoryExists(FileDir) then
       if Not ForceDirectories(FileDir) then
       begin
-        LVRep.Items[i].SubItems[4] := 'Ошибка: ' + SystemErrorMessage(GetLastError);
+        LVRep.Items[I].SubItems[4] := 'Ошибка: ' +
+          SystemErrorMessage(GetLastError);
         Continue;
       end;
 
     // Копирование файла
     CopyFile(PChar(FileSource), PChar(FileDest), false);
 
-    //проверка что файл был дейтвительно скопирован и заменен
+    // проверка что файл был дейтвительно скопирован и заменен
     if CheckFileCopy(FileSource, FileDest) then
     begin
-      if LVRep.Items[i].SubItems[1] = '-->>' then
+      if LVRep.Items[I].SubItems[1] = '-->>' then
       begin
-        if LVRep.Items[i].SubItems[3] <> '' then
-          LVRep.Items[i].SubItems[4] := 'Обновлен'
-        else LVRep.Items[i].SubItems[4] := 'Скопирован';
-      end
+        if LVRep.Items[I].SubItems[3] <> '' then
+          LVRep.Items[I].SubItems[4] := 'Обновлен'
         else
+          LVRep.Items[I].SubItems[4] := 'Скопирован';
+      end
+      else
       begin
-        if LVRep.Items[i].Caption <> '' then
-          LVRep.Items[i].SubItems[4] := 'Обновлен'
-        else LVRep.Items[i].SubItems[4] := 'Скопирован';
+        if LVRep.Items[I].Caption <> '' then
+          LVRep.Items[I].SubItems[4] := 'Обновлен'
+        else
+          LVRep.Items[I].SubItems[4] := 'Скопирован';
       end;
     end
     else
     begin
-      //копирование не удалось
-      LVRep.Items[i].SubItems[4] := 'Не удачно';
+      // копирование не удалось
+      LVRep.Items[I].SubItems[4] := 'Не удачно';
     end;
 
     inc(cnt);
@@ -327,20 +351,24 @@ begin
 end;
 
 function TFrmSync.CheckFileCopy(FileSource, FileDest: String): Boolean;
-var SR_source, SR_Dest: TSearchRec;
-    dt_source, dt_dest: TDateTime;
+var
+  SR_source, SR_Dest: TSearchRec;
+  dt_source, dt_dest: TDateTime;
 begin
-  Result := False;
+  Result := false;
   try
-    if FindFirst(FileSource, faAnyFile , SR_source) = 0 then
+    if FindFirst(FileSource, faAnyFile, SR_source) = 0 then
       dt_source := GetDateTimeFromFile(SR_source)
-    else Exit;
+    else
+      Exit;
 
     if FindFirst(FileDest, faAnyFile, SR_Dest) = 0 then
       dt_dest := GetDateTimeFromFile(SR_Dest)
-    else Exit;
+    else
+      Exit;
 
-    if dt_source = dt_dest then Result := true;
+    if dt_source = dt_dest then
+      Result := true;
 
   finally
     FindClose(SR_source);
@@ -366,7 +394,7 @@ end;
 procedure TFrmSync.ImagListClear;
 begin
   while ImageList.Count > 3 do
-    ImageList.Delete(ImageList.Count-1);
+    ImageList.Delete(ImageList.Count - 1);
 end;
 
 procedure TFrmSync.LockControl(ProcType: TProcessType);
@@ -375,13 +403,13 @@ begin
   ChBoxSyncRevers.Enabled := false;
 
   case ProcType of
-    ptScan :
+    ptScan:
       begin
         BtnScan.Caption := 'ОСТАНОВИТЬ';
         BtnSync.Enabled := false;
         ProgressBar.Style := pbstMarquee;
       end;
-    ptSync :
+    ptSync:
       begin
         BtnScan.Enabled := false;
         BtnSync.Caption := 'ОСТАНОВИТЬ';
@@ -395,17 +423,20 @@ begin
   LastActivLV := Sender as TsListView;
 end;
 
-procedure TFrmSync.LVRep_oldCustomDrawItem(Sender: TCustomListView; Item: TListItem;
-  State: TCustomDrawState; var DefaultDraw: Boolean);
+procedure TFrmSync.LVRep_oldCustomDrawItem(Sender: TCustomListView;
+  Item: TListItem; State: TCustomDrawState; var DefaultDraw: Boolean);
 begin
   DefaultDraw := true;
   with Sender.Canvas do
   begin
-    if Item.SubItems[4] = 'Не удачно' then Brush.Color := $00D9D9FF;
-    if Item.SubItems[4] = 'Обновлен' then Brush.Color := $00FFD5D5;
-    if Item.SubItems[4] = 'Скопирован' then Brush.Color := $00E7FFCE;
-   //FillRect(Item.DisplayRect(drBounds));
- end;
+    if Item.SubItems[4] = 'Не удачно' then
+      Brush.Color := $00D9D9FF;
+    if Item.SubItems[4] = 'Обновлен' then
+      Brush.Color := $00FFD5D5;
+    if Item.SubItems[4] = 'Скопирован' then
+      Brush.Color := $00E7FFCE;
+    // FillRect(Item.DisplayRect(drBounds));
+  end;
 
 end;
 
@@ -413,14 +444,15 @@ function TFrmSync.OpenDirectory: String;
 var
   Options: TSelectDirExtOpts;
 begin
-  ///  sdNewFolder, sdShowEdit, sdShowShares,, sdShowFiles, sdValidateDir
+  /// sdNewFolder, sdShowEdit, sdShowShares,, sdShowFiles, sdValidateDir
   Options := [sdNewFolder, sdShowEdit, sdShowShares, sdNewUI];
-  SelectDirectory('Укажите директорию','',Result, Options, Nil);
+  SelectDirectory('Укажите директорию', '', Result, Options, Nil);
 end;
 
 procedure TFrmSync.PA_LVRepCheckDownClick(Sender: TObject);
 begin
-  if LVRep.SelCount = 0 then exit;
+  if LVRep.SelCount = 0 then
+    Exit;
   for I := 0 to LVRep.Items.Count - 1 do
     if LVRep.Items[I].Selected then
       if LVRep.Items[I].Checked then
@@ -429,7 +461,8 @@ end;
 
 procedure TFrmSync.PA_LVRepSetCheckClick(Sender: TObject);
 begin
-  if LVRep.SelCount = 0 then exit;
+  if LVRep.SelCount = 0 then
+    Exit;
   for I := 0 to LVRep.Items.Count - 1 do
     if LVRep.Items[I].Selected then
       if Not LVRep.Items[I].Checked then
@@ -438,8 +471,9 @@ end;
 
 procedure TFrmSync.PA_VLClearClick(Sender: TObject);
 begin
-  if MessageBox(Handle, PChar('Вы действительно желаете очистить список?'), PChar(MB_CAPTION),
-                MB_ICONWARNING or MB_YESNO) = IDNO then Exit;
+  if MessageBox(Handle, PChar('Вы действительно желаете очистить список?'),
+    PChar(MB_CAPTION), MB_ICONWARNING or MB_YESNO) = IDNO then
+    Exit;
   LastActivLV.Clear;
 end;
 
@@ -448,21 +482,25 @@ begin
   if LastActivLV = LVDirMaster then
     if LVDirMaster.Items.Count > 0 then
     begin
-      MessageBox(Handle, PChar('Мастер директория не может быть более чем одна директория.'),
-                 PChar(MB_CAPTION), MB_ICONINFORMATION);
-      exit;
+      MessageBox(Handle,
+        PChar('Мастер директория не может быть более чем одна директория.'),
+        PChar(MB_CAPTION), MB_ICONINFORMATION);
+      Exit;
     end;
   OpenDirSrt := OpenDirectory;
-  if OpenDirSrt = '' then Exit;
-  if LastActivLV = LVDirMaster then AddItem(LVDirMaster, LVDirBackUp, OpenDirSrt);
-  if LastActivLV = LVDirBackUp then AddItem(LVDirBackUp, LVDirMaster, OpenDirSrt);
+  if OpenDirSrt = '' then
+    Exit;
+  if LastActivLV = LVDirMaster then
+    AddItem(LVDirMaster, LVDirBackUp, OpenDirSrt);
+  if LastActivLV = LVDirBackUp then
+    AddItem(LVDirBackUp, LVDirMaster, OpenDirSrt);
   LVRep.Clear;
   ImagListClear;
 end;
 
 procedure TFrmSync.PM_AddDirFromParamClick(Sender: TObject);
 var
-  i : SmallInt;
+  I: SmallInt;
   FrmMode: TFrmInitMode;
 begin
 
@@ -470,28 +508,30 @@ begin
   begin
     if LVDirMaster.Items.Count > 0 then
     begin
-      MessageBox(Handle, 
-	             PChar('Мастер директория не может быть более чем одна директория.'),
-                 PChar(MB_CAPTION), MB_ICONINFORMATION);
-      exit;
+      MessageBox(Handle,
+        PChar('Мастер директория не может быть более чем одна директория.'),
+        PChar(MB_CAPTION), MB_ICONINFORMATION);
+      Exit;
     end;
     FrmMode := fmMasterDir;
   end
-  else FrmMode := fmBuckUpDir;
+  else
+    FrmMode := fmBuckUpDir;
 
   FrmSelectDir.Apply := false;
   FrmSelectDir.ShowModalInit(FrmMode);
 
-  if Not FrmSelectDir.Apply then Exit;
-  for i := 0 to FrmSelectDir.LVDir.Items.Count -1 do
+  if Not FrmSelectDir.Apply then
+    Exit;
+  for I := 0 to FrmSelectDir.LVDir.Items.Count - 1 do
   begin
-    if FrmSelectDir.LVDir.Items[i].Checked then
+    if FrmSelectDir.LVDir.Items[I].Checked then
     begin
-      mm.Lines.Add(FrmSelectDir.LVDir.Items[i].Caption);
-      if LastActivLV = LVDirMaster then 
-	    AddItem(LVDirMaster, LVDirBackUp, FrmSelectDir.LVDir.Items[i].Caption);
-      if LastActivLV = LVDirBackUp then 
-	    AddItem(LVDirBackUp, LVDirMaster, FrmSelectDir.LVDir.Items[i].Caption);
+      mm.Lines.Add(FrmSelectDir.LVDir.Items[I].Caption);
+      if LastActivLV = LVDirMaster then
+        AddItem(LVDirMaster, LVDirBackUp, FrmSelectDir.LVDir.Items[I].Caption);
+      if LastActivLV = LVDirBackUp then
+        AddItem(LVDirBackUp, LVDirMaster, FrmSelectDir.LVDir.Items[I].Caption);
     end;
   end;
 
@@ -501,17 +541,19 @@ end;
 
 procedure TFrmSync.PM_DeleteItemClick(Sender: TObject);
 begin
- if LastActivLV.SelCount = 0 then exit;
-  if MessageBox(Handle, 
-                PChar('Вы действительно желаете удалить выделенную директорию из списока?'), 
-				PChar(MB_CAPTION),
-                MB_ICONWARNING or MB_YESNO) = IDNO then Exit;
- LastActivLV.Selected.Delete;
+  if LastActivLV.SelCount = 0 then
+    Exit;
+  if MessageBox(Handle,
+    PChar('Вы действительно желаете удалить выделенную директорию из списока?'),
+    PChar(MB_CAPTION), MB_ICONWARNING or MB_YESNO) = IDNO then
+    Exit;
+  LastActivLV.Selected.Delete;
 end;
 
 procedure TFrmSync.PM_LVRepCheckDownClick(Sender: TObject);
 begin
-if LVRep.SelCount = 0 then exit;
+  if LVRep.SelCount = 0 then
+    Exit;
   for I := 0 to LVRep.Items.Count - 1 do
     if LVRep.Items[I].Selected then
       if LVRep.Items[I].Checked then
@@ -520,7 +562,8 @@ end;
 
 procedure TFrmSync.PM_LVRepSetCheckClick(Sender: TObject);
 begin
-  if LVRep.SelCount = 0 then exit;
+  if LVRep.SelCount = 0 then
+    Exit;
   for I := 0 to LVRep.Items.Count - 1 do
     if LVRep.Items[I].Selected then
       if Not LVRep.Items[I].Checked then
@@ -529,13 +572,15 @@ end;
 
 procedure TFrmSync.PM_VLClearClick(Sender: TObject);
 begin
-  if MessageBox(Handle, PChar('Вы действительно желаете очистить список?'), PChar(MB_CAPTION),
-                MB_ICONWARNING or MB_YESNO) = IDNO then Exit;
+  if MessageBox(Handle, PChar('Вы действительно желаете очистить список?'),
+    PChar(MB_CAPTION), MB_ICONWARNING or MB_YESNO) = IDNO then
+    Exit;
   LastActivLV.Clear;
 end;
 
 procedure TFrmSync.ShowModalInit;
-var NewItem: TListItem;
+var
+  NewItem: TListItem;
 begin
   //
 end;
@@ -545,89 +590,97 @@ procedure TFrmSync.SynchronizeDirect(StartDir, FirstDir, OldDir, Mask: string;
 var
   SR, SR_Old: TSearchRec;
   MaskStrings: TStrings;
-  i: integer;
+  I: Integer;
   FindFile: String;
   dt_start, dt_sync: TDateTime;
   NewItem: TListItem;
-  IcnIndex : Integer;
+  IcnIndex: Integer;
 begin
   StartDir := IncludeTrailingPathDelimiter(StartDir);
   try
     MaskStrings := TStringList.Create;
-    if Mask = '' then MaskStrings.Add('*.*')
-    else MaskStrings.Text := StringReplace(Mask,'|',#13,[rfReplaceAll,rfIgnoreCase]);
+    if Mask = '' then
+      MaskStrings.Add('*.*')
+    else
+      MaskStrings.Text := StringReplace(Mask, '|', #13,
+        [rfReplaceAll, rfIgnoreCase]);
 
-    if FindFirst(StartDir + '*.*',$3f , SR) = 0 then
+    if FindFirst(StartDir + '*.*', $3F, SR) = 0 then
     Begin
       Repeat
         Application.ProcessMessages;
-        if StartProcess = false then Break;
+        if StartProcess = false then
+          Break;
         if (SR.Attr and faDirectory) <> 0 then
         begin
           if ScanSubFolders and (SR.Name <> '.') and (SR.Name <> '..') then
           begin
-            SynchronizeDirect(StartDir + SR.Name, FirstDir, OldDir, Mask, ScanSubFolders);
+            SynchronizeDirect(StartDir + SR.Name, FirstDir, OldDir, Mask,
+              ScanSubFolders);
           end;
         end
         else
         begin
 
-          for i := 0 to MaskStrings.Count-1 do
+          for I := 0 to MaskStrings.Count - 1 do
           begin
-            if MatchesMask(SR.Name, MaskStrings[i]) then
+            if MatchesMask(SR.Name, MaskStrings[I]) then
             Begin
 
-              FindFile := Copy(StartDir + SR.Name, Length(FirstDir) + 1, length(StartDir + SR.Name) - Length(FirstDir));
+              FindFile := Copy(StartDir + SR.Name, Length(FirstDir) + 1,
+                Length(StartDir + SR.Name) - Length(FirstDir));
 
               // Получаем дату последнего изменения
               dt_start := GetDateTimeFromFile(SR);
 
-              ////  поиск Файла в резервной директории
+              /// /  поиск Файла в резервной директории
               if FindFirst(OldDir + FindFile, faAnyFile, SR_Old) = 0 then
               begin
 
                 // Получаем дату файла последнего изменения в синхронизируемой папке
-                dt_sync  := GetDateTimeFromFile(SR_Old);
+                dt_sync := GetDateTimeFromFile(SR_Old);
 
                 // Если даты последнего изменения равны то переход на следующий цикл
-                if (dt_start = dt_sync) or (dt_start < dt_sync) then Continue;
-
+                if (dt_start = dt_sync) or (dt_start < dt_sync) then
+                  Continue;
 
                 // Получение иконки
                 IcnIndex := AddAssociatedIcon(StartDir + SR.Name);
 
                 // Создаем новый итем в списке
                 NewItem := AddItemReport;
-                NewItem.Caption     := StartDir + SR.Name;
-                NewItem.ImageIndex  := IcnIndex;
-                NewItem.SubItems[0] := FormatDateTime('dd.mm.yyyy hh:mm:ss.zz', dt_start);
-                NewItem.SubItems[2] := FormatDateTime('dd.mm.yyyy hh:mm:ss.zz', dt_sync);
+                NewItem.Caption := StartDir + SR.Name;
+                NewItem.ImageIndex := IcnIndex;
+                NewItem.SubItems[0] := FormatDateTime('dd.mm.yyyy hh:mm:ss.zz',
+                  dt_start);
+                NewItem.SubItems[2] :=
+                  FormatDateTime('dd.mm.yyyy hh:mm:ss.zz', dt_sync);
                 NewItem.SubItems[3] := OldDir + FindFile;
                 NewItem.SubItemImages[3] := IcnIndex;
 
                 //
                 if dt_start > dt_sync then
                 begin
-                  //NewItem.SubItems[4] := 'Заменен';
+                  // NewItem.SubItems[4] := 'Заменен';
                   NewItem.SubItems[1] := '-->>';
                 end;
 
-
               end
-                else
+              else
               begin
                 // Если файл не найден в синхронизируемой директории
 
                 // Получение иконки
                 IcnIndex := AddAssociatedIcon(StartDir + SR.Name);
 
-                NewItem             := AddItemReport;
-                NewItem.Caption     := StartDir + SR.Name;
-                NewItem.ImageIndex  := IcnIndex;
-                NewItem.SubItems[0] := FormatDateTime('dd.mm.yyyy hh:mm:ss.zz', dt_start);
+                NewItem := AddItemReport;
+                NewItem.Caption := StartDir + SR.Name;
+                NewItem.ImageIndex := IcnIndex;
+                NewItem.SubItems[0] := FormatDateTime('dd.mm.yyyy hh:mm:ss.zz',
+                  dt_start);
                 NewItem.SubItems[1] := '-->>';
                 NewItem.SubItems[5] := OldDir + FindFile;
-                //NewItem.SubItems[4] := 'Скопирован';
+                // NewItem.SubItems[4] := 'Скопирован';
               end;
 
               FindClose(SR_Old);
@@ -638,9 +691,10 @@ begin
 
       until FindNext(SR) <> 0;
     end
-      else
+    else
     begin
-      MessageBox(Handle, Pchar('Error: '+SystemErrorMessage(GetLastError)), PChar(MB_CAPTION), MB_ICONSTOP);
+      MessageBox(Handle, PChar('Error: ' + SystemErrorMessage(GetLastError)),
+        PChar(MB_CAPTION), MB_ICONSTOP);
     end;
 
   finally
@@ -655,39 +709,45 @@ procedure TFrmSync.SynchronizeRevers(StartDir, FirstDir, OldDir, Mask: string;
 var
   SR, SR_Old: TSearchRec;
   MaskStrings: TStrings;
-  i: integer;
+  I: Integer;
   FindFile: String;
   dt_start, dt_sync: TDateTime;
   NewItem: TListItem;
-  IcnIndex : ShortInt;
+  IcnIndex: ShortInt;
 begin
   StartDir := IncludeTrailingPathDelimiter(StartDir);
   try
     MaskStrings := TStringList.Create;
-    if Mask = '' then MaskStrings.Add('*.*')
-    else MaskStrings.Text := StringReplace(Mask,'|',#13,[rfReplaceAll,rfIgnoreCase]);
+    if Mask = '' then
+      MaskStrings.Add('*.*')
+    else
+      MaskStrings.Text := StringReplace(Mask, '|', #13,
+        [rfReplaceAll, rfIgnoreCase]);
 
-    if FindFirst(StartDir + '*.*',$3f , SR) = 0 then
+    if FindFirst(StartDir + '*.*', $3F, SR) = 0 then
     Begin
       Repeat
         Application.ProcessMessages;
-        if StartProcess = false then Break;
+        if StartProcess = false then
+          Break;
         if (SR.Attr and faDirectory) <> 0 then
         begin
           if ScanSubFolders and (SR.Name <> '.') and (SR.Name <> '..') then
           begin
-            SynchronizeRevers(StartDir + SR.Name, FirstDir, OldDir, Mask, ScanSubFolders);
+            SynchronizeRevers(StartDir + SR.Name, FirstDir, OldDir, Mask,
+              ScanSubFolders);
           end;
         end
         else
         begin
 
-          for i := 0 to MaskStrings.Count-1 do
+          for I := 0 to MaskStrings.Count - 1 do
           begin
-            if MatchesMask(SR.Name, MaskStrings[i]) then
+            if MatchesMask(SR.Name, MaskStrings[I]) then
             Begin
 
-              FindFile := Copy(StartDir + SR.Name, Length(FirstDir) + 1, length(StartDir + SR.Name) - Length(FirstDir));
+              FindFile := Copy(StartDir + SR.Name, Length(FirstDir) + 1,
+                Length(StartDir + SR.Name) - Length(FirstDir));
 
               // Получаем дату последнего изменения
               dt_start := GetDateTimeFromFile(SR);
@@ -698,22 +758,25 @@ begin
 
                 dt_sync := GetDateTimeFromFile(SR_Old);
 
-                if (dt_start = dt_sync) or (dt_start < dt_sync) then continue;
+                if (dt_start = dt_sync) or (dt_start < dt_sync) then
+                  Continue;
 
                 // Получение иконки
                 IcnIndex := AddAssociatedIcon(StartDir + SR.Name);
 
                 // Если файл не найден в синхронизируемой директории
-                NewItem             := AddItemReport;
-                NewItem.Caption     := OldDir + FindFile; //StartDir + SR.Name;
-                NewItem.ImageIndex  := IcnIndex;
-                NewItem.SubItemImages[3] := AddAssociatedIcon(StartDir + SR.Name);
-                NewItem.SubItems[2] := FormatDateTime('dd.mm.yyyy hh:mm:ss.zz', dt_start);
+                NewItem := AddItemReport;
+                NewItem.Caption := OldDir + FindFile; // StartDir + SR.Name;
+                NewItem.ImageIndex := IcnIndex;
+                NewItem.SubItemImages[3] :=
+                  AddAssociatedIcon(StartDir + SR.Name);
+                NewItem.SubItems[2] := FormatDateTime('dd.mm.yyyy hh:mm:ss.zz',
+                  dt_start);
                 NewItem.SubItems[1] := '<<--';
                 NewItem.SubItems[3] := StartDir + SR.Name;
 
               end
-                else
+              else
               begin
                 // Если файл не найден в другой директории
 
@@ -721,11 +784,13 @@ begin
                 IcnIndex := AddAssociatedIcon(StartDir + SR.Name);
 
                 // Если файл не найден в синхронизируемой директории
-                NewItem             := AddItemReport;
-                NewItem.Caption     := '';//OldDir + FindFile; //StartDir + SR.Name;
-                NewItem.ImageIndex  := -1;
+                NewItem := AddItemReport;
+                NewItem.Caption := '';
+                // OldDir + FindFile; //StartDir + SR.Name;
+                NewItem.ImageIndex := -1;
                 NewItem.SubItemImages[3] := IcnIndex;
-                NewItem.SubItems[2] := FormatDateTime('dd.mm.yyyy hh:mm:ss.zz', dt_start);
+                NewItem.SubItems[2] := FormatDateTime('dd.mm.yyyy hh:mm:ss.zz',
+                  dt_start);
                 NewItem.SubItems[1] := '<<--';
                 NewItem.SubItems[3] := StartDir + SR.Name;
                 NewItem.SubItems[5] := OldDir + FindFile;
@@ -740,9 +805,10 @@ begin
 
       until FindNext(SR) <> 0;
     end
-      else
+    else
     begin
-      MessageBox(Handle, Pchar('Error: '+SystemErrorMessage(GetLastError)), PChar(MB_CAPTION), MB_ICONSTOP);
+      MessageBox(Handle, PChar('Error: ' + SystemErrorMessage(GetLastError)),
+        PChar(MB_CAPTION), MB_ICONSTOP);
     end;
 
   finally
@@ -757,21 +823,18 @@ begin
   ChBoxSyncDirect.Enabled := true;
   ChBoxSyncRevers.Enabled := true;
   case ProcType of
-    ptScan :
+    ptScan:
       begin
         BtnScan.Caption := 'СКАНИРОВАТЬ';
         BtnSync.Enabled := true;
         ProgressBar.Style := pbstNormal;
       end;
-    ptSync :
+    ptSync:
       begin
         BtnScan.Enabled := true;
-        BtnSync.caption := 'СИНХРОНИЗИРОВАТЬ';
+        BtnSync.Caption := 'СИНХРОНИЗИРОВАТЬ';
       end;
   end;
 end;
 
 end.
-
-
-

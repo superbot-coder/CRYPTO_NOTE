@@ -3,8 +3,10 @@
 interface
 
 uses
-  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
-  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.ComCtrls, Vcl.ExtCtrls, System.Win.Registry,
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants,
+  System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.ComCtrls,
+  Vcl.ExtCtrls, System.Win.Registry,
   sButton, sListView, sSkinProvider, sCheckBox, sLabel, sEdit, Vcl.Menus;
 
 type
@@ -36,6 +38,7 @@ type
 var
   FrmExt: TFrmExt;
   I: SmallInt;
+
 implementation
 
 USES UFrmMain, UFrmSync;
@@ -46,14 +49,15 @@ procedure TFrmExt.BtnAddClick(Sender: TObject);
 Var
   NewItem: TListItem;
 begin
-  for I := 0 to LVExt.Items.Count -1 do
+  for I := 0 to LVExt.Items.Count - 1 do
     if LVExt.Items[I].Caption = LowerCase(sEdExt.Text) then
     begin
-      MessageBox(Handle, PChar('Такая маска уже существует.'), PChar(MB_CAPTION), MB_ICONWARNING);
+      MessageBox(Handle, PChar('Такая маска уже существует.'),
+        PChar(MB_CAPTION), MB_ICONWARNING);
       Exit;
     end;
 
-  NewItem         := LVExt.Items.Add;
+  NewItem := LVExt.Items.Add;
   NewItem.Caption := sEdExt.Text;
   NewItem.SubItems.Add(sEdDescript.Text);
 
@@ -73,29 +77,30 @@ end;
 procedure TFrmExt.LoadLVExtFromReg;
 var
   Reg: TRegistry;
-  i: SmallInt;
+  I: SmallInt;
   st: TStrings;
   s_temp: AnsiString;
   NewItem: TListItem;
 begin
   Reg := TRegistry.Create;
-  st  := TStringList.Create;
+  st := TStringList.Create;
   try
     Reg.RootKey := HKEY_CURRENT_USER;
     if Reg.OpenKey('\Software\CryptoNote\Extentions', false) then
     begin
       Reg.GetValueNames(st);
-      for i := 0 to st.Count -1 do
+      for I := 0 to st.Count - 1 do
       begin
-        if MaskExistes(st.Strings[i]) or (st.Strings[i] = '') then Continue;
-        s_temp := Reg.ReadString(st.Strings[i]);
+        if MaskExistes(st.Strings[I]) or (st.Strings[I] = '') then
+          Continue;
+        s_temp := Reg.ReadString(st.Strings[I]);
         NewItem := LVExt.Items.Add;
-         if AnsiPos('checked', s_temp) > 0 then
-         begin
-           s_temp := copy(s_temp, 1, length(s_temp)-length('checked'));
-           NewItem.Checked := true;
-         end;
-        NewItem.Caption := st.Strings[i];
+        if AnsiPos('checked', s_temp) > 0 then
+        begin
+          s_temp := copy(s_temp, 1, length(s_temp) - length('checked'));
+          NewItem.Checked := true;
+        end;
+        NewItem.Caption := st.Strings[I];
         NewItem.SubItems.Add(s_temp);
       end;
     end;
@@ -105,23 +110,23 @@ begin
   end;
 end;
 
-
 function TFrmExt.MaskExistes(mask: string): boolean;
 begin
   Result := false;
-  for i := 0 to LVExt.Items.Count -1 do
+  for I := 0 to LVExt.Items.Count - 1 do
   begin
-    if LVExt.Items[i].Caption = mask then
+    if LVExt.Items[I].Caption = mask then
     begin
       Result := true;
-      exit;
+      Exit;
     end;
   end;
 end;
 
 procedure TFrmExt.PM_DeleteClick(Sender: TObject);
 begin
-  if LVExt.SelCount = 0 then exit;
+  if LVExt.SelCount = 0 then
+    Exit;
   LVExt.DeleteSelected;
 end;
 
@@ -137,11 +142,14 @@ begin
     Reg.RootKey := HKEY_CURRENT_USER;
     if Reg.OpenKey('\Software\CryptoNote\Extentions', true) then
     begin
-      for si := 0 to LVExt.Items.Count -1 do
+      for si := 0 to LVExt.Items.Count - 1 do
       begin
-        if LVExt.Items[si].Checked then Checked := 'checked'
-        else Checked := '';
-        Reg.WriteString(LVExt.Items[si].Caption, LVExt.Items[si].SubItems[0] +' '+ Checked);
+        if LVExt.Items[si].Checked then
+          Checked := 'checked'
+        else
+          Checked := '';
+        Reg.WriteString(LVExt.Items[si].Caption, LVExt.Items[si].SubItems[0] +
+          ' ' + Checked);
       end;
       Reg.CloseKey;
     end;

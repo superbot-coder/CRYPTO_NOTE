@@ -199,8 +199,6 @@ object FrmSync: TFrmSync
       Font.Style = [fsBold]
       ParentFont = False
       TabOrder = 2
-      ImgChecked = 0
-      ImgUnchecked = 0
     end
     object ChBoxSyncRevers: TsCheckBox
       Left = 479
@@ -215,8 +213,6 @@ object FrmSync: TFrmSync
       Font.Style = [fsBold]
       ParentFont = False
       TabOrder = 3
-      ImgChecked = 0
-      ImgUnchecked = 0
     end
     object sBtnMaskEdit: TsButton
       Left = 343
@@ -289,6 +285,11 @@ object FrmSync: TFrmSync
     Top = 8
   end
   object sSkinProvider: TsSkinProvider
+    AddedTitle.Font.Charset = DEFAULT_CHARSET
+    AddedTitle.Font.Color = clNone
+    AddedTitle.Font.Height = -11
+    AddedTitle.Font.Name = 'Tahoma'
+    AddedTitle.Font.Style = []
     SkinData.SkinSection = 'FORM'
     TitleButtons = <>
     Left = 680

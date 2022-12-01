@@ -3,11 +3,11 @@ object FrmMain: TFrmMain
   Top = 0
   Caption = 'CRYPTO NOTE'
   ClientHeight = 775
-  ClientWidth = 1158
+  ClientWidth = 1379
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
-  Font.Height = -13
+  Font.Height = -11
   Font.Name = 'Tahoma'
   Font.Style = []
   FormStyle = fsMDIForm
@@ -16,45 +16,65 @@ object FrmMain: TFrmMain
   Position = poScreenCenter
   OnCreate = FormCreate
   PixelsPerInch = 96
-  TextHeight = 16
+  TextHeight = 13
   object sSplitterBrowser: TsSplitter
-    Left = 297
-    Top = 66
+    Left = 334
+    Top = 83
     Width = 12
-    Height = 686
+    Height = 669
     Hint = #1053#1072#1078#1084#1080#1090#1077' '#1085#1072' '#1088#1072#1079#1076#1077#1083#1080#1090#1077#1083#1100' '#1087#1088#1072#1074#1086#1081' '#1082#1085#1086#1087#1082#1086#1081', '#1095#1090#1086' '#1073#1099' '#1087#1077#1088#1077#1082#1083#1102#1095#1080#1090#1100' '#1088#1077#1078#1080#1084
+    ParentCustomHint = False
+    ResizeStyle = rsPattern
+    Visible = False
+    StyleName = 'Sapphire Kamri'
+    Enabled = False
     ParentShowHint = False
     SizingByClick = True
     ShowGrip = True
-    ShowHint = True
+    ShowHint = False
     OnMouseDown = sSplitterBrowserMouseDown
+    ExplicitLeft = 368
+    ExplicitTop = 98
+  end
+  object Splitter: TSplitter
+    Left = 322
+    Top = 83
+    Width = 12
+    Height = 669
+    Color = clBtnShadow
+    MinSize = 100
+    ParentColor = False
+    ExplicitLeft = 368
+    ExplicitTop = 89
   end
   object sStatusBar: TsStatusBar
     Left = 0
     Top = 752
-    Width = 1158
+    Width = 1379
     Height = 23
     Panels = <
       item
         Text = #1055#1086#1080#1089#1082': '
         Width = 50
       end>
+    ExplicitWidth = 1158
   end
   object sPnlBrowser: TsPanel
-    Left = 0
-    Top = 66
+    Left = 400
+    Top = 83
     Width = 297
-    Height = 686
-    Align = alLeft
+    Height = 669
+    Align = alCustom
     TabOrder = 1
+    Visible = False
     DesignSize = (
       297
-      686)
+      669)
     object sLblSearch: TsLabel
       Left = 5
       Top = 37
-      Width = 39
-      Height = 16
+      Width = 34
+      Height = 13
       Caption = #1055#1086#1080#1089#1082':'
     end
     object sBtnOpenTreeDir: TsButton
@@ -89,42 +109,42 @@ object FrmMain: TFrmMain
       Images = ImageListButtons
       TabOrder = 2
     end
-    object sCmBoxExRootDirs: TsComboBoxEx
+    object sCmBoxExRootDirs_old: TsComboBoxEx
       Left = 5
-      Top = 8
+      Top = 6
       Width = 189
-      Height = 25
-      BoundLabel.Font.Charset = DEFAULT_CHARSET
-      BoundLabel.Font.Color = clWindowText
-      BoundLabel.Font.Height = -13
-      BoundLabel.Font.Name = 'Tahoma'
-      BoundLabel.Font.Style = []
-      ItemsEx = <>
+      Height = 24
       Anchors = [akLeft, akTop, akRight]
-      ItemIndex = -1
       TabOrder = 3
-      Text = 'sCmBoxExRootDirs'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -13
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
+      ItemsEx = <>
+      Text = 'sCmBoxExRootDirs_old'
       Images = ImageListTree
     end
-    object sCmBoxSearch: TsComboBox
+    object sCmBoxSearch_old: TsComboBox
       Left = 5
       Top = 53
       Width = 214
       Height = 24
       Anchors = [akLeft, akTop, akRight]
-      BoundLabel.Font.Charset = DEFAULT_CHARSET
-      BoundLabel.Font.Color = clWindowText
-      BoundLabel.Font.Height = -13
-      BoundLabel.Font.Name = 'Tahoma'
-      BoundLabel.Font.Style = []
-      ItemIndex = -1
       TabOrder = 4
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -13
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
     end
-    object TV: TsTreeViewEx
+    object TV_old: TsTreeViewEx
       Left = 3
-      Top = 89
+      Top = 84
       Width = 288
-      Height = 591
+      Height = 579
       Anchors = [akLeft, akTop, akRight, akBottom]
       Images = ImageListTree
       Indent = 19
@@ -133,42 +153,25 @@ object FrmMain: TFrmMain
       ShowRoot = False
       TabOrder = 5
       OnDblClick = Act_OpenFileExecute
-      BoundLabel.Font.Charset = DEFAULT_CHARSET
-      BoundLabel.Font.Color = clWindowText
-      BoundLabel.Font.Height = -13
-      BoundLabel.Font.Name = 'Tahoma'
-      BoundLabel.Font.Style = []
     end
   end
   object sPnlTabs: TsPanel
     Left = 0
-    Top = 0
-    Width = 1158
-    Height = 66
+    Top = 25
+    Width = 1379
+    Height = 58
     Align = alTop
+    Caption = 'ImageListTree'
     TabOrder = 2
-    DesignSize = (
-      1158
-      66)
-    object sSkinSelector: TsSkinSelector
-      Left = 1008
-      Top = 6
-      Width = 145
-      Height = 25
-      BoundLabel.Font.Charset = DEFAULT_CHARSET
-      BoundLabel.Font.Color = clWindowText
-      BoundLabel.Font.Height = -13
-      BoundLabel.Font.Name = 'Tahoma'
-      BoundLabel.Font.Style = []
-      Anchors = [akTop, akRight]
-      TabOrder = 0
-    end
+    ExplicitLeft = -8
+    ExplicitTop = 55
+    ExplicitWidth = 1158
     object TabSet: TTabSet
       Left = 1
-      Top = 43
-      Width = 1156
+      Top = 1
+      Width = 1377
       Height = 22
-      Align = alBottom
+      Align = alTop
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText
       Font.Height = -13
@@ -180,6 +183,130 @@ object FrmMain: TFrmMain
       TabPosition = tpTop
       UnselectedColor = clBtnFace
       OnClick = TabSetClick
+      ExplicitWidth = 1156
+    end
+    object Button1: TButton
+      Left = 368
+      Top = 29
+      Width = 75
+      Height = 25
+      Caption = 'Button1'
+      TabOrder = 1
+      OnClick = Button1Click
+    end
+    object cbxVclStyles: TComboBox
+      Left = 469
+      Top = 31
+      Width = 268
+      Height = 21
+      Style = csDropDownList
+      TabOrder = 2
+      OnSelect = cbxVclStylesSelect
+    end
+  end
+  object ActionMainMenuBar1: TActionMainMenuBar
+    Left = 0
+    Top = 0
+    Width = 1379
+    Height = 25
+    UseSystemFont = False
+    ActionManager = ActionManager
+    Caption = 'ActionMainMenuBar1'
+    Color = clMenuBar
+    ColorMap.DisabledFontColor = 7171437
+    ColorMap.HighlightColor = clWhite
+    ColorMap.BtnSelectedFont = clBlack
+    ColorMap.UnusedColor = clWhite
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clBlack
+    Font.Height = -12
+    Font.Name = 'Segoe UI'
+    Font.Style = []
+    Spacing = 0
+    ExplicitWidth = 1158
+  end
+  object PanelBrowser: TPanel
+    Left = 0
+    Top = 83
+    Width = 322
+    Height = 669
+    Align = alLeft
+    TabOrder = 4
+    ExplicitLeft = 424
+    ExplicitTop = 106
+    DesignSize = (
+      322
+      669)
+    object LblSearch: TLabel
+      Left = 9
+      Top = 36
+      Width = 34
+      Height = 13
+      Caption = #1055#1086#1080#1089#1082':'
+    end
+    object CmBoxExRootDirs: TComboBoxEx
+      Left = 9
+      Top = 6
+      Width = 193
+      Height = 22
+      ItemsEx = <>
+      Anchors = [akLeft, akTop, akRight]
+      TabOrder = 0
+      Text = 'CmBoxExRootDirs'
+      Images = ImageListTree
+    end
+    object BtnOpenTreeDir: TButton
+      Left = 208
+      Top = 5
+      Width = 75
+      Height = 24
+      Anchors = [akTop, akRight]
+      Caption = #1054#1090#1082#1088#1099#1090#1100
+      TabOrder = 1
+      OnClick = Act_OpenTreeDirExecute
+    end
+    object CmBoxSearch: TComboBox
+      Left = 9
+      Top = 55
+      Width = 192
+      Height = 21
+      Anchors = [akLeft, akTop, akRight]
+      TabOrder = 2
+      Text = 'CmBoxSearch'
+    end
+    object TV: TTreeView
+      Left = 0
+      Top = 82
+      Width = 321
+      Height = 581
+      Anchors = [akLeft, akTop, akRight, akBottom]
+      Images = ImageListTree
+      Indent = 19
+      PopupMenu = PopActBarTV
+      TabOrder = 3
+      OnDblClick = Act_OpenFileExecute
+    end
+    object BtnUpDate: TButton
+      Left = 289
+      Top = 6
+      Width = 25
+      Height = 25
+      Anchors = [akTop, akRight]
+      ImageAlignment = iaCenter
+      ImageIndex = 0
+      Images = ImageListButtons
+      TabOrder = 4
+      OnClick = Act_UpDateFileListBrowserExecute
+    end
+    object BtnSearch: TButton
+      Left = 207
+      Top = 53
+      Width = 106
+      Height = 25
+      Anchors = [akTop, akRight]
+      Caption = #1055#1086#1080#1089#1082
+      TabOrder = 5
+      OnClick = BtnSearchClick
     end
   end
   object SaveDialog: TSaveDialog
@@ -245,9 +372,71 @@ object FrmMain: TFrmMain
               end>
             Caption = #1042#1080#1076
           end>
+      end
+      item
+        Items = <
+          item
+            Items = <
+              item
+                Action = Act_OpenFile
+              end
+              item
+                Action = Act_FrmDecryptOld
+              end
+              item
+                Action = Act_CreateNewFile
+              end
+              item
+                Action = Act_Exit
+              end>
+            Caption = #1060#1072#1081#1083
+          end
+          item
+            Items = <
+              item
+                Action = Act_ShowFrmMasterPwd
+              end
+              item
+                Action = Act_Settings
+              end
+              item
+                Action = Act_Synchronize
+              end
+              item
+                Action = Act_Show_MasterPassword
+              end>
+            Caption = #1053#1072#1089#1090#1088#1086#1081#1082#1080
+          end
+          item
+            Items = <
+              item
+                Action = Act_ChildCascade
+              end
+              item
+                Action = Act_ChildTileHorizont
+              end
+              item
+                Action = Act_ChildTileVertical
+              end
+              item
+                Action = Act_tets
+                Caption = '&Act_tets'
+              end
+              item
+                Action = Act_ExitToTray
+              end
+              item
+                Action = Act_ShowDebugWindow
+              end
+              item
+                Action = Act_SpliterSvich
+              end>
+            Caption = #1042#1080#1076
+          end>
+        ActionBar = ActionMainMenuBar1
       end>
-    Left = 456
-    Top = 128
+    Left = 736
+    Top = 320
     StyleName = 'Platform Default'
     object Act_ShowFrmMasterPwd: TAction
       Category = #1053#1072#1089#1090#1088#1086#1081#1082#1080
@@ -347,8 +536,8 @@ object FrmMain: TFrmMain
   end
   object PopActBarTV: TPopupActionBar
     OnPopup = PopActBarTVPopup
-    Left = 605
-    Top = 180
+    Left = 925
+    Top = 380
     object OpenFile: TMenuItem
       Action = Act_OpenFile
     end
@@ -1584,8 +1773,8 @@ object FrmMain: TFrmMain
     Top = 228
   end
   object PopActBarTray: TPopupActionBar
-    Left = 524
-    Top = 180
+    Left = 812
+    Top = 380
     object PA_TrayShow: TMenuItem
       Caption = #1055#1086#1082#1072#1079#1072#1090#1100' '#1075#1083#1072#1074#1085#1086#1077' '#1086#1082#1085#1086
     end
@@ -1598,8 +1787,8 @@ object FrmMain: TFrmMain
   end
   object ImageListTree: TImageList
     ColorDepth = cd32Bit
-    Left = 632
-    Top = 116
+    Left = 920
+    Top = 308
     Bitmap = {
       494C010104000800040010001000FFFFFFFF2110FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000002000000001002000000000000020
@@ -3671,7 +3860,6 @@ object FrmMain: TFrmMain
     MenuSupport.Font.Style = []
     Options.StdImgTransparency = True
     SkinDirectory = 'c:\Skins'
-    SkinName = 'Material Dark (internal)'
     SkinInfo = 'N/A'
     ThirdParty.ThirdEdits = ' '
     ThirdParty.ThirdButtons = 'TButton'
@@ -3704,8 +3892,8 @@ object FrmMain: TFrmMain
     DrawingStyle = dsTransparent
     Height = 24
     Width = 24
-    Left = 548
-    Top = 116
+    Left = 836
+    Top = 308
     Bitmap = {
       494C010101000800040018001800FFFFFFFF2110FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000600000001800000001002000000000000024
@@ -4012,8 +4200,8 @@ object FrmMain: TFrmMain
       000000000000}
   end
   object MainMenu: TMainMenu
-    Left = 452
-    Top = 184
+    Left = 740
+    Top = 376
     object Menu_Top_File: TMenuItem
       Caption = #1060#1072#1081#1083
       object N_OpenFile: TMenuItem

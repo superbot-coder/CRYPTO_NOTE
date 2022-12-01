@@ -26,7 +26,6 @@ object FrmSelectDir: TFrmSelectDir
         AutoSize = True
         Caption = #1044#1080#1088#1077#1082#1090#1086#1088#1080#1080
       end>
-    SmallImages = FrmMain.ImageList
     TabOrder = 0
     ViewStyle = vsReport
   end

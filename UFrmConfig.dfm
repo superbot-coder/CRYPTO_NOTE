@@ -28,19 +28,14 @@ object FrmConfig: TFrmConfig
     Left = 334
     Top = 283
     Width = 145
-    Height = 25
+    Height = 24
+    TabOrder = 0
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clBlack
     Font.Height = -13
     Font.Name = 'Tahoma'
     Font.Style = []
     ParentFont = False
-    BoundLabel.Font.Charset = DEFAULT_CHARSET
-    BoundLabel.Font.Color = clBlack
-    BoundLabel.Font.Height = -13
-    BoundLabel.Font.Name = 'Tahoma'
-    BoundLabel.Font.Style = []
-    TabOrder = 0
   end
   object sBtnApply: TsButton
     Left = 203
@@ -56,11 +51,6 @@ object FrmConfig: TFrmConfig
     Top = 18
     Width = 511
     Height = 193
-    BoundLabel.Font.Charset = DEFAULT_CHARSET
-    BoundLabel.Font.Color = clWindowText
-    BoundLabel.Font.Height = -13
-    BoundLabel.Font.Name = 'Tahoma'
-    BoundLabel.Font.Style = []
     Columns = <
       item
         AutoSize = True
@@ -78,13 +68,8 @@ object FrmConfig: TFrmConfig
     AutoSize = False
     MaxLength = 255
     TabOrder = 3
-    Text = ''
     CheckOnExit = True
-    BoundLabel.Font.Charset = DEFAULT_CHARSET
-    BoundLabel.Font.Color = clWindowText
-    BoundLabel.Font.Height = -13
-    BoundLabel.Font.Name = 'Tahoma'
-    BoundLabel.Font.Style = []
+    Text = ''
   end
   object PopActionBar: TPopupActionBar
     Left = 296

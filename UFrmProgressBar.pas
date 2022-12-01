@@ -3,15 +3,17 @@
 interface
 
 uses
-  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
-  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls, Vcl.StdCtrls, sPanel, sSkinProvider;
-  //JvProgressBar, JvExControls, JvGradient;
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants,
+  System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls, Vcl.StdCtrls, sPanel,
+  sSkinProvider;
+// JvProgressBar, JvExControls, JvGradient;
 
 type
   TFrmProgressBar = class(TForm)
     TimerProgress: TTimer;
     sSkinProvider: TsSkinProvider;
-    //JvGradProgressBar: TJvGradientProgressBar;
+    // JvGradProgressBar: TJvGradientProgressBar;
     LblCaption: TLabel;
     procedure TimerProgressTimer(Sender: TObject);
     procedure Start;
@@ -44,23 +46,23 @@ end;
 procedure TFrmProgressBar.TimerProgressTimer(Sender: TObject);
 begin
   {
-   if JvGradProgressBar.Position = 100 then
-  begin
+    if JvGradProgressBar.Position = 100 then
+    begin
     JvGradProgressBar.Position := 0;
     if JvGradProgressBar.Inverted = false then
     begin
-      JvGradProgressBar.Inverted     := true;
-      JvGradProgressBar.BarColorFrom := clLime;
-      JvGradProgressBar.BarColorTo   := clGreen;
+    JvGradProgressBar.Inverted     := true;
+    JvGradProgressBar.BarColorFrom := clLime;
+    JvGradProgressBar.BarColorTo   := clGreen;
     end
     else
     begin
-      JvGradProgressBar.Inverted     := false;
-      JvGradProgressBar.BarColorFrom := clGreen;
-      JvGradProgressBar.BarColorTo   := clLime;
+    JvGradProgressBar.Inverted     := false;
+    JvGradProgressBar.BarColorFrom := clGreen;
+    JvGradProgressBar.BarColorTo   := clLime;
     end;
-  end;
-  JvGradProgressBar.Position := JvGradProgressBar.Position + 2;
+    end;
+    JvGradProgressBar.Position := JvGradProgressBar.Position + 2;
   }
 end;
 
