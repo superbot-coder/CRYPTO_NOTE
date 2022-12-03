@@ -11,20 +11,19 @@ The main desire of the author: to reliably protect your files from the curious e
 
 Huge desire to support many encryption algorithms that are generally available so that users can choose the best protection themselves
 
-![Screenshot](https://github.com/superbot-coder/CRYPTO_NOTE/blob/master/ScreenShot_001.PNG "")
-
 **Статус проекта:** Активная разработке    
 **Project status:** Currently in active development
+
+![Screenshot](https://github.com/superbot-coder/CRYPTO_NOTE/blob/master/ScreenShot_001.PNG "")
+![Screenshot](https://github.com/superbot-coder/CRYPTO_NOTE/blob/master/ScreenShot_002.PNG "")
 
 **Требования для компиляции и зависимости:**
 - RAD Studio Delphi 10.4 и выше
 - Библиотека DCPCrypt2-2010
-- Установленый пакет библиотеки AlphaSkins v16.11 и выше 
 
 **Requirements for compilation and dependences:**
 - RAD Studio Delphi 10.4 and higher
 - Library Packаge: DCPCrypt2-2010
-- Installed Library Package: AlphaSkins v16.11 and higher
 
 
 
