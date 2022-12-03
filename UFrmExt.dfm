@@ -3,116 +3,97 @@ object FrmExt: TFrmExt
   Top = 0
   BorderStyle = bsToolWindow
   Caption = #1056#1072#1089#1096#1080#1088#1077#1085#1080#1103' '#1092#1072#1081#1083#1086#1074
-  ClientHeight = 285
+  ClientHeight = 279
   ClientWidth = 422
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
-  Font.Height = -13
+  Font.Height = -11
   Font.Name = 'Tahoma'
   Font.Style = []
   OldCreateOrder = False
   Position = poMainFormCenter
   OnCreate = FormCreate
   PixelsPerInch = 96
-  TextHeight = 16
-  object sLblDescript: TsLabel
+  TextHeight = 13
+  object LblExt: TLabel
+    Left = 8
+    Top = 13
+    Width = 65
+    Height = 13
+    Caption = #1056#1072#1089#1096#1080#1088#1077#1085#1080#1077':'
+  end
+  object LblDescript: TLabel
     Left = 112
-    Top = 10
-    Width = 164
-    Height = 16
-    Caption = #1054#1087#1080#1089#1072#1085#1080#1077' ('#1085#1077' '#1086#1073#1103#1079#1072#1090#1077#1083#1100#1085#1086')'
+    Top = 13
+    Width = 144
+    Height = 13
+    Caption = #1054#1087#1080#1089#1072#1085#1080#1077' ('#1085#1077' '#1086#1073#1103#1079#1072#1090#1077#1083#1100#1085#1086'):'
   end
-  object sLblExt: TsLabel
-    Left = 8
-    Top = 10
-    Width = 72
-    Height = 16
-    Caption = #1056#1072#1089#1096#1080#1088#1077#1085#1080#1077
+  object BtnOk: TButton
+    Left = 154
+    Top = 243
+    Width = 98
+    Height = 30
+    Caption = 'OK'
+    TabOrder = 0
+    OnClick = BtnOKClick
   end
-  object LVExt: TsListView
+  object BtnAdd: TButton
+    Left = 323
+    Top = 30
+    Width = 75
+    Height = 25
+    Caption = #1044#1086#1073#1072#1074#1080#1090#1100
+    TabOrder = 1
+    OnClick = BtnAddClick
+  end
+  object ChBoxAllFiles: TCheckBox
     Left = 8
-    Top = 90
+    Top = 59
+    Width = 97
+    Height = 17
+    Caption = '*.* '#1042#1089#1077' '#1092#1072#1081#1083#1099
+    Checked = True
+    State = cbChecked
+    TabOrder = 2
+  end
+  object edExt: TEdit
+    Left = 8
+    Top = 32
+    Width = 89
+    Height = 21
+    TabOrder = 3
+  end
+  object EdDescript: TEdit
+    Left = 111
+    Top = 32
+    Width = 206
+    Height = 21
+    TabOrder = 4
+  end
+  object LVExt: TListView
+    Left = 8
+    Top = 82
     Width = 401
-    Height = 147
+    Height = 150
     Checkboxes = True
     Columns = <
       item
         Caption = #1052#1072#1089#1082#1072' '#1088#1072#1089#1096#1080#1088#1077#1085#1080#1103
-        MaxWidth = 250
-        MinWidth = 50
-        Width = 150
       end
       item
         Caption = #1054#1087#1080#1089#1072#1085#1080#1077' ('#1085#1077' '#1086#1073#1103#1079#1072#1090#1077#1083#1100#1085#1086')'
-        MaxWidth = 300
-        MinWidth = 50
-        Width = 240
       end>
     Items.ItemData = {
-      05980000000200000000000000FFFFFFFFFFFFFFFF01000000FFFFFFFF000000
-      00052A002E007400780074000F220435043A04410442043E0432044B04350420
-      004404300439043B044B0440DC1F2500000000FFFFFFFFFFFFFFFF01000000FF
-      FFFFFF00000000062A002E0063007400780074001128043804440440043E0432
-      0430043D043D044B04350420004404300439043B044B04D0DB1F25FFFFFFFF}
-    ReadOnly = True
-    RowSelect = True
+      05960000000200000000000000FFFFFFFFFFFFFFFF01000000FFFFFFFF000000
+      00052A002E007400780074000E220435043A04410442043E0432044B04390420
+      004404300439043B04088B142B00000000FFFFFFFFFFFFFFFF01000000FFFFFF
+      FF00000000062A002E0063007400780074001128043804440440043E04320430
+      043D043D044B04350420004404300439043B044B04A88D142BFFFFFFFF}
     PopupMenu = PopupMenu
-    TabOrder = 0
-    ViewStyle = vsReport
-  end
-  object sBtnOk: TsButton
-    Left = 160
-    Top = 243
-    Width = 105
-    Height = 34
-    Caption = 'OK'
-    TabOrder = 1
-    OnClick = BtnOKClick
-  end
-  object sBtnAdd: TsButton
-    Left = 323
-    Top = 32
-    Width = 75
-    Height = 25
-    Caption = #1044#1086#1073#1072#1074#1080#1090#1100
-    TabOrder = 2
-    OnClick = BtnAddClick
-  end
-  object sEdDescript: TsEdit
-    Left = 112
-    Top = 32
-    Width = 205
-    Height = 24
-    TabOrder = 3
-  end
-  object sEdExt: TsEdit
-    Left = 8
-    Top = 32
-    Width = 89
-    Height = 24
-    TabOrder = 4
-  end
-  object sChBoxAllFiles: TsCheckBox
-    Left = 8
-    Top = 64
-    Width = 108
-    Height = 20
-    Caption = '*.* '#1042#1089#1077' '#1092#1072#1081#1083#1099
-    Checked = True
-    State = cbChecked
     TabOrder = 5
-  end
-  object sSkinProvider: TsSkinProvider
-    AddedTitle.Font.Charset = DEFAULT_CHARSET
-    AddedTitle.Font.Color = clNone
-    AddedTitle.Font.Height = -11
-    AddedTitle.Font.Name = 'Tahoma'
-    AddedTitle.Font.Style = []
-    SkinData.SkinSection = 'FORM'
-    TitleButtons = <>
-    Left = 324
-    Top = 152
+    ViewStyle = vsReport
   end
   object PopupMenu: TPopupMenu
     Left = 240

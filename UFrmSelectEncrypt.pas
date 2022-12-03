@@ -6,7 +6,7 @@ uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants,
   System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs,
-  Vcl.StdCtrls, Vcl.ExtCtrls, Vcl.ComCtrls, CryptMod, sButton;
+  Vcl.StdCtrls, Vcl.ExtCtrls, Vcl.ComCtrls, CryptMod;
 
 type
   TFrmSelectEncrypt = class(TForm)
@@ -14,10 +14,10 @@ type
     ChBoxDeleteSource: TCheckBox;
     CmBoxExAlgo: TComboBoxEx;
     lblAlgo: TLabel;
-    sButton1: TsButton;
+    Button1: TButton;
     procedure FrmShowModal(DLG: TCryptDlgMode);
     procedure FormCreate(Sender: TObject);
-    procedure sButton1Click(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
   private
     { Private declarations }
   public
@@ -33,6 +33,14 @@ implementation
 USES UfrmMain;
 
 {$R *.dfm}
+
+procedure TFrmSelectEncrypt.Button1Click(Sender: TObject);
+begin
+  ALGO := GetAlgoType(FrmSelectEncrypt.CmBoxExAlgo.Items
+    [FrmSelectEncrypt.CmBoxExAlgo.ItemIndex]);
+  Apply := true;
+  Close;
+end;
 
 procedure TFrmSelectEncrypt.FormCreate(Sender: TObject);
 var
@@ -78,14 +86,6 @@ begin
   end;
 
   ShowModal;
-end;
-
-procedure TFrmSelectEncrypt.sButton1Click(Sender: TObject);
-begin
-  ALGO := GetAlgoType(FrmSelectEncrypt.CmBoxExAlgo.Items
-    [FrmSelectEncrypt.CmBoxExAlgo.ItemIndex]);
-  Apply := true;
-  Close;
 end;
 
 end.

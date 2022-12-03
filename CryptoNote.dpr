@@ -23,7 +23,7 @@ uses
 begin
   Application.Initialize;
   Application.MainFormOnTaskbar := True;
-  TStyleManager.TrySetStyle('Amakrits');
+  TStyleManager.TrySetStyle('Amethyst Kamri');
   Application.CreateForm(TFrmMain, FrmMain);
   Application.CreateForm(TFrmConfig, FrmConfig);
   Application.CreateForm(TFrmMasterPwd, FrmMasterPwd);

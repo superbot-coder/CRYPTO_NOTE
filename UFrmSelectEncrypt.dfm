@@ -64,13 +64,13 @@ object FrmSelectEncrypt: TFrmSelectEncrypt
       end>
     TabOrder = 1
   end
-  object sButton1: TsButton
+  object Button1: TButton
     Left = 160
     Top = 136
     Width = 169
-    Height = 35
-    Caption = 'sButton1'
+    Height = 33
+    Caption = 'Button1'
     TabOrder = 3
-    OnClick = sButton1Click
+    OnClick = Button1Click
   end
 end

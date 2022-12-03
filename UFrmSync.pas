@@ -7,30 +7,15 @@ uses
   System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ComCtrls, Vcl.StdCtrls,
   Vcl.PlatformDefaultStyleActnCtrls, Vcl.Menus, Vcl.ActnPopup, Vcl.ExtCtrls,
-  Vcl.FileCtrl,
-  System.masks, Error, System.ImageList, Vcl.ImgList, Winapi.ShellAPI, sButton,
-  sPanel, sStatusBar, sSkinProvider, sListView, sCheckBox, sLabel, sEdit;
+  Vcl.FileCtrl, System.masks, Error, System.ImageList, Vcl.ImgList, Winapi.ShellAPI;
 
 Type
   TProcessType = (ptScan, ptSync);
 
 type
   TFrmSync = class(TForm)
-    LVRep_old: TListView;
+    LVRep: TListView;
     ImageList: TImageList;
-    LVRep: TsListView;
-    sSkinProvider: TsSkinProvider;
-    sStatusBar: TsStatusBar;
-    sPnlBar: TsPanel;
-    LVDirBackUp: TsListView;
-    BtnScan: TsButton;
-    BtnSync: TsButton;
-    sBtnMaskEdit: TsButton;
-    edExt: TsEdit;
-    sLblExt: TsLabel;
-    ProgressBar: TProgressBar;
-    ChBoxSyncDirect: TsCheckBox;
-    ChBoxSyncRevers: TsCheckBox;
     PopMenu: TPopupMenu;
     PopMenuLVRep: TPopupMenu;
     PM_LVRepSetCheck: TMenuItem;
@@ -41,10 +26,21 @@ type
     PM_DeleteItem: TMenuItem;
     PM_Spliter: TMenuItem;
     mm: TMemo;
-    LVDirMaster: TsListView;
+    StatusBar: TStatusBar;
+    PnlBar: TPanel;
+    LVDirMaster: TListView;
+    LVDirBackUp: TListView;
+    ProgressBar: TProgressBar;
+    BtnSync: TButton;
+    BtnScan: TButton;
+    ChBoxSyncRevers: TCheckBox;
+    ChBoxSyncDirect: TCheckBox;
+    BtnMaskEdit: TButton;
+    edExt: TEdit;
+    lblExt: TLabel;
     procedure ShowModalInit;
     function OpenDirectory: String;
-    procedure AddItem(LVAddDir, LVCheckDir: TsListView; AddDir: String);
+    procedure AddItem(LVAddDir, LVCheckDir: TListView; AddDir: String);
     function AddItemReport: TListItem;
     procedure PA_VLClearClick(Sender: TObject);
     procedure LVMouseDown(Sender: TObject; Button: TMouseButton;
@@ -62,7 +58,7 @@ type
     procedure BtnSyncClick(Sender: TObject);
     procedure PA_LVRepCheckDownClick(Sender: TObject);
     function CheckFileCopy(FileSource, FileDest: String): Boolean;
-    procedure LVRep_oldCustomDrawItem(Sender: TCustomListView; Item: TListItem;
+    procedure LVRepCustomDrawItem(Sender: TCustomListView; Item: TListItem;
       State: TCustomDrawState; var DefaultDraw: Boolean);
     procedure LockControl(ProcType: TProcessType);
     procedure UnlockControl(ProcType: TProcessType);
@@ -84,7 +80,7 @@ type
 var
   FrmSync: TFrmSync;
   OpenDirSrt: String;
-  LastActivLV: TsListView;
+  LastActivLV: TListView;
   si: SmallInt;
   I: Integer;
   StartProcess: Boolean;
@@ -150,7 +146,7 @@ begin
   end;
 end;
 
-procedure TFrmSync.AddItem(LVAddDir, LVCheckDir: TsListView; AddDir: String);
+procedure TFrmSync.AddItem(LVAddDir, LVCheckDir: TListView; AddDir: String);
 Var
   NewItem: TListItem;
   I: SmallInt;
@@ -196,7 +192,7 @@ var
 begin
   FrmExt.ShowModal;
 
-  if FrmExt.sChBoxAllFiles.Checked then
+  if FrmExt.ChBoxAllFiles.Checked then
   begin
     edExt.Text := '*.*';
     Exit;
@@ -420,10 +416,10 @@ end;
 procedure TFrmSync.LVMouseDown(Sender: TObject; Button: TMouseButton;
   Shift: TShiftState; X, Y: Integer);
 begin
-  LastActivLV := Sender as TsListView;
+  LastActivLV := Sender as TListView;
 end;
 
-procedure TFrmSync.LVRep_oldCustomDrawItem(Sender: TCustomListView;
+procedure TFrmSync.LVRepCustomDrawItem(Sender: TCustomListView;
   Item: TListItem; State: TCustomDrawState; var DefaultDraw: Boolean);
 begin
   DefaultDraw := true;
@@ -479,7 +475,7 @@ end;
 
 procedure TFrmSync.PM_AddDirClick(Sender: TObject);
 begin
-  if LastActivLV = LVDirMaster then
+ { if LastActivLV = LVDirMaster then
     if LVDirMaster.Items.Count > 0 then
     begin
       MessageBox(Handle,
@@ -495,7 +491,7 @@ begin
   if LastActivLV = LVDirBackUp then
     AddItem(LVDirBackUp, LVDirMaster, OpenDirSrt);
   LVRep.Clear;
-  ImagListClear;
+  ImagListClear;  }
 end;
 
 procedure TFrmSync.PM_AddDirFromParamClick(Sender: TObject);

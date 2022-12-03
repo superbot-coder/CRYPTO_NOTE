@@ -4,9 +4,9 @@ interface
 
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants,
-  System.Classes, Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.ExtCtrls,
-  Vcl.ComCtrls, Error, MsgLog, sStatusBar,
-  SynEditHighlighter, SynHighlighterGeneral, SynEdit, CryptMod;
+  System.Classes, Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls,
+  Vcl.ExtCtrls, Vcl.ComCtrls, Error, MsgLog, SynEditHighlighter,
+  SynHighlighterGeneral, SynEdit, CryptMod;
 
 type
   TMDIStatusFile = (sfNewFile, sfCryptFile, sfUnCryptFile, sfUnDecryptedFile);
@@ -115,12 +115,9 @@ begin
       end;
 
       case ALGO of
-        RC4_SHA1:
-          Atxt := DecryptRC4_SHA1(PASSWORD, st.Strings[1]);
-        RC4_SHA256:
-          Atxt := DecryptRC4_SHA256(PASSWORD, st.Strings[1]);
-        RC4_SHA512:
-          Atxt := DecryptRC4_SHA512(PASSWORD, st.Strings[1]);
+        RC4_SHA1:   Atxt := DecryptRC4_SHA1(PASSWORD, st.Strings[1]);
+        RC4_SHA256: Atxt := DecryptRC4_SHA256(PASSWORD, st.Strings[1]);
+        RC4_SHA512: Atxt := DecryptRC4_SHA512(PASSWORD, st.Strings[1]);
       end;
 
       if Sign.hash_uncrypt <> GetMD5Hash(Atxt) then
@@ -150,19 +147,15 @@ begin
       if MessageBox(Handle, PChar('Сигнатура файла не найдена или повреждена.' +
         #13 + 'Возможно этот файл не является зашифровонным. ' +
         'Возможно дальнейшая расшифровка текста не удастся.' + #13 +
-        'Вы хотит продолжить?'), PChar(MB_CAPTION), MB_ICONWARNING or MB_YESNO)
-        = IDNO then
-        Exit;
+        'Вы хотит продолжить?'),
+         PChar(MB_CAPTION), MB_ICONWARNING or MB_YESNO) = IDNO then Exit;
 
       for i := 0 to st.Count - 1 do
       begin
         case ALGO of
-          RC4_SHA1:
-            Atxt := DecryptRC4_SHA1(PASSWORD, st.Strings[i]);
-          RC4_SHA256:
-            Atxt := DecryptRC4_SHA256(PASSWORD, st.Strings[i]);
-          RC4_SHA512:
-            Atxt := DecryptRC4_SHA512(PASSWORD, st.Strings[i]);
+          RC4_SHA1:   Atxt := DecryptRC4_SHA1(PASSWORD, st.Strings[i]);
+          RC4_SHA256: Atxt := DecryptRC4_SHA256(PASSWORD, st.Strings[i]);
+          RC4_SHA512: Atxt := DecryptRC4_SHA512(PASSWORD, st.Strings[i]);
         end;
 
         if 'szd:' = Copy(Atxt, 1, 4) then
@@ -185,15 +178,13 @@ end;
 
 procedure TFrmMDIChild.BtnEncryptClick(Sender: TObject);
 begin
-  if SynEdit.Lines.Count = 0 then
-    Exit;
+  if SynEdit.Lines.Count = 0 then Exit;
   EncryptFile;
 end;
 
 procedure TFrmMDIChild.BtnSaveClick(Sender: TObject);
 begin
-  if SynEdit.Lines.Count = 0 then
-    Exit;
+  if SynEdit.Lines.Count = 0 then Exit;
   SaveFile(True);
   SetStatusBarInfo;
   ChangeTxt := false;
@@ -203,8 +194,7 @@ procedure TFrmMDIChild.BtnSaveDecryptClick(Sender: TObject);
 var
   FileName, ext: string;
 begin
-  if SynEdit.Lines.Count = 0 then
-    Exit;
+  if SynEdit.Lines.Count = 0 then Exit;
   case MDIStatusFile of
     sfNewFile:
       begin
@@ -213,8 +203,7 @@ begin
   else
     begin
       ext := ExtractFileExt(OpenedFileName);
-      FileName := Copy(OpenedFileName, 1, Length(OpenedFileName) - Length(ext)
-        ) + '.txt';
+      FileName := Copy(OpenedFileName, 1, Length(OpenedFileName) - Length(ext)) + '.txt';
 
       if FileExists(FileName) then
       begin
@@ -297,8 +286,7 @@ begin
   end;
 
   // Шифруем и сохраняем
-  EnCryptTxtToSave(EncriptFileName, PAnsiChar(AnsiString(SynEdit.Text)), ALGO,
-    PASSWORD);
+  EnCryptTxtToSave(EncriptFileName, PAnsiChar(AnsiString(SynEdit.Text)), ALGO, PASSWORD);
 
   // обновляю статусы и свойства формы
   if MDIStatusFile = sfNewFile then
@@ -355,12 +343,9 @@ begin
     ASign := ASign + 'sign:0;' + GetMD5Hash(Atxt);
     // add to Signature hash_md5_txt
     case ALGO of
-      RC4_SHA1:
-        Actxt := EncryptRC4_SHA1(APwd, Atxt); // шифруеется
-      RC4_SHA256:
-        Actxt := EncryptRC4_SHA256(APwd, Atxt); // шифруеется
-      RC4_SHA512:
-        Actxt := EncryptRC4_SHA512(APwd, Atxt); // шифруеется
+      RC4_SHA1:   Actxt := EncryptRC4_SHA1(APwd, Atxt); // шифруеется
+      RC4_SHA256: Actxt := EncryptRC4_SHA256(APwd, Atxt); // шифруеется
+      RC4_SHA512: Actxt := EncryptRC4_SHA512(APwd, Atxt); // шифруеется
     end;
 
     ASign := ASign + ';' + GetMD5Hash(Actxt); // add to Signature hash_md5_ctxt
@@ -468,12 +453,9 @@ begin
       end;
 
       case ALGO of
-        RC4_SHA1:
-          Atxt := DecryptRC4_SHA1(PASSWORD, st.Strings[1]);
-        RC4_SHA256:
-          Atxt := DecryptRC4_SHA256(PASSWORD, st.Strings[1]);
-        RC4_SHA512:
-          Atxt := DecryptRC4_SHA512(PASSWORD, st.Strings[1]);
+        RC4_SHA1:   Atxt := DecryptRC4_SHA1(PASSWORD, st.Strings[1]);
+        RC4_SHA256: Atxt := DecryptRC4_SHA256(PASSWORD, st.Strings[1]);
+        RC4_SHA512: Atxt := DecryptRC4_SHA512(PASSWORD, st.Strings[1]);
       end;
 
       if Sign.hash_uncrypt <> GetMD5Hash(Atxt) then
@@ -510,12 +492,9 @@ begin
       for i := 0 to st.Count - 1 do
       begin
         case ALGO of
-          RC4_SHA1:
-            Atxt := DecryptRC4_SHA1(PASSWORD, st.Strings[i]);
-          RC4_SHA256:
-            Atxt := DecryptRC4_SHA256(PASSWORD, st.Strings[i]);
-          RC4_SHA512:
-            Atxt := DecryptRC4_SHA512(PASSWORD, st.Strings[i]);
+          RC4_SHA1:   Atxt := DecryptRC4_SHA1(PASSWORD, st.Strings[i]);
+          RC4_SHA256: Atxt := DecryptRC4_SHA256(PASSWORD, st.Strings[i]);
+          RC4_SHA512: Atxt := DecryptRC4_SHA512(PASSWORD, st.Strings[i]);
         end;
 
         if 'szd:' = Copy(Atxt, 1, 4) then
@@ -526,15 +505,11 @@ begin
           SynEdit.Text := Atxt;
           Break;
         end;
-
       end;
-
     end;
-
   finally
     st.Free
   end;
-
 end;
 
 procedure TFrmMDIChild.mmChange(Sender: TObject);

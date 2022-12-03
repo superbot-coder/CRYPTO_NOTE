@@ -4,8 +4,8 @@ interface
 
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants,
-  System.Classes, Vcl.Graphics,
-  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.ComCtrls;
+  System.Classes, Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs,
+  Vcl.StdCtrls, Vcl.ComCtrls;
 
 Type
   TFrmInitMode = (fmMasterDir, fmBuckUpDir);
@@ -65,8 +65,7 @@ var
 begin
   FFrmMode := FrmMode;
   LVDir.Clear;
-  if FrmConfig.LVDir.Items.Count = 0 then
-    exit;
+  if FrmConfig.LVDir.Items.Count = 0 then exit;
   for i := 0 to FrmConfig.LVDir.Items.Count - 1 do
   begin
     NewItem := LVDir.Items.Add;

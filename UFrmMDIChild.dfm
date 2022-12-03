@@ -41,10 +41,6 @@ object FrmMDIChild: TFrmMDIChild
     Highlighter = SynGeneralSyn
     Lines.Strings = (
       'SynEdit')
-    ExplicitLeft = 423
-    ExplicitTop = 59
-    ExplicitWidth = 466
-    ExplicitHeight = 437
   end
   object PanelBar: TPanel
     Left = 0
@@ -112,7 +108,6 @@ object FrmMDIChild: TFrmMDIChild
         Text = #1048#1079#1084#1077#1085#1077#1085':'
         Width = 50
       end>
-    ExplicitTop = 480
   end
   object SynGeneralSyn: TSynGeneralSyn
     Options.AutoDetectEnabled = False

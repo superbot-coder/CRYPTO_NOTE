@@ -29,7 +29,6 @@
     Caption = #1055#1056#1048#1052#1045#1053#1048#1058#1068
     TabOrder = 0
     OnClick = BtnSaveClick
-    ExplicitTop = 166
   end
   object edPwd1: TLabeledEdit
     Left = 16

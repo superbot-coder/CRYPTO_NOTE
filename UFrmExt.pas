@@ -4,24 +4,21 @@ interface
 
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants,
-  System.Classes, Vcl.Graphics,
-  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.ComCtrls,
-  Vcl.ExtCtrls, System.Win.Registry,
-  sButton, sListView, sSkinProvider, sCheckBox, sLabel, sEdit, Vcl.Menus;
+  System.Classes, Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs,
+  Vcl.StdCtrls, Vcl.ComCtrls, Vcl.ExtCtrls, System.Win.Registry, Vcl.Menus;
 
 type
   TFrmExt = class(TForm)
-    LVExt: TsListView;
-    sBtnOk: TsButton;
-    sBtnAdd: TsButton;
-    sEdDescript: TsEdit;
-    sLblDescript: TsLabel;
-    sEdExt: TsEdit;
-    sLblExt: TsLabel;
-    sChBoxAllFiles: TsCheckBox;
-    sSkinProvider: TsSkinProvider;
     PopupMenu: TPopupMenu;
     PM_Delete: TMenuItem;
+    BtnOk: TButton;
+    BtnAdd: TButton;
+    ChBoxAllFiles: TCheckBox;
+    LblExt: TLabel;
+    LblDescript: TLabel;
+    edExt: TEdit;
+    EdDescript: TEdit;
+    LVExt: TListView;
     procedure BtnOKClick(Sender: TObject);
     procedure BtnAddClick(Sender: TObject);
     procedure SaveLVExtToReg;
@@ -50,17 +47,16 @@ Var
   NewItem: TListItem;
 begin
   for I := 0 to LVExt.Items.Count - 1 do
-    if LVExt.Items[I].Caption = LowerCase(sEdExt.Text) then
+    if LVExt.Items[I].Caption = LowerCase(edExt.Text) then
     begin
       MessageBox(Handle, PChar('Такая маска уже существует.'),
-        PChar(MB_CAPTION), MB_ICONWARNING);
+                 PChar(MB_CAPTION), MB_ICONWARNING);
       Exit;
     end;
 
   NewItem := LVExt.Items.Add;
-  NewItem.Caption := sEdExt.Text;
-  NewItem.SubItems.Add(sEdDescript.Text);
-
+  NewItem.Caption := edExt.Text;
+  NewItem.SubItems.Add(EdDescript.Text);
 end;
 
 procedure TFrmExt.BtnOKClick(Sender: TObject);
@@ -83,7 +79,7 @@ var
   NewItem: TListItem;
 begin
   Reg := TRegistry.Create;
-  st := TStringList.Create;
+  st  := TStringList.Create;
   try
     Reg.RootKey := HKEY_CURRENT_USER;
     if Reg.OpenKey('\Software\CryptoNote\Extentions', false) then
@@ -125,8 +121,7 @@ end;
 
 procedure TFrmExt.PM_DeleteClick(Sender: TObject);
 begin
-  if LVExt.SelCount = 0 then
-    Exit;
+  if LVExt.SelCount = 0 then Exit;
   LVExt.DeleteSelected;
 end;
 
@@ -137,7 +132,6 @@ var
   Checked: string;
 begin
   Reg := TRegistry.Create;
-
   try
     Reg.RootKey := HKEY_CURRENT_USER;
     if Reg.OpenKey('\Software\CryptoNote\Extentions', true) then

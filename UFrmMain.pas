@@ -10,11 +10,7 @@ uses
   System.ImageList, Vcl.ImgList, System.masks, Vcl.Buttons, Vcl.Menus,
   Vcl.ActnPopup, System.Win.Registry, System.StrUtils,
   ShellAPI, Vcl.Tabs, Math, Error,
-  sSkinManager, sSplitter,
-  sComboBoxes, sTreeView, sPanel, sComboBox, sLabel, acShellCtrls, sButton,
-  Vcl.Mask, sMaskEdit, sCustomComboEdit, sComboEdit, aceCheckComboBox,
-  sStatusBar, acCoolBar, sSkinProvider, sPageControl, acHeaderControl,
-  sTabControl, acTitleBar, sScrollBox, sFrameBar, sToolBar, aceListView,
+  Vcl.Mask,
   Vcl.Themes;
 
 type THashType = (MD5_TXT, MD5_CTXT);
@@ -41,7 +37,6 @@ type
     Act_tets: TAction;
     OpenDialog: TOpenDialog;
     Act_FrmDecryptOld: TAction;
-    FontDialog: TFontDialog;
     Act_CryptSelectedDir: TAction;
     PA_CryptSelectedDir: TMenuItem;
     Act_DecryptSelectedDir: TAction;
@@ -58,43 +53,9 @@ type
     Act_OpenTreeDir: TAction;
     Act_TreeViewSearch: TAction;
     Act_ShowDebugWindow: TAction;
-    sSplitterBrowser: TsSplitter;
-    sSkinManager: TsSkinManager;
-    sPnlTabs: TsPanel;
-    sCmBoxSearch_old: TsComboBox;
-    sLblSearch: TsLabel;
-    sCmBoxExRootDirs_old: TsComboBoxEx;
-    sBtnSearch: TsButton;
-    sBtnOpenTreeDir: TsButton;
-    sBtnUpDate: TsButton;
     ImageListButtons: TImageList;
-    sStatusBar: TsStatusBar;
-    sPnlBrowser: TsPanel;
-    MainMenu: TMainMenu;
-    N_OpenFile: TMenuItem;
-    N_FrmDecryptOld: TMenuItem;
-    N_CreateNewFile: TMenuItem;
-    N_Exit: TMenuItem;
-    Menu_Top_File: TMenuItem;
-    sSkinProvider: TsSkinProvider;
-    Menu_Top_Settings: TMenuItem;
-    N_FrmMasterPwd: TMenuItem;
-    N_Settings: TMenuItem;
-    N_Synchronize: TMenuItem;
-    N_Show_MasterPassword: TMenuItem;
-    Menu_Top_Vid: TMenuItem;
-    N_ChildCascade: TMenuItem;
-    N_ChildTileHorizont: TMenuItem;
-    N_ChildTileVertical: TMenuItem;
-    N_ShadowTray: TMenuItem;
-    N_ExitToTray: TMenuItem;
-    N_ShowDebugWindow: TMenuItem;
-    N_Spliter: TMenuItem;
-    N_tets: TMenuItem;
-    TV_old: TsTreeViewEx;
     Act_SpliterSvich: TAction;
     ActionMainMenuBar1: TActionMainMenuBar;
-    Button1: TButton;
     Splitter: TSplitter;
     PanelBrowser: TPanel;
     CmBoxExRootDirs: TComboBoxEx;
@@ -104,6 +65,9 @@ type
     BtnUpDate: TButton;
     BtnSearch: TButton;
     LblSearch: TLabel;
+    PnlTabs: TPanel;
+    StatusBar: TStatusBar;
+    Button1: TButton;
     cbxVclStyles: TComboBox;
     procedure Act_SettingsExecute(Sender: TObject);
     procedure Act_ShowFrmMasterPwdExecute(Sender: TObject);
@@ -150,9 +114,6 @@ type
     procedure AddSearchBookMark;
     procedure Act_ShowDebugWindowExecute(Sender: TObject);
     procedure LoadSearchBookMark;
-    procedure sBtnSearchClick(Sender: TObject);
-    procedure sSplitterBrowserMouseDown(Sender: TObject; Button: TMouseButton;
-      Shift: TShiftState; X, Y: Integer);
     procedure Act_SpliterSvichExecute(Sender: TObject);
     procedure cbxVclStylesSelect(Sender: TObject);
     procedure Button1Click(Sender: TObject);
@@ -239,17 +200,17 @@ begin
 
   if LowerCase(ExtractFileExt(FullName)) = '.ctxt' then
   begin
-    if FrmConfig.sFilenameEditTxtEditor.Text = '' then
+    if FrmConfig.edTxtEditor.Text = '' then
       ShellExecute(Handle, 'open', PChar(GetEnvironmentVariable('windir')+'\notepad.exe'),
                    PChar(FullName), Nil, SW_SHOWNORMAL)
-    else ShellExecute(Handle, 'open', PChar(FrmConfig.sFilenameEditTxtEditor.Text),
+    else ShellExecute(Handle, 'open', PChar(FrmConfig.edTxtEditor.Text),
                       PChar(FullName), nil, SW_SHOWNORMAL);
   end
     else
   begin
-    if FrmConfig.sFilenameEditTxtEditor.Text = '' then
+    if FrmConfig.edTxtEditor.Text = '' then
       ShellExecute(Handle, 'open', PChar(FullName), nil, nil, SW_SHOWNORMAL)
-    else ShellExecute(Handle, 'open', PChar(FrmConfig.sFilenameEditTxtEditor.Text),
+    else ShellExecute(Handle, 'open', PChar(FrmConfig.edTxtEditor.Text),
                       PChar(FullName), nil, SW_SHOWNORMAL);
   end;
 
@@ -267,13 +228,6 @@ begin
     PA_CryptSelectedDir.Visible   := false;
     PA_DecryptSelectedDir.Visible := false;
   end;
-end;
-
-procedure TFrmMain.sBtnSearchClick(Sender: TObject);
-begin
-  if (CmBoxSearch.Text = '') or (TV.Items.Count = 0) then Exit;
-  TVSearh;
-  sStatusBar.Panels[0].Text := 'Поиск: ' + GetFullFileName;
 end;
 
 procedure TFrmMain.SendLog(txt: string; Err: Integer);
@@ -296,15 +250,6 @@ begin
  Result := Result + NewExt;
 end;
 
-procedure TFrmMain.sSplitterBrowserMouseDown(Sender: TObject;
-  Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
-var pos: SmallInt;
-begin
-  if Not (Button = mbRight) then Exit;
-  if sSplitterBrowser.SizingByClick then sSplitterBrowser.SizingByClick := false
-  else sSplitterBrowser.SizingByClick := true;
-end;
-
 procedure TFrmMain.Act_ChildTileHorizontExecute(Sender: TObject);
 begin
   TileMode := tbHorizontal;
@@ -318,8 +263,9 @@ begin
 end;
 
 procedure TFrmMain.Act_CreateNewFileExecute(Sender: TObject);
-var i : SmallInt;
-    NewChild: TFrmMDIChild;
+var
+  i : SmallInt;
+  NewChild: TFrmMDIChild;
 begin
   NewChild := TFrmMDIChild.Create(Application);
   NewChild.Caption             := 'Новая запись';
@@ -333,12 +279,13 @@ begin
 end;
 
 procedure TFrmMain.Act_CryptSelectedDirExecute(Sender: TObject);
-var SR: TSearchRec;
-    FilesList: TStrings;
-    ST : TStrings;
-    PASSWORD: AnsiString;
-    i: Integer;
-    EncriptFileName: string;
+var
+  SR: TSearchRec;
+  FilesList: TStrings;
+  ST : TStrings;
+  PASSWORD: AnsiString;
+  i: Integer;
+  EncriptFileName: string;
 begin
   FrmSelectEncrypt.FrmShowModal(DLG_ECRYPT);
   if FrmSelectEncrypt.Apply = false then Exit;
@@ -399,13 +346,14 @@ begin
 end;
 
 procedure TFrmMain.Act_DecryptSelectedDirExecute(Sender: TObject);
-var SR: TSearchRec;
-    FilesList: TStrings;
-    ST : TStrings;
-    PASSWORD: AnsiString;
-    i: Integer;
-    Sign: TSignature;
-    Actxt, Atxt: AnsiString;
+var
+  SR: TSearchRec;
+  FilesList: TStrings;
+  ST : TStrings;
+  PASSWORD: AnsiString;
+  i: Integer;
+  Sign: TSignature;
+  Actxt, Atxt: AnsiString;
 begin
   FrmSelectEncrypt.FrmShowModal(DLG_DECRYPT);
   if FrmSelectEncrypt.Apply = false then Exit;
@@ -691,7 +639,7 @@ var
 begin
   if (CmBoxExRootDirs.ItemsEx.Count = 0) or (CmBoxExRootDirs.ItemIndex = -1) then Exit;
 
-  sBtnUpDate.Enabled := false;
+  BtnUpDate.Enabled := false;
   // FrmProgressBar.Start;
   //while ImageListTree.Count > 4 do ImageListTree.Delete(ImageListTree.Count -1);
   //TV.Items.Clear;
@@ -744,7 +692,7 @@ begin
 
 
   FrmProgressBar.Stop;
-  sBtnUpDate.Enabled := true;
+  BtnUpDate.Enabled := true;
 end;
 
 procedure TFrmMain.Act_SettingsExecute(Sender: TObject);
@@ -770,10 +718,12 @@ end;
 
 procedure TFrmMain.Act_SpliterSvichExecute(Sender: TObject);
 begin
+  {
   if sSplitterBrowser.SizingByClick then
     sSplitterBrowser.SizingByClick := false
   else
     sSplitterBrowser.SizingByClick := true;
+  }
 end;
 
 procedure TFrmMain.Act_SynchronizeExecute(Sender: TObject);
@@ -817,7 +767,7 @@ var
    ImageIndex: Integer;
 begin
   if (CmBoxExRootDirs.ItemsEx.Count = 0) or (CmBoxExRootDirs.ItemIndex = -1) then Exit;
-  sBtnUpDate.Enabled := false;
+  BtnUpDate.Enabled := false;
   FrmProgressBar.Start;
 
   TV.Items.BeginUpdate;
@@ -839,7 +789,7 @@ begin
   TV.FullCollapse;
   TV.Items.EndUpdate;
   FrmProgressBar.Stop;
-  sBtnUpDate.Enabled := true;
+  BtnUpDate.Enabled := true;
 end;
 
 function TFrmMain.AddAssociatedIcon(FileName: String;
@@ -933,7 +883,7 @@ procedure TFrmMain.BtnSearchClick(Sender: TObject);
 begin
  if (CmBoxSearch.Text = '') or (TV.Items.Count = 0) then Exit;
   TVSearh;
-  sStatusBar.Panels[0].Text := 'Поиск: ' + GetFullFileName;
+  StatusBar.Panels[0].Text := 'Поиск: ' + GetFullFileName;
 end;
 
 procedure TFrmMain.Button1Click(Sender: TObject);
@@ -1171,9 +1121,6 @@ begin
     sSkinManager.SkinName := '';
   end;
   }
-
-  sSkinManager.SkinName := '';
-  sSkinManager.Active   := false;
 
 end;
 

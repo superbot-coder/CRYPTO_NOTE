@@ -17,59 +17,50 @@ object FrmConfig: TFrmConfig
   OnCreate = FormCreate
   PixelsPerInch = 96
   TextHeight = 16
-  object sLblTxtEditors: TsLabel
-    Left = 12
+  object LblTxtEditors: TLabel
+    Left = 8
     Top = 217
     Width = 126
     Height = 16
     Caption = #1058#1077#1082#1089#1090#1086#1074#1099#1081' '#1088#1077#1076#1072#1082#1090#1086#1088':'
   end
-  object sSkinSelector: TsSkinSelector
-    Left = 334
-    Top = 283
-    Width = 145
-    Height = 24
-    TabOrder = 0
-    Font.Charset = DEFAULT_CHARSET
-    Font.Color = clBlack
-    Font.Height = -13
-    Font.Name = 'Tahoma'
-    Font.Style = []
-    ParentFont = False
+  object SpBtnOpenDlg: TSpeedButton
+    Left = 494
+    Top = 238
+    Width = 25
+    Height = 25
+    Caption = '...'
+    OnClick = SpBtnOpenDlgClick
   end
-  object sBtnApply: TsButton
-    Left = 203
-    Top = 278
-    Width = 111
-    Height = 34
-    Caption = #1055#1056#1048#1052#1045#1053#1048#1058#1068
-    TabOrder = 1
-    OnClick = BtnApply
-  end
-  object LVDir: TsListView
+  object LVDir: TListView
     Left = 8
-    Top = 18
+    Top = 8
     Width = 511
     Height = 193
     Columns = <
       item
-        AutoSize = True
         Caption = #1044#1080#1088#1077#1082#1090#1086#1088#1080#1080
         MinWidth = 400
+        Width = 500
       end>
-    TabOrder = 2
+    TabOrder = 0
     ViewStyle = vsReport
   end
-  object sFilenameEditTxtEditor: TsFilenameEdit
+  object BtnApply: TButton
+    Left = 198
+    Top = 283
+    Width = 111
+    Height = 34
+    Caption = #1055#1056#1048#1052#1045#1053#1048#1058#1068
+    TabOrder = 1
+    OnClick = BtnApplyOnClick
+  end
+  object edTxtEditor: TEdit
     Left = 8
     Top = 239
-    Width = 511
-    Height = 26
-    AutoSize = False
-    MaxLength = 255
-    TabOrder = 3
-    CheckOnExit = True
-    Text = ''
+    Width = 480
+    Height = 24
+    TabOrder = 2
   end
   object PopActionBar: TPopupActionBar
     Left = 296

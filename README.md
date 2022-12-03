@@ -11,6 +11,8 @@ The main desire of the author: to reliably protect your files from the curious e
 
 Huge desire to support many encryption algorithms that are generally available so that users can choose the best protection themselves
 
+![Screenshot](https://github.com/superbot-coder/CRYPTO_NOTE/blob/master/ScreenShot_001.PNG "")
+
 **Статус проекта:** Активная разработке    
 **Project status:** Currently in active development
 

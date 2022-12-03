@@ -17,11 +17,11 @@ object FrmSync: TFrmSync
   OnClose = FormClose
   PixelsPerInch = 96
   TextHeight = 16
-  object LVRep_old: TListView
+  object LVRep: TListView
     Left = 0
-    Top = 225
+    Top = 233
     Width = 1157
-    Height = 403
+    Height = 395
     Align = alClient
     Checkboxes = True
     Color = clCream
@@ -73,104 +73,71 @@ object FrmSync: TFrmSync
     SmallImages = ImageList
     TabOrder = 0
     ViewStyle = vsReport
-    Visible = False
-    OnCustomDrawItem = LVRep_oldCustomDrawItem
-    ExplicitLeft = -4
-    ExplicitTop = 209
-    ExplicitHeight = 411
+    OnCustomDrawItem = LVRepCustomDrawItem
+    ExplicitTop = 225
+    ExplicitHeight = 403
   end
-  object LVRep: TsListView
-    Left = 0
-    Top = 225
-    Width = 1157
-    Height = 403
-    Align = alClient
-    Columns = <
-      item
-        AutoSize = True
-        Caption = #1060#1072#1081#1083#1099' '#1074' '#1086#1089#1085#1086#1074#1085#1086#1081' '#1076#1080#1088#1077#1082#1090#1086#1088#1080#1080
-        MaxWidth = 600
-        MinWidth = 100
-      end
-      item
-        AutoSize = True
-        Caption = #1044#1072#1090#1072' '#1087#1086#1089#1083#1077#1076#1085#1077#1081' '#1079#1072#1087#1080#1089#1080
-        MaxWidth = 200
-        MinWidth = 50
-      end
-      item
-        Alignment = taCenter
-        AutoSize = True
-        Caption = #1053#1072#1087#1088#1072#1074#1083#1077#1085#1080#1077
-        MaxWidth = 100
-        MinWidth = 30
-      end
-      item
-        AutoSize = True
-        Caption = #1044#1072#1090#1072' '#1087#1086#1089#1083#1077#1076#1085#1077#1075#1086' '#1080#1079#1084#1077#1085#1077#1085#1080#1103
-        MaxWidth = 200
-        MinWidth = 50
-      end
-      item
-        AutoSize = True
-        Caption = #1060#1072#1081#1083#1099' '#1074' '#1088#1077#1079#1077#1088#1074#1085#1086#1081' '#1076#1080#1088#1077#1082#1090#1086#1088#1080#1080
-        MaxWidth = 600
-        MinWidth = 100
-      end
-      item
-        Width = 0
-      end>
-    ReadOnly = True
-    RowSelect = True
-    PopupMenu = PopMenuLVRep
-    SmallImages = ImageList
+  object mm: TMemo
+    Left = 372
+    Top = 520
+    Width = 769
+    Height = 89
+    Lines.Strings = (
+      'mm')
     TabOrder = 1
-    ViewStyle = vsReport
-    ExplicitTop = 222
   end
-  object sStatusBar: TsStatusBar
+  object StatusBar: TStatusBar
     Left = 0
     Top = 628
     Width = 1157
     Height = 19
     Panels = <>
-    ExplicitLeft = 448
-    ExplicitTop = 600
-    ExplicitWidth = 0
   end
-  object sPnlBar: TsPanel
+  object PnlBar: TPanel
     Left = 0
     Top = 0
     Width = 1157
-    Height = 225
+    Height = 233
     Align = alTop
-    BevelOuter = bvNone
+    Caption = 'PnlBar'
     TabOrder = 3
-    ExplicitTop = 56
-    object sLblExt: TsLabel
+    ExplicitTop = -6
+    object lblExt: TLabel
       Left = 12
       Top = 13
       Width = 112
       Height = 16
       Caption = #1052#1072#1089#1082#1072' '#1088#1072#1089#1096#1080#1088#1077#1085#1080#1103
     end
-    object LVDirBackUp: TsListView
-      Left = 631
-      Top = 66
-      Width = 449
+    object LVDirMaster: TListView
+      Left = 7
+      Top = 65
+      Width = 454
       Height = 150
-      Checkboxes = True
+      Columns = <
+        item
+          AutoSize = True
+          Caption = #1054#1089#1085#1086#1074#1085#1072#1103' '#1076#1080#1088#1077#1082#1090#1086#1088#1080#1103
+          MaxWidth = 800
+          MinWidth = 100
+        end>
+      PopupMenu = PopMenu
+      TabOrder = 0
+      ViewStyle = vsReport
+      OnMouseDown = LVMouseDown
+    end
+    object LVDirBackUp: TListView
+      Left = 631
+      Top = 65
+      Width = 449
+      Height = 154
       Columns = <
         item
           AutoSize = True
           Caption = #1044#1080#1088#1077#1082#1090#1086#1088#1080#1080' '#1076#1083#1103' '#1088#1077#1079#1077#1088#1074#1085#1099#1093' '#1082#1086#1087#1080#1081
-          MaxWidth = 800
-          MinWidth = 100
         end>
-      ReadOnly = True
-      RowSelect = True
       PopupMenu = PopMenu
-      TabOrder = 0
+      TabOrder = 1
       ViewStyle = vsReport
       OnMouseDown = LVMouseDown
     end
@@ -184,27 +151,31 @@ object FrmSync: TFrmSync
       ParentDoubleBuffered = False
       MarqueeInterval = 50
       Step = 1
-      TabOrder = 1
-    end
-    object ChBoxSyncDirect: TsCheckBox
-      Left = 479
-      Top = 66
-      Width = 134
-      Height = 20
-      Caption = '>> '#1085#1072#1087#1088#1072#1074#1083#1077#1085#1080#1077
-      Font.Charset = DEFAULT_CHARSET
-      Font.Color = clWindowText
-      Font.Height = -13
-      Font.Name = 'Tahoma'
-      Font.Style = [fsBold]
-      ParentFont = False
       TabOrder = 2
     end
-    object ChBoxSyncRevers: TsCheckBox
+    object BtnSync: TButton
+      Left = 467
+      Top = 149
+      Width = 158
+      Height = 30
+      Caption = #1057#1048#1053#1061#1056#1054#1053#1048#1047#1048#1056#1054#1042#1040#1058#1068
+      TabOrder = 3
+      OnClick = BtnSyncClick
+    end
+    object BtnScan: TButton
+      Left = 467
+      Top = 114
+      Width = 158
+      Height = 29
+      Caption = #1057#1050#1040#1053#1048#1056#1054#1042#1040#1058#1068
+      TabOrder = 4
+      OnClick = BtnScanClick
+    end
+    object ChBoxSyncRevers: TCheckBox
       Left = 479
-      Top = 88
-      Width = 134
-      Height = 20
+      Top = 91
+      Width = 140
+      Height = 17
       Caption = '<< '#1085#1072#1087#1088#1072#1074#1083#1077#1085#1080#1077
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText
@@ -212,88 +183,45 @@ object FrmSync: TFrmSync
       Font.Name = 'Tahoma'
       Font.Style = [fsBold]
       ParentFont = False
-      TabOrder = 3
+      TabOrder = 5
     end
-    object sBtnMaskEdit: TsButton
+    object ChBoxSyncDirect: TCheckBox
+      Left = 479
+      Top = 68
+      Width = 146
+      Height = 17
+      Caption = '>> '#1085#1072#1087#1088#1072#1074#1083#1077#1085#1080#1077
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -13
+      Font.Name = 'Tahoma'
+      Font.Style = [fsBold]
+      ParentFont = False
+      TabOrder = 6
+    end
+    object BtnMaskEdit: TButton
       Left = 343
       Top = 34
       Width = 81
       Height = 25
-      Caption = #1053#1072#1089#1090#1088#1086#1080#1090#1100' '
-      TabOrder = 4
+      Caption = #1053#1072#1089#1090#1088#1086#1080#1090#1100
+      TabOrder = 7
       OnClick = BtnMaskEditClick
     end
-    object BtnScan: TsButton
-      Left = 467
-      Top = 114
-      Width = 158
-      Height = 29
-      Caption = #1057#1050#1040#1053#1048#1056#1054#1042#1040#1058#1068
-      TabOrder = 5
-      OnClick = BtnScanClick
-    end
-    object BtnSync: TsButton
-      Left = 467
-      Top = 149
-      Width = 158
-      Height = 30
-      Caption = #1057#1048#1053#1061#1056#1054#1053#1048#1047#1048#1056#1054#1042#1040#1058#1068
-      TabOrder = 6
-      OnClick = BtnSyncClick
-    end
-    object edExt: TsEdit
+    object edExt: TEdit
       Left = 12
       Top = 35
       Width = 325
       Height = 24
-      TabOrder = 7
+      TabOrder = 8
       Text = '*.*'
     end
-    object LVDirMaster: TsListView
-      Left = 12
-      Top = 65
-      Width = 449
-      Height = 150
-      Columns = <
-        item
-          AutoSize = True
-          Caption = #1054#1089#1085#1086#1074#1085#1072#1103' '#1076#1080#1088#1077#1082#1090#1086#1088#1080#1103
-          MaxWidth = 800
-          MinWidth = 100
-        end>
-      ReadOnly = True
-      RowSelect = True
-      PopupMenu = PopMenu
-      TabOrder = 8
-      ViewStyle = vsReport
-      OnMouseDown = LVMouseDown
-    end
-  end
-  object mm: TMemo
-    Left = 372
-    Top = 520
-    Width = 769
-    Height = 89
-    Lines.Strings = (
-      'mm')
-    TabOrder = 4
   end
   object ImageList: TImageList
     ColorDepth = cd32Bit
     DrawingStyle = dsTransparent
     Left = 932
     Top = 8
-  end
-  object sSkinProvider: TsSkinProvider
-    AddedTitle.Font.Charset = DEFAULT_CHARSET
-    AddedTitle.Font.Color = clNone
-    AddedTitle.Font.Height = -11
-    AddedTitle.Font.Name = 'Tahoma'
-    AddedTitle.Font.Style = []
-    SkinData.SkinSection = 'FORM'
-    TitleButtons = <>
-    Left = 680
-    Top = 284
   end
   object PopMenu: TPopupMenu
     Left = 856

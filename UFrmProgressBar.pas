@@ -4,15 +4,12 @@ interface
 
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants,
-  System.Classes, Vcl.Graphics,
-  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls, Vcl.StdCtrls, sPanel,
-  sSkinProvider;
-// JvProgressBar, JvExControls, JvGradient;
+  System.Classes, Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs,
+  Vcl.ExtCtrls, Vcl.StdCtrls;
 
 type
   TFrmProgressBar = class(TForm)
     TimerProgress: TTimer;
-    sSkinProvider: TsSkinProvider;
     // JvGradProgressBar: TJvGradientProgressBar;
     LblCaption: TLabel;
     procedure TimerProgressTimer(Sender: TObject);
