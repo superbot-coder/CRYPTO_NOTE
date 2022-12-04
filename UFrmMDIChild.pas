@@ -59,7 +59,7 @@ implementation
 
 Uses
   UFrmMain, UFrmDlgFileName, UFrmConfig, UFrmSelectEncrypt,
-  UFrmMasterPwd;
+  UFrmMasterPwd, UFrmDebugs;
 
 {$R *.dfm}
 
@@ -287,7 +287,7 @@ begin
       end;
   end;
 
-  // Шифруем и сохраняем
+  // Encrypt and save
   //EnCryptTxtToSave(EncriptFileName, PAnsiChar(AnsiString(SynEdit.Text)), ALGO, PASSWORD);
   EnCryptTxtToSaveTwo(EncriptFileName, PAnsiChar(AnsiString(SynEdit.Text)), ALGO, PASSWORD);
 
@@ -303,7 +303,7 @@ begin
   OpenedFileName := EncriptFileName;
   Caption        := EncriptFileName;
 
-  // удаление файла источника
+  // удаление файла источника (оригинал)
   if FrmSelectEncrypt.ChBoxDeleteSource.Checked then
   begin
     if FileExists(EncriptFileName) then
@@ -313,14 +313,15 @@ begin
     end;
   end;
 
+  SetStatusBarInfo;  //UpDate StatusBar
   // обновления списка дерева файлов
-  SetStatusBarInfo;
-  if FileExists(EncriptFileName)  then
+  if FileExists(EncriptFileName) and (FrmMain.TV.Items.Count <> 0) then
     FrmMain.AddNodeToTreeView(EncriptFileName, IMG_INDEX_CTXT);
   // FrmMain.Act_UpDateFileListBrowserExecute(nil);
 
   MessageBox(Handle, PChar('Файл успешно зашифрован и сохранен.'),
     PChar(MB_CAPTION), MB_ICONINFORMATION);
+
 end;
 
 procedure TFrmMDIChild.EnCryptTxtToSave(EnCryptFileName: String;
@@ -368,18 +369,12 @@ var
   st: TStrings;
   Atxt, Actxt: AnsiString;
   ASign: AnsiString; // Signature
-  d_size: Integer;
-
   JFileObject: TJSONObject;
   JContent: TJSONObject;
   dt_create: TDateTime;
-
-
 begin
   try
-    st     := TStringList.Create;
-    d_size := Length(PAnsiChar(PAtxt));
-
+    st   := TStringList.Create;
     Atxt := PAnsiChar(PAtxt);
 
     JFileObject := TJSONObject.Create;
@@ -387,18 +382,13 @@ begin
     JContent.AddPair('content', Atxt);
     JContent.AddPair('content_hash', GetSHA1Hash(Atxt));
 
-
     Atxt := JContent.ToJSON;
-    FrmMain.mm.Lines.add(JContent.ToJSON);
-
-    // JContent2 := TJSONObject.Create;
-    //JContent2 := TJSONObject.ParseJSONValue(Atxt) as TJSONObject;
-    //ShowMessage((Jcontent2.ToString));
+    FrmDebugs.AddDbgMessage(JContent.ToJSON); // for debug
 
     case ALGO of
-      RC4_SHA1:   Actxt := EncryptRC4_SHA1(APwd, Atxt); // шифруеется
-      RC4_SHA256: Actxt := EncryptRC4_SHA256(APwd, Atxt); // шифруеется
-      RC4_SHA512: Actxt := EncryptRC4_SHA512(APwd, Atxt); // шифруеется
+      RC4_SHA1:   Actxt := EncryptRC4_SHA1(APwd, Atxt);   // encrypt
+      RC4_SHA256: Actxt := EncryptRC4_SHA256(APwd, Atxt); // encrypt
+      RC4_SHA512: Actxt := EncryptRC4_SHA512(APwd, Atxt); // encrypt
     end;
 
     dt_create := Date + time;
@@ -412,8 +402,9 @@ begin
       AddPair('content', Actxt);
     end;
 
-    //st.Text := JFileObject.ToJSON;
-    st.Text := TJson.Format(JFileObject);
+    FrmDebugs.AddDbgMessage(TJson.Format(JFileObject)); //Format for debugs
+    //FrmDebugs.SynEdit.Text := TJson.Format(JFileObject); //Format for debugs
+    st.Text := JFileObject.ToJSON;
     st.SaveToFile(EnCryptFileName);
 
   finally

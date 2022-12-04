@@ -67,7 +67,6 @@ type
     StatusBar: TStatusBar;
     Button1: TButton;
     cbxVclStyles: TComboBox;
-    mm: TMemo;
     procedure Act_SettingsExecute(Sender: TObject);
     procedure Act_ShowFrmMasterPwdExecute(Sender: TObject);
     procedure FindFilesMskTV(StartFolder,  Mask: string; TNParent: TTreeNode; ScanSubFolders: Boolean);
@@ -235,12 +234,12 @@ var
   sErr: string;
 begin
   if Err = -1 then
-    FrmDebugs.mm.Lines.Add(FormatDateTime('dd.mm.yyyy hh:mm:ss.zzz', Date + Time) + ' ' + txt)
+    FrmDebugs.AddDbgMessage(FormatDateTime('dd.mm.yyyy hh:mm:ss.zzz', Date + Time) + ' ' + txt)
   else
   begin
     sErr := ' Error Code: [' + IntToStr(Err) + '] '+SysErrorMessage(Err);
-    FrmDebugs.mm.Lines.Add(
-           FormatDateTime('dd.mm.yyyy hh:mm:ss.zzz', Date + Time) + ' ' + txt + sErr);
+    FrmDebugs.AddDbgMessage(FormatDateTime('dd.mm.yyyy hh:mm:ss.zzz',
+                             Date + Time) + ' ' + txt + sErr);
   end;
 end;
 
@@ -391,7 +390,7 @@ begin
     // Получаю список всех шифрованных файлов в выделенной директории
     FindFilesMsk(GetFullFileName, '*.ctxt', FilesList, True);
     FrmDebugs.Show;
-    FrmDebugs.mm.Lines.Add(FilesList.Text);
+    FrmDebugs.AddDbgMessage(FilesList.Text);
     for i := 0 to FilesList.Count -1 do
     begin
 
@@ -717,7 +716,7 @@ end;
 
 procedure TFrmMain.Act_Show_MasterPasswordExecute(Sender: TObject);
 begin
-  FrmDebugs.mm.Lines.Add('MASTER PASSWORD: '+MASTER_PASSWORD);
+  FrmDebugs.AddDbgMessage('MASTER PASSWORD: '+MASTER_PASSWORD);
   FrmDebugs.Show;
 end;
 
@@ -1205,7 +1204,7 @@ begin
   // Директории будут отсортировываться с верху файлов
   CountMove := 0;
   RootTxt  := IncludeTrailingPathDelimiter(RootTxt);
-  if DEBUG_MODE then FrmDebugs.mm.Lines.Add('RootTxt + N.Text ' + RootTxt + N.Text);
+  if DEBUG_MODE then FrmDebugs.AddDbgMessage('RootTxt + N.Text ' + RootTxt + N.Text);
   N := TN.getFirstChild;
   While Assigned(N) do
   begin
@@ -1246,7 +1245,7 @@ begin
 
     if AnsiPos(SearchText, AnsiString(N.Text)) > 0 then
     begin
-      FrmDebugs.mm.Lines.Add('find!!!!!!!!!!!!!!!!!!!!!!!!!!!!! ' + N.Text);
+      FrmDebugs.AddDbgMessage('find!!!!!!!!!!!!!!!!!!!!!!!!!!!!! ' + N.Text);
       Result := N;
       Break;
     end;

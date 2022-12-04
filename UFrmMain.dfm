@@ -18,9 +18,9 @@ object FrmMain: TFrmMain
   TextHeight = 13
   object Splitter: TSplitter
     Left = 322
-    Top = 49
+    Top = 81
     Width = 12
-    Height = 722
+    Height = 690
     Color = clBtnShadow
     MinSize = 100
     ParentColor = False
@@ -34,7 +34,6 @@ object FrmMain: TFrmMain
     Top = 0
     Width = 1379
     Height = 25
-    UseSystemFont = False
     ActionManager = ActionManager
     Caption = 'ActionMainMenuBar1'
     Color = clMenuBar
@@ -43,7 +42,7 @@ object FrmMain: TFrmMain
     ColorMap.BtnSelectedFont = clBlack
     ColorMap.UnusedColor = clWhite
     Font.Charset = DEFAULT_CHARSET
-    Font.Color = clBlack
+    Font.Color = clWindowText
     Font.Height = -12
     Font.Name = 'Segoe UI'
     Font.Style = []
@@ -51,14 +50,16 @@ object FrmMain: TFrmMain
   end
   object PanelBrowser: TPanel
     Left = 0
-    Top = 49
+    Top = 81
     Width = 322
-    Height = 722
+    Height = 690
     Align = alLeft
     TabOrder = 1
+    ExplicitTop = 49
+    ExplicitHeight = 722
     DesignSize = (
       322
-      722)
+      690)
     object LblSearch: TLabel
       Left = 9
       Top = 36
@@ -99,13 +100,14 @@ object FrmMain: TFrmMain
       Left = 9
       Top = 82
       Width = 312
-      Height = 634
+      Height = 602
       Anchors = [akLeft, akTop, akRight, akBottom]
       Images = ImageListTree
       Indent = 19
       PopupMenu = PopActBarTV
       TabOrder = 3
       OnDblClick = Act_OpenFileExecute
+      ExplicitHeight = 634
     end
     object BtnUpDate: TButton
       Left = 289
@@ -134,7 +136,7 @@ object FrmMain: TFrmMain
     Left = 0
     Top = 25
     Width = 1379
-    Height = 24
+    Height = 56
     Align = alTop
     BevelOuter = bvNone
     TabOrder = 2
@@ -142,7 +144,7 @@ object FrmMain: TFrmMain
       Left = 0
       Top = 0
       Width = 1379
-      Height = 22
+      Height = 18
       Align = alTop
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText
@@ -155,6 +157,7 @@ object FrmMain: TFrmMain
       TabPosition = tpTop
       UnselectedColor = clBtnFace
       OnClick = TabSetClick
+      ExplicitTop = 6
     end
   end
   object StatusBar: TStatusBar
@@ -169,8 +172,8 @@ object FrmMain: TFrmMain
       end>
   end
   object Button1: TButton
-    Left = 356
-    Top = 99
+    Left = 4
+    Top = 47
     Width = 93
     Height = 25
     Caption = 'Button1'
@@ -179,22 +182,14 @@ object FrmMain: TFrmMain
     OnClick = Button1Click
   end
   object cbxVclStyles: TComboBox
-    Left = 469
-    Top = 101
+    Left = 117
+    Top = 49
     Width = 268
     Height = 21
     Style = csDropDownList
     TabOrder = 5
     Visible = False
     OnSelect = cbxVclStylesSelect
-  end
-  object mm: TMemo
-    Left = 340
-    Top = 632
-    Width = 669
-    Height = 133
-    ScrollBars = ssVertical
-    TabOrder = 6
   end
   object SaveDialog: TSaveDialog
     Left = 840
