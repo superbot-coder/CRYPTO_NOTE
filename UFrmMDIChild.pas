@@ -6,7 +6,7 @@ uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants,
   System.Classes, Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls,
   Vcl.ExtCtrls, Vcl.ComCtrls, Error, MsgLog, SynEditHighlighter,
-  SynHighlighterGeneral, SynEdit, CryptMod;
+  SynHighlighterGeneral, SynEdit, CryptMod, JSON, REST.JSON;
 
 type
   TMDIStatusFile = (sfNewFile, sfCryptFile, sfUnCryptFile, sfUnDecryptedFile);
@@ -29,7 +29,8 @@ type
     procedure EnCryptTxtToSave(EnCryptFileName: String; PAtxt: PAnsiChar;
       ALGO: TAlgoType; APwd: AnsiString);
     procedure SetPassword;
-    Procedure EncryptFile;
+    procedure EnCryptTxtToSaveTwo(EnCryptFileName: String; PAtxt: PAnsiChar;
+      ALGO: TAlgoType; APwd: AnsiString);
     procedure FormCreate(Sender: TObject);
     procedure SetStatusBarInfo;
     procedure JvXPBtnDecryptClick(Sender: TObject);
@@ -40,6 +41,7 @@ type
     procedure BtnSaveClick(Sender: TObject);
   private
     PASSWORD: AnsiString;
+    Procedure EncryptFile;
     { Private declarations }
   public
     ChangeTxt: Boolean;
@@ -286,20 +288,22 @@ begin
   end;
 
   // Шифруем и сохраняем
-  EnCryptTxtToSave(EncriptFileName, PAnsiChar(AnsiString(SynEdit.Text)), ALGO, PASSWORD);
+  //EnCryptTxtToSave(EncriptFileName, PAnsiChar(AnsiString(SynEdit.Text)), ALGO, PASSWORD);
+  EnCryptTxtToSaveTwo(EncriptFileName, PAnsiChar(AnsiString(SynEdit.Text)), ALGO, PASSWORD);
 
   // обновляю статусы и свойства формы
   if MDIStatusFile = sfNewFile then
   begin
     NewTabName := FrmMain.IncrementTabsName(ExtractFileName(EncriptFileName));
     FrmMain.TabSetReplase(TabSetID, NewTabName);
-    TabSetID := NewTabName;
+    TabSetID   := NewTabName;
   end;
-  MDIStatusFile := sfCryptFile;
-  SourceFile := OpenedFileName;
+  MDIStatusFile  := sfCryptFile;
+  SourceFile     := OpenedFileName;
   OpenedFileName := EncriptFileName;
-  Caption := EncriptFileName;
+  Caption        := EncriptFileName;
 
+  // удаление файла источника
   if FrmSelectEncrypt.ChBoxDeleteSource.Checked then
   begin
     if FileExists(EncriptFileName) then
@@ -311,7 +315,7 @@ begin
 
   // обновления списка дерева файлов
   SetStatusBarInfo;
-  if FileExists(EncriptFileName) then
+  if FileExists(EncriptFileName)  then
     FrmMain.AddNodeToTreeView(EncriptFileName, IMG_INDEX_CTXT);
   // FrmMain.Act_UpDateFileListBrowserExecute(nil);
 
@@ -354,6 +358,67 @@ begin
     st.Add(Actxt);
     st.SaveToFile(EnCryptFileName);
   finally
+    st.Free;
+  end;
+end;
+
+procedure TFrmMDIChild.EnCryptTxtToSaveTwo(EnCryptFileName: String;
+  PAtxt: PAnsiChar; ALGO: TAlgoType; APwd: AnsiString);
+var
+  st: TStrings;
+  Atxt, Actxt: AnsiString;
+  ASign: AnsiString; // Signature
+  d_size: Integer;
+
+  JFileObject: TJSONObject;
+  JContent: TJSONObject;
+  dt_create: TDateTime;
+
+
+begin
+  try
+    st     := TStringList.Create;
+    d_size := Length(PAnsiChar(PAtxt));
+
+    Atxt := PAnsiChar(PAtxt);
+
+    JFileObject := TJSONObject.Create;
+    JContent    := TJSONObject.Create;
+    JContent.AddPair('content', Atxt);
+    JContent.AddPair('content_hash', GetSHA1Hash(Atxt));
+
+
+    Atxt := JContent.ToJSON;
+    FrmMain.mm.Lines.add(JContent.ToJSON);
+
+    // JContent2 := TJSONObject.Create;
+    //JContent2 := TJSONObject.ParseJSONValue(Atxt) as TJSONObject;
+    //ShowMessage((Jcontent2.ToString));
+
+    case ALGO of
+      RC4_SHA1:   Actxt := EncryptRC4_SHA1(APwd, Atxt); // шифруеется
+      RC4_SHA256: Actxt := EncryptRC4_SHA256(APwd, Atxt); // шифруеется
+      RC4_SHA512: Actxt := EncryptRC4_SHA512(APwd, Atxt); // шифруеется
+    end;
+
+    dt_create := Date + time;
+    With JFileObject do
+    begin
+      AddPair('version', '1');
+      AddPair('algo_type', AlgoName[TAlgoType(ALGO)]);
+      AddPair('content_hash', GetSHA1Hash(Actxt));
+      AddPair('date_create', DateTimeToStr(dt_create));
+      AddPair('date_change', DateTimeToStr(dt_create));
+      AddPair('content', Actxt);
+    end;
+
+    //st.Text := JFileObject.ToJSON;
+    st.Text := TJson.Format(JFileObject);
+    st.SaveToFile(EnCryptFileName);
+
+  finally
+    JFileObject.Free;
+    JContent.Free;
     st.Free;
   end;
 end;

@@ -24,6 +24,7 @@ object FrmMain: TFrmMain
     Color = clBtnShadow
     MinSize = 100
     ParentColor = False
+    OnMoved = SplitterMoved
     ExplicitLeft = 368
     ExplicitTop = 89
     ExplicitHeight = 669
@@ -55,8 +56,6 @@ object FrmMain: TFrmMain
     Height = 722
     Align = alLeft
     TabOrder = 1
-    ExplicitTop = 89
-    ExplicitHeight = 662
     DesignSize = (
       322
       722)
@@ -95,7 +94,6 @@ object FrmMain: TFrmMain
       Height = 21
       Anchors = [akLeft, akTop, akRight]
       TabOrder = 2
-      Text = 'CmBoxSearch'
     end
     object TV: TTreeView
       Left = 9
@@ -108,7 +106,6 @@ object FrmMain: TFrmMain
       PopupMenu = PopActBarTV
       TabOrder = 3
       OnDblClick = Act_OpenFileExecute
-      ExplicitHeight = 574
     end
     object BtnUpDate: TButton
       Left = 289
@@ -158,9 +155,6 @@ object FrmMain: TFrmMain
       TabPosition = tpTop
       UnselectedColor = clBtnFace
       OnClick = TabSetClick
-      ExplicitLeft = 1
-      ExplicitTop = 1
-      ExplicitWidth = 1377
     end
   end
   object StatusBar: TStatusBar
@@ -173,12 +167,11 @@ object FrmMain: TFrmMain
         Text = #1055#1086#1080#1089#1082':'
         Width = 150
       end>
-    ExplicitTop = 751
   end
   object Button1: TButton
     Left = 356
     Top = 99
-    Width = 75
+    Width = 93
     Height = 25
     Caption = 'Button1'
     TabOrder = 4
@@ -186,7 +179,7 @@ object FrmMain: TFrmMain
     OnClick = Button1Click
   end
   object cbxVclStyles: TComboBox
-    Left = 445
+    Left = 469
     Top = 101
     Width = 268
     Height = 21
@@ -194,6 +187,14 @@ object FrmMain: TFrmMain
     TabOrder = 5
     Visible = False
     OnSelect = cbxVclStylesSelect
+  end
+  object mm: TMemo
+    Left = 340
+    Top = 632
+    Width = 669
+    Height = 133
+    ScrollBars = ssVertical
+    TabOrder = 6
   end
   object SaveDialog: TSaveDialog
     Left = 840
@@ -441,8 +442,8 @@ object FrmMain: TFrmMain
   object ImgListLogo: TImageList
     Height = 48
     Width = 48
-    Left = 708
-    Top = 112
+    Left = 772
+    Top = 64
     Bitmap = {
       494C010102000800040030003000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000C00000003000000001002000000000000090
@@ -1646,7 +1647,7 @@ object FrmMain: TFrmMain
   object TrayIcon: TTrayIcon
     PopupMenu = PopActBarTray
     Visible = True
-    Left = 724
+    Left = 1020
     Top = 228
   end
   object PopActBarTray: TPopupActionBar

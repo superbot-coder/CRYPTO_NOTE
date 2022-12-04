@@ -34,6 +34,7 @@ function GetKey: AnsiString;
 function CheckHash(hash: AnsiString; l: integer): Boolean;
 function DigestToTxt(Digest: Array of byte): AnsiString;
 function GetMD5Hash(AStrData: AnsiString): AnsiString;
+function GetSHA1Hash(AStrData: AnsiString): AnsiString;
 function GetTrashStr(Count: integer): AnsiString;
 function GetAlgoType(StrAlgo: String): TAlgoType;
 function GetSignature(Sign: String; PSign: PSignature): Boolean;
@@ -96,6 +97,22 @@ begin
     Result := DigestToTxt(Digest);
   finally
     MD5.Free;
+  end;
+end;
+
+function GetSHA1Hash(AStrData: AnsiString): AnsiString;
+var
+  SHA1: TDCP_sha1;
+  Digest: array[0..19] of byte;
+begin
+  try
+    SHA1 := TDCP_sha1.Create(Nil);
+    SHA1.Init;
+    SHA1.UpdateStr(AStrData);
+    SHA1.Final(Digest);
+    Result := DigestToTxt(Digest);
+  finally
+    SHA1.Free;
   end;
 end;
 

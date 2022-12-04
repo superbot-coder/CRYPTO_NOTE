@@ -40,7 +40,12 @@ object FrmMDIChild: TFrmMDIChild
     Gutter.Width = 0
     Highlighter = SynGeneralSyn
     Lines.Strings = (
-      'SynEdit')
+      #1083#1091#1095#1096#1080#1081' '#1073#1072#1083#1072#1085#1089'        = 22400'
+      #1090#1077#1082#1091#1097#1072#1103#1103' '#1079#1072#1076#1086#1083#1078#1085#1086#1089#1090#1100' = 32581'
+      ''
+      'USD1 =  +10240'
+      'USD2 =   +8700'
+      'USD3 =   +5800')
   end
   object PanelBar: TPanel
     Left = 0

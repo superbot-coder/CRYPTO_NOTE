@@ -9,9 +9,7 @@ uses
   Vcl.PlatformDefaultStyleActnCtrls, Vcl.ExtCtrls, GUID, Vcl.ComCtrls,
   System.ImageList, Vcl.ImgList, System.masks, Vcl.Buttons, Vcl.Menus,
   Vcl.ActnPopup, System.Win.Registry, System.StrUtils,
-  ShellAPI, Vcl.Tabs, Math, Error,
-  Vcl.Mask,
-  Vcl.Themes;
+  ShellAPI, Vcl.Tabs, Math, Error, Vcl.Mask, Vcl.Themes;
 
 type THashType = (MD5_TXT, MD5_CTXT);
 
@@ -69,6 +67,7 @@ type
     StatusBar: TStatusBar;
     Button1: TButton;
     cbxVclStyles: TComboBox;
+    mm: TMemo;
     procedure Act_SettingsExecute(Sender: TObject);
     procedure Act_ShowFrmMasterPwdExecute(Sender: TObject);
     procedure FindFilesMskTV(StartFolder,  Mask: string; TNParent: TTreeNode; ScanSubFolders: Boolean);
@@ -118,6 +117,7 @@ type
     procedure cbxVclStylesSelect(Sender: TObject);
     procedure Button1Click(Sender: TObject);
     procedure BtnSearchClick(Sender: TObject);
+    procedure SplitterMoved(Sender: TObject);
   private
     { Private declarations }
     LastIndexSearch: integer;
@@ -248,6 +248,11 @@ function TFrmMain.SetFileNameExtention(FileName, NewExt: String): string;
 begin
  Result := Copy(FileName, 1, Length(FileName) - Length(ExtractFileExt(FileName)));
  Result := Result + NewExt;
+end;
+
+procedure TFrmMain.SplitterMoved(Sender: TObject);
+begin
+  if PanelBrowser.Width > 350 then  PanelBrowser.Width := 350;
 end;
 
 procedure TFrmMain.Act_ChildTileHorizontExecute(Sender: TObject);
