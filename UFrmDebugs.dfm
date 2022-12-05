@@ -37,6 +37,8 @@ object FrmDebugs: TFrmDebugs
       Width = 97
       Height = 17
       Caption = #1055#1077#1088#1077#1085#1086#1089' '#1089#1090#1088#1086#1082
+      Checked = True
+      State = cbChecked
       TabOrder = 0
       OnClick = ChBoxWordWrapClick
     end
@@ -46,9 +48,9 @@ object FrmDebugs: TFrmDebugs
       Width = 113
       Height = 21
       Style = csDropDownList
-      ItemIndex = 0
+      ItemIndex = 1
       TabOrder = 1
-      Text = #1043#1077#1085#1077#1088#1072#1083#1100#1085#1099#1081
+      Text = 'JSON'
       OnSelect = CmBoxSelHighLighterSelect
       Items.Strings = (
         #1043#1077#1085#1077#1088#1072#1083#1100#1085#1099#1081

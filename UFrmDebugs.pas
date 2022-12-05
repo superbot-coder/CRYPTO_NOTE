@@ -43,7 +43,7 @@ implementation
 procedure TFrmDebugs.AddDbgMessage(DbgMsgStr: String);
 begin
   SynEdit.Lines.Add('');
-  SynEdit.Lines.Add('Message ID: ' + UIntToStr(FMsgCount));
+  SynEdit.Lines.Add(DateTimeToStr(Date + time) + ' Message ID: ' + UIntToStr(FMsgCount));
   FStMsg.Text := DbgMsgStr;
   SynEdit.Lines.AddStrings(FStMsg);
   Inc(FMsgCount);
@@ -73,6 +73,8 @@ end;
 procedure TFrmDebugs.FormCreate(Sender: TObject);
 begin
   FStMsg := TStringList.Create;
+  CmBoxSelHighLighterSelect(Nil);
+  ChBoxWordWrapClick(Nil);
 end;
 
 end.

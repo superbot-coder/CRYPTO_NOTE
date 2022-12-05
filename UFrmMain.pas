@@ -52,8 +52,6 @@ type
     Act_TreeViewSearch: TAction;
     Act_ShowDebugWindow: TAction;
     ImageListButtons: TImageList;
-    Act_SpliterSvich: TAction;
-    ActionMainMenuBar1: TActionMainMenuBar;
     Splitter: TSplitter;
     PanelBrowser: TPanel;
     CmBoxExRootDirs: TComboBoxEx;
@@ -65,8 +63,27 @@ type
     LblSearch: TLabel;
     PnlTabs: TPanel;
     StatusBar: TStatusBar;
-    Button1: TButton;
     cbxVclStyles: TComboBox;
+    MainMenu: TMainMenu;
+    A1: TMenuItem;
+    N1: TMenuItem;
+    N2: TMenuItem;
+    N3: TMenuItem;
+    N4: TMenuItem;
+    N5: TMenuItem;
+    Y1: TMenuItem;
+    N6: TMenuItem;
+    N7: TMenuItem;
+    N8: TMenuItem;
+    N9: TMenuItem;
+    N10: TMenuItem;
+    N11: TMenuItem;
+    N12: TMenuItem;
+    N13: TMenuItem;
+    N14: TMenuItem;
+    N15: TMenuItem;
+    N16: TMenuItem;
+    Act_OpenFileTwo: TAction;
     procedure Act_SettingsExecute(Sender: TObject);
     procedure Act_ShowFrmMasterPwdExecute(Sender: TObject);
     procedure FindFilesMskTV(StartFolder,  Mask: string; TNParent: TTreeNode; ScanSubFolders: Boolean);
@@ -112,11 +129,12 @@ type
     procedure AddSearchBookMark;
     procedure Act_ShowDebugWindowExecute(Sender: TObject);
     procedure LoadSearchBookMark;
-    procedure Act_SpliterSvichExecute(Sender: TObject);
     procedure cbxVclStylesSelect(Sender: TObject);
-    procedure Button1Click(Sender: TObject);
+    procedure BtnTestClick(Sender: TObject);
     procedure BtnSearchClick(Sender: TObject);
     procedure SplitterMoved(Sender: TObject);
+    procedure PA_OpenFileTwoClick(Sender: TObject);
+    procedure Act_OpenFileTwoExecute(Sender: TObject);
   private
     { Private declarations }
     LastIndexSearch: integer;
@@ -184,6 +202,11 @@ begin
   finally
     Reg.Free;
   end;
+end;
+
+procedure TFrmMain.PA_OpenFileTwoClick(Sender: TObject);
+begin
+  ShowMessage('Open file');
 end;
 
 procedure TFrmMain.PA_OpenTxtEditorClick(Sender: TObject);
@@ -490,8 +513,6 @@ var
 begin
 
   if TV.Selected = Nil then exit;
-
-
   FullName := GetFullFileName;
   if GetFileAttributes(PChar(FullName)) = FILE_ATTRIBUTE_DIRECTORY then
   begin
@@ -525,13 +546,14 @@ begin
       // Проверка мастер пароля
       if MASTER_PASSWORD = '' then
       begin
-         Act_GetMasterPasswordExecute(Nil);
+        Act_GetMasterPasswordExecute(Nil);
       end;
 
       // Записываем в созданную форму PASSWORD,
       // что бы использовался при сохранееии открытого файла
       FrmMDIChild.SetPassword; //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
+/////////
       st := TStringList.Create;
       st.LoadFromFile(FullName);
       if st.Count = 0 then
@@ -604,13 +626,13 @@ begin
                    'Возможно у вас введен не верный пароль. '+#13+
                    'Попробуйте повторить попытку с другим паролем.'),
                    PCHar(MB_CAPTION), MB_ICONWARNING);
+
         FrmMDIChild.SynEdit.Text       := Atxt;
         FrmMDIChild.SynEdit.ReadOnly   := true;
         FrmMDIChild.BtnEncrypt.Enabled := false;
         FrmMDIChild.MDIStatusFile := sfUnDecryptedFile;
 
       end;
-      //FrmMDIChild.JvXPBtnEncrypt.Enabled := false;
 
     finally
       st.Free;
@@ -633,7 +655,80 @@ begin
   TabSet.TabIndex := i;
   FrmMDIChild.ChangeTxt := False;
   FrmMDIChild.SetStatusBarInfo;
+end;
 
+{------------------------  Act_OpenFileTwoExecute -----------------------------}
+procedure TFrmMain.Act_OpenFileTwoExecute(Sender: TObject);
+var
+  //NewChild: TFrmMDIChild;
+  i: integer;
+  ImageIndex: integer;
+  FileName, hash_txt, hash_ctxt, szd: string;
+  st: TStrings;
+  Actxt, Atxt, ASig: AnsiString;
+  Sign: TSignature;
+begin
+  if TV.Selected = Nil then exit;
+  FileName := GetFullFileName;
+  if GetFileAttributes(PChar(FileName)) = FILE_ATTRIBUTE_DIRECTORY then
+  begin
+    TV.Selected.Expanded := true;
+    Exit;
+  end;
+
+  // Если окно уже открыто то оно распахнется на максимум
+  for i := 0 to FrmMain.MDIChildCount -1 do
+  begin
+    if FrmMain.MDIChildren[i].Caption = FileName then
+    begin
+      //FrmMain.MDIChildren[i].WindowState := wsMaximized;
+      FrmMain.MDIChildren[i].SetFocus;
+      Exit;
+    end;
+  end;
+
+  // Создание экземпляра окна
+  FrmMDIChild := TFrmMDIChild.Create(Application);
+  FrmMDIChild.Caption             := FileName;
+  FrmMDIChild.OpenedFileName      := FileName;
+  //FrmMDIChild.Width               := FrmMain.Width - PnlBrowser.Width - 60;
+  //FrmMDIChild.Height              := FrmMain.Height - 140;
+  FrmMDIChild.SynEdit.Clear;
+  FrmMDIChild.WindowState         := wsNormal;
+
+
+  if ExtractFileExt(LowerCase(FileName)) = '.ctxt' then
+  begin
+    ImageIndex := 1;
+    // Проверка мастер пароля
+    if MASTER_PASSWORD = '' then
+    begin
+      Act_GetMasterPasswordExecute(Nil);
+    end;
+
+    // Записываем в созданную форму PASSWORD,
+    // что бы использовался при сохранееии открытого файла
+    FrmMDIChild.SetPassword; //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    FrmMDIChild.DecryptFile;
+    FrmMDIChild.SetStatusBarInfoTwo;
+
+  end
+    else
+  begin
+    ImageIndex := 0;
+    FrmMDIChild.SynEdit.Lines.LoadFromFile(FileName);
+    FrmMDIChild.BtnDecrypt.Enabled     := false;
+    FrmMDIChild.BtnSaveDecrypt.Enabled := false;
+    FrmMDIChild.MDIStatusFile          := sfUnCryptFile;
+  end;
+
+  // Генерация TabNameID
+  ImgListLogo.GetIcon(ImageIndex, FrmMDIChild.ImageLogo.Picture.Icon);
+  i := TabSet.Tabs.Add(IncrementTabsName(ExtractFileName(FileName)));
+  FrmMDIChild.TabSetID  := TabSet.Tabs[i];
+  TabSet.TabIndex       := i;
+  FrmMDIChild.ChangeTxt := False;
+  // FrmMDIChild.SetStatusBarInfo;
 end;
 
 procedure TFrmMain.Act_OpenTreeDirExecute(Sender: TObject);
@@ -718,16 +813,6 @@ procedure TFrmMain.Act_Show_MasterPasswordExecute(Sender: TObject);
 begin
   FrmDebugs.AddDbgMessage('MASTER PASSWORD: '+MASTER_PASSWORD);
   FrmDebugs.Show;
-end;
-
-procedure TFrmMain.Act_SpliterSvichExecute(Sender: TObject);
-begin
-  {
-  if sSplitterBrowser.SizingByClick then
-    sSplitterBrowser.SizingByClick := false
-  else
-    sSplitterBrowser.SizingByClick := true;
-  }
 end;
 
 procedure TFrmMain.Act_SynchronizeExecute(Sender: TObject);
@@ -890,7 +975,7 @@ begin
   StatusBar.Panels[0].Text := 'Поиск: ' + GetFullFileName;
 end;
 
-procedure TFrmMain.Button1Click(Sender: TObject);
+procedure TFrmMain.BtnTestClick(Sender: TObject);
 begin
   ShowMessage(IntToStr(FrmMain.Color));
 end;
@@ -1129,8 +1214,9 @@ begin
 end;
 
 function TFrmMain.GetFullFileName: String;
-var N: TTreeNode;
-    S: String;
+var
+  N: TTreeNode;
+  S: String;
 begin
   S := '';
   N := TV.Selected;

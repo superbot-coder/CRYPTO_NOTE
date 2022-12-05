@@ -6,7 +6,8 @@ uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants,
   System.Classes, Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls,
   Vcl.ExtCtrls, Vcl.ComCtrls, Error, MsgLog, SynEditHighlighter,
-  SynHighlighterGeneral, SynEdit, CryptMod, JSON, REST.JSON;
+  SynHighlighterGeneral, SynEdit, System.StrUtils, CryptMod, System.IOUtils,
+  JSON, REST.JSON;
 
 type
   TMDIStatusFile = (sfNewFile, sfCryptFile, sfUnCryptFile, sfUnDecryptedFile);
@@ -33,23 +34,27 @@ type
       ALGO: TAlgoType; APwd: AnsiString);
     procedure FormCreate(Sender: TObject);
     procedure SetStatusBarInfo;
-    procedure JvXPBtnDecryptClick(Sender: TObject);
+    procedure SetStatusBarInfoTwo;
+    // procedure JvXPBtnDecryptClick(Sender: TObject);
     procedure SaveDialogNewFile(sfType: TMDIStatusFile);
     procedure BtnEncryptClick(Sender: TObject);
     procedure BtnDecryptClick(Sender: TObject);
     procedure BtnSaveDecryptClick(Sender: TObject);
     procedure BtnSaveClick(Sender: TObject);
   private
+    FOpenFileError: boolean;
     PASSWORD: AnsiString;
     Procedure EncryptFile;
-    { Private declarations }
   public
+    JFileObject: TJSONObject;
     ChangeTxt: Boolean;
     // FileNameCrypt : String;
     MDIStatusFile: TMDIStatusFile;
     TabSetID: String;
     ALGO: TAlgoType;
     OpenedFileName: String;
+    property OpenFileError: boolean read FOpenFileError;
+    procedure DecryptFile;
   end;
 
 var
@@ -223,6 +228,91 @@ begin
 
   FrmMain.AddNodeToTreeView(FileName, IMG_INDEX_TXT);
   // FrmMain.Act_UpDateFileListBrowserExecute(Nil);
+end;
+
+procedure TFrmMDIChild.DecryptFile;
+var
+  Atxt, Actxt: AnsiString;
+  // JFileObject: TJSONObject;
+  JContent: TJSONObject;
+  JSONBytes: TBytes;
+  Hash: String;
+  StrValue: String;
+  ALGO: TAlgoType;
+begin
+
+  //JSONBytes := System.IOUtils;
+  JFileObject := TJSONObject.ParseJSONValue(TFile.ReadAllBytes(OpenedFileName), 0) as TJSONObject;
+  try
+    if JFileObject = Nil then
+    begin
+      FOpenFileError := true;
+      Exit;
+    end;
+
+    FrmDebugs.AddDbgMessage(TJson.Format(JFileObject));
+
+    Hash  := JFileObject.GetValue('content_hash').Value;
+    Actxt := JFileObject.GetValue('content').Value;
+
+    FrmDebugs.AddDbgMessage('Hash: ' + Hash);
+    FrmDebugs.AddDbgMessage('content: ' + Actxt);
+
+
+    if GetSHA1Hash(Actxt) <> Hash then
+    begin
+      FrmDebugs.AddDbgMessage('Error: Не верный content_hash, OpenFile: ' + OpenedFileName);
+      Exit;
+    end;
+
+    StrValue := JFileObject.GetValue('algo_type').Value;
+
+    //ALGO := ;
+    case TAlgoType(AnsiIndexStr(StrValue, AlgoName)) of
+      RC4_SHA1:   Atxt := DecryptRC4_SHA1(MASTER_PASSWORD, Actxt);
+      RC4_SHA256: Atxt := DecryptRC4_SHA256(MASTER_PASSWORD, Actxt);
+      RC4_SHA512: Atxt := DecryptRC4_SHA512(MASTER_PASSWORD, Actxt);
+    else
+      begin
+        FrmDebugs.AddDbgMessage('Error: Не верный "algo_type", OpenFile: ' + OpenedFileName);
+        Exit;
+      end;
+    end;
+
+    FrmDebugs.AddDbgMessage('Atxt: ' + Atxt);
+
+    JContent := TJSONObject.ParseJSONValue(Atxt) as TJSONObject;
+
+    FrmDebugs.AddDbgMessage('JContent: ' + JContent.ToJSON);
+
+
+    if JContent = Nil then
+    begin
+      FrmDebugs.AddDbgMessage('Error: var JContent = Nil OpenFile: ' + OpenedFileName);
+      Exit;
+    end;
+
+    StrValue := JContent.GetValue('content_hash').Value;
+    Atxt     := JContent.GetValue('content').Value;
+
+    FrmDebugs.AddDbgMessage('content_hash: '+ StrValue);
+    FrmDebugs.AddDbgMessage('Atxt: '+ Atxt);
+
+    if GetSHA1Hash(Atxt) <> StrValue then
+    begin
+      FrmDebugs.AddDbgMessage('Error: Не верный content_hash 1 уровня OpenFile: ' + OpenedFileName);
+      Exit;
+    end;
+
+    SynEdit.Lines.Text := Atxt;
+    //SetStatusBarInfoTwo;
+
+  except
+    MessageBox(Handle, PChar('Возникла критическая ошибка при открытии файла'),
+               PChar(MB_CAPTION), MB_ICONERROR);
+    FOpenFileError := true;
+  end;
+
 end;
 
 procedure TFrmMDIChild.EncryptFile;
@@ -455,119 +545,6 @@ begin
   Constraints.MinHeight := 300
 end;
 
-procedure TFrmMDIChild.JvXPBtnDecryptClick(Sender: TObject);
-var
-  Sign: TSignature;
-  Atxt: AnsiString;
-  szd, i: Integer;
-begin
-  SendDebugMsg('procedure TFrmMDIChild.FormCreate(Sender: TObject);');
-  FrmSelectEncrypt.FrmShowModal(DLG_DECRYPT);
-  if FrmSelectEncrypt.Apply = false then
-    Exit;
-  ALGO := GetAlgoType(FrmSelectEncrypt.CmBoxExAlgo.ItemsEx
-    [FrmSelectEncrypt.CmBoxExAlgo.ItemIndex].Caption);
-
-  case FrmSelectEncrypt.RadioGroup.ItemIndex of
-
-    0:
-      begin
-        // Decrypt the MASTER_PASSWORD
-        // Проверка мастер пароля
-        if MASTER_PASSWORD = '' then
-        begin
-          FrmMain.Act_GetMasterPasswordExecute(Nil);
-        end;
-        PASSWORD := MASTER_PASSWORD;
-      end;
-
-    1:
-      begin
-        // Decrypt the OLP PASSWOD
-        FrmMasterPwd.ShowModeDlg(DLG_OLDPWD);
-        if FrmMasterPwd.Apply = false then
-          Exit;
-        PASSWORD := FrmMasterPwd.edPwd1.Text;
-      end;
-  end;
-
-  st := TStringList.Create;
-  try
-    st.LoadFromFile(OpenedFileName);
-    GetSignature(st.Strings[0], @Sign);
-
-    if Sign.Checked then
-    begin
-      if Sign.hash_encrypt <> GetMD5Hash(st.Strings[1]) then
-      begin
-        if MessageBox(Handle,
-          PChar('Хэш из сигнатуры несовпадает с полученным хешем зашифрованного файла,'
-          + #13 + 'возможно файл поврежден и его не удастся правильно дешифровать.'
-          + #13 + 'Вы желаете продолжить?'), PChar(MB_CAPTION),
-          MB_ICONWARNING or MB_YESNO) = IDNO then
-          Exit;
-      end;
-
-      case ALGO of
-        RC4_SHA1:   Atxt := DecryptRC4_SHA1(PASSWORD, st.Strings[1]);
-        RC4_SHA256: Atxt := DecryptRC4_SHA256(PASSWORD, st.Strings[1]);
-        RC4_SHA512: Atxt := DecryptRC4_SHA512(PASSWORD, st.Strings[1]);
-      end;
-
-      if Sign.hash_uncrypt <> GetMD5Hash(Atxt) then
-      begin
-        MessageBox(Handle, PChar('Текст не убалось дешифровать,' + #13 +
-          'хэш сигнатуры не совпал с дешифрованным текстом.' + #13 +
-          'Возможно был выбран не верный алгоритм или введен не верный пароль.'),
-          PChar(MB_CAPTION), MB_ICONWARNING);
-        SynEdit.ReadOnly := True;
-      end
-      else
-      begin
-        if 'szd:' = Copy(Atxt, 1, 4) then
-        begin
-          i := FrmMain.ConvertStringToInteger
-            (Copy(Atxt, 5, AnsiPos(';', Atxt) - 4));
-          Atxt := Copy(Atxt, AnsiPos(';', Atxt) + 1, i);
-        end;
-        SynEdit.ReadOnly := false;
-        BtnEncrypt.Enabled := True;
-      end;
-      SynEdit.Text := Atxt;
-
-    end
-    else
-    begin
-      if MessageBox(Handle, PChar('Сигнатура файла не найдена или повреждена.' +
-        #13 + 'Возможно этот файл не является зашифровонным. ' +
-        'Возможно дальнейшая расшифровка текста не удастся.' + #13 +
-        'Вы хотит продолжить?'), PChar(MB_CAPTION), MB_ICONWARNING or MB_YESNO)
-        = IDNO then
-        Exit;
-
-      for i := 0 to st.Count - 1 do
-      begin
-        case ALGO of
-          RC4_SHA1:   Atxt := DecryptRC4_SHA1(PASSWORD, st.Strings[i]);
-          RC4_SHA256: Atxt := DecryptRC4_SHA256(PASSWORD, st.Strings[i]);
-          RC4_SHA512: Atxt := DecryptRC4_SHA512(PASSWORD, st.Strings[i]);
-        end;
-
-        if 'szd:' = Copy(Atxt, 1, 4) then
-        begin
-          szd := FrmMain.ConvertStringToInteger
-            (Copy(Atxt, 5, AnsiPos(';', Atxt) - 4));
-          Atxt := Copy(Atxt, AnsiPos(';', Atxt) + 1, szd);
-          SynEdit.Text := Atxt;
-          Break;
-        end;
-      end;
-    end;
-  finally
-    st.Free
-  end;
-end;
-
 procedure TFrmMDIChild.mmChange(Sender: TObject);
 begin
   ChangeTxt := True;
@@ -698,14 +675,47 @@ begin
 
     FileTimeToLocalFileTime(SR.FindData.ftLastWriteTime, LocalTime);
     FileTimeToSystemTime(LocalTime, sys_time);
-    SetLength(str_dt, GetDateFormat(LOCALE_SYSTEM_DEFAULT, 0, @sys_time,
-      PChar('dd MMMM yyyy'), Nil, 0));
-    GetDateFormat(LOCALE_SYSTEM_DEFAULT, 0, @sys_time, PChar('dd MMMM yyyy'),
-      PChar(str_dt), Length(str_dt));
+
+    SetLength(str_dt, GetDateFormat(LOCALE_SYSTEM_DEFAULT, 0, @sys_time, PChar('dd MMMM yyyy'), Nil, 0));
+
+    GetDateFormat(LOCALE_SYSTEM_DEFAULT, 0, @sys_time, PChar('dd MMMM yyyy'), PChar(str_dt), Length(str_dt));
+
     StatusBar.Panels[1].Text := 'Изменен: ' + Trim(str_dt) + ' ' +
       TimeToStr(SystemTimeToDateTime(sys_time));
   end;
 
+end;
+
+procedure TFrmMDIChild.SetStatusBarInfoTwo;
+var
+  sys_time: _SYSTEMTIME;
+  LocalTime: tFileTime;
+  str_dt: String;
+  dt : TDateTime;
+begin
+
+  if JFileObject = NIL then
+  begin
+    StatusBar.Panels[0].Text := 'Создан: 00.00.0000 00:00:00';
+    StatusBar.Panels[1].Text := 'Изменен: 00.00.0000 00:00:00';
+    Exit;
+  end;
+
+  // Получаем дату создания файта
+  dt := StrToDateTime(JFileObject.GetValue('date_create').Value);
+  // конвертируем и форматируем время сщздания
+  DateTimeToSystemTime(dt, sys_time);
+  SetLength(str_dt, GetDateFormat(LOCALE_SYSTEM_DEFAULT, 0, @sys_time, PChar('dd MMMM yyyy'), Nil, 0));
+  GetDateFormat(LOCALE_SYSTEM_DEFAULT, 0, @sys_time, PChar('dd MMMM yyyy'), PChar(str_dt), Length(str_dt));
+  StatusBar.Panels[0].Text := 'Создан: ' + Trim(str_dt) + ' ' + TimeToStr(SystemTimeToDateTime(sys_time));
+
+  // получаем дату изменения файла
+  dt := StrToDateTime(JFileObject.GetValue('date_change').Value);
+  // конвертируем и форматируем время сщздания
+  DateTimeToSystemTime(dt, sys_time);
+  SetLength(str_dt, GetDateFormat(LOCALE_SYSTEM_DEFAULT, 0, @sys_time, PChar('dd MMMM yyyy'), Nil, 0));
+  GetDateFormat(LOCALE_SYSTEM_DEFAULT, 0, @sys_time, PChar('dd MMMM yyyy'), PChar(str_dt), Length(str_dt));
+  StatusBar.Panels[1].Text := 'Изменен: ' + Trim(str_dt) + ' ' + TimeToStr(SystemTimeToDateTime(sys_time));
 end;
 
 end.

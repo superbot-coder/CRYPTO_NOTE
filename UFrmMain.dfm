@@ -11,6 +11,7 @@ object FrmMain: TFrmMain
   Font.Name = 'Tahoma'
   Font.Style = []
   FormStyle = fsMDIForm
+  Menu = MainMenu
   OldCreateOrder = False
   Position = poScreenCenter
   OnCreate = FormCreate
@@ -18,9 +19,9 @@ object FrmMain: TFrmMain
   TextHeight = 13
   object Splitter: TSplitter
     Left = 322
-    Top = 81
+    Top = 57
     Width = 12
-    Height = 690
+    Height = 714
     Color = clBtnShadow
     MinSize = 100
     ParentColor = False
@@ -29,37 +30,18 @@ object FrmMain: TFrmMain
     ExplicitTop = 89
     ExplicitHeight = 669
   end
-  object ActionMainMenuBar1: TActionMainMenuBar
-    Left = 0
-    Top = 0
-    Width = 1379
-    Height = 25
-    ActionManager = ActionManager
-    Caption = 'ActionMainMenuBar1'
-    Color = clMenuBar
-    ColorMap.DisabledFontColor = 7171437
-    ColorMap.HighlightColor = clWhite
-    ColorMap.BtnSelectedFont = clBlack
-    ColorMap.UnusedColor = clWhite
-    Font.Charset = DEFAULT_CHARSET
-    Font.Color = clWindowText
-    Font.Height = -12
-    Font.Name = 'Segoe UI'
-    Font.Style = []
-    Spacing = 0
-  end
   object PanelBrowser: TPanel
     Left = 0
-    Top = 81
+    Top = 57
     Width = 322
-    Height = 690
+    Height = 714
     Align = alLeft
-    TabOrder = 1
-    ExplicitTop = 49
-    ExplicitHeight = 722
+    TabOrder = 0
+    ExplicitTop = 81
+    ExplicitHeight = 690
     DesignSize = (
       322
-      690)
+      714)
     object LblSearch: TLabel
       Left = 9
       Top = 36
@@ -100,14 +82,14 @@ object FrmMain: TFrmMain
       Left = 9
       Top = 82
       Width = 312
-      Height = 602
+      Height = 626
       Anchors = [akLeft, akTop, akRight, akBottom]
       Images = ImageListTree
       Indent = 19
       PopupMenu = PopActBarTV
       TabOrder = 3
-      OnDblClick = Act_OpenFileExecute
-      ExplicitHeight = 634
+      OnDblClick = Act_OpenFileTwoExecute
+      ExplicitHeight = 602
     end
     object BtnUpDate: TButton
       Left = 289
@@ -134,12 +116,12 @@ object FrmMain: TFrmMain
   end
   object PnlTabs: TPanel
     Left = 0
-    Top = 25
+    Top = 0
     Width = 1379
-    Height = 56
+    Height = 57
     Align = alTop
     BevelOuter = bvNone
-    TabOrder = 2
+    TabOrder = 1
     object TabSet: TTabSet
       Left = 0
       Top = 0
@@ -157,7 +139,6 @@ object FrmMain: TFrmMain
       TabPosition = tpTop
       UnselectedColor = clBtnFace
       OnClick = TabSetClick
-      ExplicitTop = 6
     end
   end
   object StatusBar: TStatusBar
@@ -171,29 +152,18 @@ object FrmMain: TFrmMain
         Width = 150
       end>
   end
-  object Button1: TButton
-    Left = 4
-    Top = 47
-    Width = 93
-    Height = 25
-    Caption = 'Button1'
-    TabOrder = 4
-    Visible = False
-    OnClick = Button1Click
-  end
   object cbxVclStyles: TComboBox
-    Left = 117
-    Top = 49
-    Width = 268
+    Left = 107
+    Top = 24
+    Width = 217
     Height = 21
     Style = csDropDownList
-    TabOrder = 5
-    Visible = False
+    TabOrder = 3
     OnSelect = cbxVclStylesSelect
   end
   object SaveDialog: TSaveDialog
-    Left = 840
-    Top = 112
+    Left = 824
+    Top = 128
   end
   object ActionManager: TActionManager
     ActionBars = <
@@ -309,15 +279,11 @@ object FrmMain: TFrmMain
               end
               item
                 Action = Act_ShowDebugWindow
-              end
-              item
-                Action = Act_SpliterSvich
               end>
             Caption = #1042#1080#1076
           end>
-        ActionBar = ActionMainMenuBar1
       end>
-    Left = 792
+    Left = 800
     Top = 224
     StyleName = 'Platform Default'
     object Act_ShowFrmMasterPwd: TAction
@@ -409,11 +375,10 @@ object FrmMain: TFrmMain
       Caption = #1055#1086#1082#1072#1079#1072#1090#1100' '#1086#1082#1085#1086' '#1086#1090#1083#1072#1076#1082#1080
       OnExecute = Act_ShowDebugWindowExecute
     end
-    object Act_SpliterSvich: TAction
-      Category = #1042#1080#1076
-      Caption = #1057#1087#1083#1080#1090#1077#1088' - '#1085#1072#1089#1090#1088#1072#1080#1074#1072#1077#1084#1099#1081
-      Checked = True
-      OnExecute = Act_SpliterSvichExecute
+    object Act_OpenFileTwo: TAction
+      Category = #1060#1072#1081#1083
+      Caption = #1054#1090#1082#1088#1099#1090#1100' '#1092#1072#1081#1083' two'
+      OnExecute = Act_OpenFileTwoExecute
     end
   end
   object PopActBarTV: TPopupActionBar
@@ -421,7 +386,7 @@ object FrmMain: TFrmMain
     Left = 965
     Top = 220
     object OpenFile: TMenuItem
-      Action = Act_OpenFile
+      Action = Act_OpenFileTwo
     end
     object PA_OpenTxtEditor: TMenuItem
       Caption = #1054#1090#1082#1088#1099#1090#1100' '#1088#1077#1076#1072#1082#1090#1086#1088#1077
@@ -1636,14 +1601,14 @@ object FrmMain: TFrmMain
       000000000000}
   end
   object OpenDialog: TOpenDialog
-    Left = 776
-    Top = 112
+    Left = 744
+    Top = 120
   end
   object TrayIcon: TTrayIcon
     PopupMenu = PopActBarTray
     Visible = True
-    Left = 1020
-    Top = 228
+    Left = 1028
+    Top = 220
   end
   object PopActBarTray: TPopupActionBar
     Left = 884
@@ -2245,5 +2210,63 @@ object FrmMain: TFrmMain
       FE003F000000000000000000FFC0FF000000000000000000FFC1FF0000000000
       00000000FFC3FF00000000000000000000000000000000000000000000000000
       000000000000}
+  end
+  object MainMenu: TMainMenu
+    Left = 832
+    Top = 72
+    object A1: TMenuItem
+      Caption = #1060#1072#1081#1083
+      object N1: TMenuItem
+        Action = Act_OpenFile
+      end
+      object N2: TMenuItem
+        Action = Act_CreateNewFile
+      end
+      object N4: TMenuItem
+        Action = Act_FrmDecryptOld
+      end
+      object N5: TMenuItem
+        Caption = '-'
+      end
+      object N3: TMenuItem
+        Action = Act_Exit
+      end
+    end
+    object Y1: TMenuItem
+      Caption = #1053#1072#1089#1090#1088#1086#1081#1082#1080
+      object N8: TMenuItem
+        Action = Act_ShowFrmMasterPwd
+      end
+      object N9: TMenuItem
+        Action = Act_Settings
+      end
+      object N10: TMenuItem
+        Action = Act_Synchronize
+      end
+      object N11: TMenuItem
+        Action = Act_Show_MasterPassword
+      end
+    end
+    object N6: TMenuItem
+      Caption = #1042#1080#1076
+      object N12: TMenuItem
+        Action = Act_ChildCascade
+      end
+      object N13: TMenuItem
+        Action = Act_ChildTileHorizont
+      end
+      object N14: TMenuItem
+        Action = Act_ChildTileVertical
+      end
+      object N15: TMenuItem
+        Action = Act_ExitToTray
+      end
+      object N16: TMenuItem
+        Action = Act_ShowDebugWindow
+      end
+    end
+    object N7: TMenuItem
+      Caption = #1055#1086#1084#1086#1097#1100
+    end
   end
 end
